@@ -1,37 +1,36 @@
 # Note: graphviz requires gd with gif support (and other fixes), hence use
 # internal one for now.
 
-Summary: 	Graph Visualization Tools
-Name: 		graphviz
-Version: 	2.2
-Release: 	3
-Epoch:		0
-Group: 		Applications/Multimedia
-License: 	CPL
-URL:  		http://www.graphviz.org/
-Source: 	http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.2.tar.gz
-BuildRoot: 	%{_tmppath}/%{name}-root
+Summary:	Graph Visualization Tools
+Name:		graphviz
+Version:	2.2
+Release:	3
+Group:		Applications/Multimedia
+License:	CPL
+URL:		http://www.graphviz.org/
+Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.2.tar.gz
+BuildRoot:	%{_tmppath}/%{name}-root
 BuildRequires:	zlib-devel libpng-devel libjpeg-devel XFree86-devel expat-devel
-BuildRequires:	/bin/ksh bison m4 flex tk tcl >= 0:8.3
+BuildRequires:	/bin/ksh bison m4 flex tk tcl >= 8.3
 BuildRequires:	/usr/include/tcl.h /usr/include/tk.h
 
 %package tcl
-Group:          Applications/Multimedia
-Summary:        Tcl extension tools for %{name}
-Requires:       %{name} = %{epoch}:%{version}-%{release} tcl >= 0:8.3 tk
+Group:		Applications/Multimedia
+Summary:	Tcl extension tools for %{name}
+Requires:	%{name} = %{version}-%{release} tcl >= 8.3 tk
 
 %package devel
-Summary: 	Development package for %{name}
-Group: 		Development/Libraries
-Requires: 	%{name} = %{epoch}:%{version}-%{release} pkgconfig
+Summary:	Development package for %{name}
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release} pkgconfig
 
 %package doc
-Group:          Documentation
-Summary:        PDF and HTML documents for %{name}
+Summary:	PDF and HTML documents for %{name}
+Group:		Documentation
 
 %package graphs
-Group:          Applications/Multimedia
-Summary:        Demo graphs for %{name}
+Summary:	Demo graphs for %{name}
+Group:		Applications/Multimedia
 
 
 %description
@@ -82,7 +81,7 @@ make \
     DESTDIR=$RPM_BUILD_ROOT \
     pkgconfigdir=%{_libdir}/pkgconfig \
     transform='s,x,x,' \
-	install
+    install
 chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/lefty/*
 cp -a $RPM_BUILD_ROOT%{_datadir}/%{name}/doc __doc
 rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/doc
@@ -154,7 +153,7 @@ rm -rf $RPM_BUILD_ROOT
 - Fix lefty/* permissions.
 
 * Sat Jan 22 2005 John Ellson <ellson@research.att.com> - 0:2.2-1
-- Updated to 2.2 
+- Updated to 2.2
 - split out:
     graphviz-docs    - optional and large
     graphviz-graphs  - optional demo graphs
