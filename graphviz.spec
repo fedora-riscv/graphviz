@@ -3,7 +3,7 @@
 Summary: 	Graph Visualization Tools
 Name: 		graphviz
 Version: 	1.12
-Release: 	0.fdr.2.2
+Release: 	2
 Epoch:		0
 Group: 		Applications/Multimedia
 License: 	AT&T open source (see COPYING)
