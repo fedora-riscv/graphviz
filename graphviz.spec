@@ -4,7 +4,8 @@
 Summary:	Graph Visualization Tools
 Name:		graphviz
 Version:	2.2
-Release:	3
+Release:	4
+
 Group:		Applications/Multimedia
 License:	CPL
 URL:		http://www.graphviz.org/
@@ -138,6 +139,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Apr  7 2005 Michael Schwendt <mschwendt[AT]users.sf.net>
+- rebuilt
+
 * Sun Jan 23 2005 John Ellson <ellson@research.att.com> - 0:2.2-3
 - change BuildRequires to /bin/ksh, since ksh doesn't provide a /usr/bin/ksh
 - change devel exclude to also exclude libtcl*.la
