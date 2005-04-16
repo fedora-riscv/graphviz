@@ -3,13 +3,13 @@
 
 Summary:	Graph Visualization Tools
 Name:		graphviz
-Version:	2.2
-Release:	4
+Version:	2.2.1
+Release:	1
 
 Group:		Applications/Multimedia
 License:	CPL
 URL:		http://www.graphviz.org/
-Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.2.tar.gz
+Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.2.1.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-root
 BuildRequires:	zlib-devel libpng-devel libjpeg-devel XFree86-devel expat-devel
 BuildRequires:	/bin/ksh bison m4 flex tk tcl >= 8.3
@@ -139,6 +139,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Apr  7 2005 John Ellson <ellson@research.att.com> - 2.2.1-1
+- update to graphviz-2.2.1
+
 * Fri Apr  7 2005 Michael Schwendt <mschwendt[AT]users.sf.net>
 - rebuilt
 
