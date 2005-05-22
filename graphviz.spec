@@ -4,7 +4,7 @@
 Summary:	Graph Visualization Tools
 Name:		graphviz
 Version:	2.2.1
-Release:	1
+Release: 2
 
 Group:		Applications/Multimedia
 License:	CPL
@@ -139,6 +139,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun May 22 2005 Jeremy Katz <katzj@redhat.com> - 2.2.1-2
+- rebuild on all arches
+
 * Fri Apr  7 2005 John Ellson <ellson@research.att.com> - 2.2.1-1
 - update to graphviz-2.2.1
 
