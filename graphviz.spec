@@ -1,41 +1,43 @@
-Summary:		Graph Visualization Tools
-Name:			graphviz
+Summary:			Graph Visualization Tools
+Name:				graphviz
 
-Version:		2.4
-Release:		1
+Version:			2.4
+Release:			1
 
-Group:			Applications/Multimedia
-License:		CPL
+Group:				Applications/Multimedia
+License:			CPL
 
-URL:			http://www.graphviz.org/
-Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
+URL:				http://www.graphviz.org/
+Source0:			http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 
-BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRoot:			%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	zlib-devel libpng-devel libjpeg-devel expat-devel freetype-devel >= 2
-BuildRequires:	/bin/ksh bison m4 flex
-BuildRequires:	tcl-devel >= 8.3
-BuildRequires:	tk-devel
-BuildRequires:	fontconfig-devel xorg-x11-devel
-BuildRequires:	php-devel guile-devel
+BuildRequires:		zlib-devel libpng-devel libjpeg-devel expat-devel freetype-devel >= 2
+BuildRequires:		/bin/ksh bison m4 flex
+BuildRequires:		tcl-devel >= 8.3
+BuildRequires:		tk-devel
+BuildRequires:		fontconfig-devel xorg-x11-devel
+BuildRequires:		php-devel guile-devel
+Requires(post):		%{_bindir}/dot
+Requires(postun):	%{_bindir}/d
 
-%package		tcl
-Summary:		Tcl extension tools for %{name}
-Group:			Applications/Multimedia
-Requires:		%{name} = %{version}-%{release} tcl >= 8.3 tk
+%package			tcl
+Summary:			Tcl extension tools for %{name}
+Group:				Applications/Multimedia
+Requires:			%{name} = %{version}-%{release} tcl >= 8.3 tk
 
-%package		devel
-Summary:		Development package for %{name}
-Group:			Development/Libraries
-Requires:		%{name} = %{version}-%{release} pkgconfig
+%package			devel
+Summary:			Development package for %{name}
+Group:				Development/Libraries
+Requires:			%{name} = %{version}-%{release} pkgconfig
 
-%package		doc
-Summary:		PDF and HTML documents for %{name}
-Group:			Documentation
+%package			doc
+Summary:			PDF and HTML documents for %{name}
+Group:				Documentation
 
-%package		graphs
-Summary:		Demo graphs for %{name}
-Group:			Applications/Multimedia
+%package			graphs
+Summary:			Demo graphs for %{name}
+Group:				Applications/Multimedia
 
 %description
 A collection of tools and tcl packages for the manipulation and layout
@@ -64,7 +66,8 @@ Some demo graphs for %{name}.
 
 %configure	--with-x \
 			--with-mylibgd \
-			--disable-dependency-tracking
+			--disable-dependency-tracking \
+			--disable-static
 
 %{__make} %{?_smp_mflags}
 
@@ -137,6 +140,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/dot -V 2>/dev/null
 
 %changelog
+* Mon Aug 22 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.4-2
+- Bug #163840
+
 * Thu Aug 11 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.4-1
 - Update
 - Took over maintainership
