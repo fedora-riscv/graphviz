@@ -19,7 +19,7 @@ BuildRequires:		tk-devel
 BuildRequires:		fontconfig-devel xorg-x11-devel
 BuildRequires:		php-devel guile-devel
 Requires(post):		%{_bindir}/dot
-Requires(postun):	%{_bindir}/d
+Requires(postun):	%{_bindir}/dot
 
 %package			tcl
 Summary:			Tcl extension tools for %{name}
