@@ -1,7 +1,7 @@
 Summary:			Graph Visualization Tools
 Name:				graphviz
 
-Version:			2.4
+Version:			2.6
 Release:			1
 
 Group:				Applications/Multimedia
@@ -140,6 +140,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/dot -V 2>/dev/null
 
 %changelog
+* Mon Aug 29 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-1
+- Update
+
 * Mon Aug 22 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.4-2
 - Bug #163840
 
