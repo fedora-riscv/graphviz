@@ -1,4 +1,4 @@
-# $Id: graphviz.spec,v 1.15 2005/08/29 11:33:04 oliver Exp $ $Revision: 1.15 $
+# $Id: graphviz.spec,v 1.16 2005/08/29 12:09:27 oliver Exp $ $Revision: 1.16 $
 
 Summary:			Graph Visualization Tools
 Name:				graphviz
@@ -125,15 +125,15 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc __doc/*
 
-# run "dot -V" to generate plugin config in %{_libdir}/%{name}/config
+# run "dot -c" to generate plugin config in %{_libdir}/%{name}/config
 %post
-%{_bindir}/dot -V 2>/dev/null
+%{_bindir}/dot -c 2>/dev/null
 
 %post tcl
-%{_bindir}/dot -V 2>/dev/null
+%{_bindir}/dot -c 2>/dev/null
 
 %post devel
-%{_bindir}/dot -V 2>/dev/null
+%{_bindir}/dot -c 2>/dev/null
 
 %changelog
 * Mon Aug 29 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-1
