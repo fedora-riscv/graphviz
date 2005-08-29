@@ -1,3 +1,5 @@
+# $Id: graphviz.spec,v 1.15 2005/08/29 11:33:04 oliver Exp $ $Revision: 1.15 $
+
 Summary:			Graph Visualization Tools
 Name:				graphviz
 
@@ -13,11 +15,10 @@ Source0:			http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.g
 BuildRoot:			%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:		zlib-devel libpng-devel libjpeg-devel expat-devel freetype-devel >= 2
-BuildRequires:		/bin/ksh bison m4 flex
-BuildRequires:		tcl-devel >= 8.3
-BuildRequires:		tk-devel
-BuildRequires:		fontconfig-devel xorg-x11-devel
+BuildRequires:		/bin/ksh bison m4 flex tcl-devel >= 8.3 tk-devel swig
+BuildRequires:		/usr/include/tcl.h /usr/include/tk.h
 BuildRequires:		php-devel guile-devel
+BuildRequires:		fontconfig-devel xorg-x11-devel libtool-ltdl-devel
 Requires(post):		%{_bindir}/dot
 Requires(postun):	%{_bindir}/dot
 
@@ -61,9 +62,6 @@ Some demo graphs for %{name}.
 %setup -q
 
 %build
-# XXX ix86 only used to have -ffast-math, let's use everywhere
-%{expand: %%define optflags %{optflags} -ffast-math}
-
 %configure	--with-x \
 			--with-mylibgd \
 			--disable-dependency-tracking \
@@ -72,18 +70,16 @@ Some demo graphs for %{name}.
 %{__make} %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT __doc
+rm -rf $RPM_BUILD_ROOT
 
-%{__make} \
-    DESTDIR=$RPM_BUILD_ROOT \
-    docdir=$RPM_BUILD_ROOT%{_docdir}/%{name} \
-    pkgconfigdir=%{_libdir}/pkgconfig \
-    transform='s,x,x,' \
-    install
+%{__make} DESTDIR=$RPM_BUILD_ROOT install
+#    docdir=$RPM_BUILD_ROOT%{_docdir}/%{name} \
+#    pkgconfigdir=%{_libdir}/pkgconfig \
+#    install
 
-chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/lefty/*
-cp -a $RPM_BUILD_ROOT%{_datadir}/%{name}/doc __doc
-rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/doc
+#chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/lefty/*
+mv $RPM_BUILD_ROOT%{_datadir}/%{name}/doc __doc
+#rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/doc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -97,10 +93,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*.1*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/lefty
-%exclude %{_libdir}/%{name}/lib*tcl*.so.*
-%exclude %{_libdir}/%{name}/libtk*.so.*
-%exclude %{_includedir}/ltdl*
-%exclude %{_libdir}/libltdl*
+#%exclude %{_libdir}/%{name}/lib*tcl*.so.*
+#%exclude %{_libdir}/%{name}/libtk*.so.*
+#%exclude %{_includedir}/ltdl*
+#%exclude %{_libdir}/libltdl*
 
 %files tcl
 %defattr(-,root,root,-)
@@ -117,8 +113,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/*.so
 %{_libdir}/pkgconfig/*.pc
 %{_mandir}/man3/*.3*
-%exclude %{_libdir}/%{name}/lib*tcl*.*
-%exclude %{_libdir}/%{name}/libtk*.*
+#%exclude %{_libdir}/%{name}/lib*tcl*.*
+#%exclude %{_libdir}/%{name}/libtk*.*
 
 %files graphs
 %defattr(-,root,root,-)
