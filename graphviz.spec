@@ -1,4 +1,4 @@
-# $Id: graphviz.spec,v 1.17 2005/08/29 12:53:11 oliver Exp $ $Revision: 1.17 $
+# $Id: graphviz.spec,v 1.18 2005/09/28 16:44:17 oliver Exp $ $Revision: 1.18 $
 
 Summary:			Graph Visualization Tools
 Name:				graphviz
@@ -21,6 +21,7 @@ BuildRequires:		php-devel guile-devel
 BuildRequires:		fontconfig-devel xorg-x11-devel libtool-ltdl-devel
 Requires(post):		%{_bindir}/dot
 Requires(postun):	%{_bindir}/dot
+Requires:			urw-fonts
 
 %package			tcl
 Summary:			Tcl extension tools for %{name}
