@@ -14,6 +14,7 @@ BuildRoot: 	%{_tmppath}/%{name}-root
 BuildRequires:	zlib-devel libpng-devel libjpeg-devel XFree86-devel expat-devel
 BuildRequires:	/bin/ksh bison m4 flex tk tcl >= 0:8.3
 BuildRequires:	/usr/include/tcl.h /usr/include/tk.h
+Requires:			urw-fonts
 
 %package tcl
 Group:          Applications/Multimedia
