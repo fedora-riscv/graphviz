@@ -1,39 +1,45 @@
-# Note: graphviz requires gd with gif support (and other fixes), hence use
-# internal one for now.
+# $Id: graphviz.spec,v 1.8 2005/10/17 08:14:43 oliver Exp $ $Revision: 1.8 $
 
-Summary: 	Graph Visualization Tools
-Name: 		graphviz
-Version: 	2.2
-Release: 	3
-Epoch:		0
-Group: 		Applications/Multimedia
-License: 	CPL
-URL:  		http://www.graphviz.org/
-Source: 	http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.2.tar.gz
-BuildRoot: 	%{_tmppath}/%{name}-root
-BuildRequires:	zlib-devel libpng-devel libjpeg-devel XFree86-devel expat-devel
-BuildRequires:	/bin/ksh bison m4 flex tk tcl >= 0:8.3
-BuildRequires:	/usr/include/tcl.h /usr/include/tk.h
+Summary:			Graph Visualization Tools
+Name:				graphviz
+
+Version:			2.6
+Release:			1%{?dist}
+
+Group:				Applications/Multimedia
+License:			CPL
+
+URL:				http://www.graphviz.org/
+Source0:			http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
+
+BuildRoot:			%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+BuildRequires:		zlib-devel libpng-devel libjpeg-devel expat-devel freetype-devel >= 2
+BuildRequires:		/bin/ksh bison m4 flex tcl-devel >= 8.3 tk-devel swig
+BuildRequires:		/usr/include/tcl.h /usr/include/tk.h
+BuildRequires:		php-devel guile-devel
+BuildRequires:		fontconfig-devel xorg-x11-devel libtool-ltdl-devel
+Requires(post):		%{_bindir}/dot
+Requires(postun):	%{_bindir}/dot
 Requires:			urw-fonts
 
-%package tcl
-Group:          Applications/Multimedia
-Summary:        Tcl extension tools for %{name}
-Requires:       %{name} = %{epoch}:%{version}-%{release} tcl >= 0:8.3 tk
+%package			tcl
+Summary:			Tcl extension tools for %{name}
+Group:				Applications/Multimedia
+Requires:			%{name} = %{version}-%{release} tcl >= 8.3 tk
 
-%package devel
-Summary: 	Development package for %{name}
-Group: 		Development/Libraries
-Requires: 	%{name} = %{epoch}:%{version}-%{release} pkgconfig
+%package			devel
+Summary:			Development package for %{name}
+Group:				Development/Libraries
+Requires:			%{name} = %{version}-%{release} pkgconfig
 
-%package doc
-Group:          Documentation
-Summary:        PDF and HTML documents for %{name}
+%package			doc
+Summary:			PDF and HTML documents for %{name}
+Group:				Documentation
 
-%package graphs
-Group:          Applications/Multimedia
-Summary:        Demo graphs for %{name}
-
+%package			graphs
+Summary:			Demo graphs for %{name}
+Group:				Applications/Multimedia
 
 %description
 A collection of tools and tcl packages for the manipulation and layout
@@ -53,45 +59,31 @@ Provides some additional PDF and HTML documentation for %{name}.
 %description graphs
 Some demo graphs for %{name}.
 
-
 %prep
 %setup -q
 
-
 %build
-# XXX ix86 only used to have -ffast-math, let's use everywhere
-%{expand: %%define optflags %{optflags} -ffast-math}
-# %%configure is broken in RH7.3 rpmbuild
-# need unreleased changes to gd, so use --with-mylibgd for now.
-CFLAGS="$RPM_OPT_FLAGS" \
-./configure \
-      --prefix=%{_prefix} \
-      --bindir=%{_bindir} \
-      --libdir=%{_libdir} \
-      --includedir=%{_includedir} \
-      --datadir=%{_datadir} \
-      --mandir=%{_mandir} \
-      --with-x \
-      --with-mylibgd \
-      --disable-dependency-tracking
-make %{?_smp_mflags}
+%configure	--with-x \
+			--with-mylibgd \
+			--disable-dependency-tracking \
+			--disable-static
 
+%{__make} %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT __doc
-make \
-    DESTDIR=$RPM_BUILD_ROOT \
-    pkgconfigdir=%{_libdir}/pkgconfig \
-    transform='s,x,x,' \
-	install
-chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/lefty/*
-cp -a $RPM_BUILD_ROOT%{_datadir}/%{name}/doc __doc
-rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/doc
+rm -rf $RPM_BUILD_ROOT
 
+%{__make} DESTDIR=$RPM_BUILD_ROOT install
+#    docdir=$RPM_BUILD_ROOT%{_docdir}/%{name} \
+#    pkgconfigdir=%{_libdir}/pkgconfig \
+#    install
+
+#chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/lefty/*
+mv $RPM_BUILD_ROOT%{_datadir}/%{name}/doc __doc
+#rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/doc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-
 
 %files
 %defattr(-,root,root,-)
@@ -102,10 +94,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*.1*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/lefty
-%exclude %{_libdir}/%{name}/lib*tcl*.so.*
-%exclude %{_libdir}/%{name}/libtk*.so.*
-%exclude %{_bindir}/dotneato-config
-%exclude %{_mandir}/man1/dotneato-config.1*
+#%exclude %{_libdir}/%{name}/lib*tcl*.so.*
+#%exclude %{_libdir}/%{name}/libtk*.so.*
+#%exclude %{_includedir}/ltdl*
+#%exclude %{_libdir}/libltdl*
 
 %files tcl
 %defattr(-,root,root,-)
@@ -114,20 +106,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/pkgIndex.tcl
 %{_datadir}/%{name}/demo
 %{_mandir}/mann/*.n*
-%exclude %{_libdir}/%{name}/lib*tcl*.so.?
-%exclude %{_libdir}/%{name}/libtk*.so.?
 
 %files devel
 %defattr(-,root,root,-)
-%{_bindir}/dotneato-config
 %{_includedir}/%{name}
 %{_libdir}/%{name}/*.la
 %{_libdir}/%{name}/*.so
 %{_libdir}/pkgconfig/*.pc
-%{_mandir}/man1/dotneato-config.1*
 %{_mandir}/man3/*.3*
-%exclude %{_libdir}/%{name}/lib*tcl*.*
-%exclude %{_libdir}/%{name}/libtk*.*
+#%exclude %{_libdir}/%{name}/lib*tcl*.*
+#%exclude %{_libdir}/%{name}/libtk*.*
 
 %files graphs
 %defattr(-,root,root,-)
@@ -138,8 +126,37 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc __doc/*
 
+# run "dot -c" to generate plugin config in %{_libdir}/%{name}/config
+%post
+%{_bindir}/dot -c
+
+%post tcl
+%{_bindir}/dot -c
+
+%post devel
+%{_bindir}/dot -c
 
 %changelog
+* Mon Aug 29 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-1
+- Update
+
+* Mon Aug 22 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.4-2
+- Bug #163840
+
+* Thu Aug 11 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.4-1
+- Update
+- Took over maintainership
+- Merge with spec provided within source tarball
+
+* Sun May 22 2005 Jeremy Katz <katzj@redhat.com> - 2.2.1-2
+- rebuild on all arches
+
+* Fri Apr  7 2005 John Ellson <ellson@research.att.com> - 2.2.1-1
+- update to graphviz-2.2.1
+
+* Fri Apr  7 2005 Michael Schwendt <mschwendt[AT]users.sf.net>
+- rebuilt
+
 * Sun Jan 23 2005 John Ellson <ellson@research.att.com> - 0:2.2-3
 - change BuildRequires to /bin/ksh, since ksh doesn't provide a /usr/bin/ksh
 - change devel exclude to also exclude libtcl*.la
@@ -155,7 +172,7 @@ rm -rf $RPM_BUILD_ROOT
 - Fix lefty/* permissions.
 
 * Sat Jan 22 2005 John Ellson <ellson@research.att.com> - 0:2.2-1
-- Updated to 2.2 
+- Updated to 2.2
 - split out:
     graphviz-docs    - optional and large
     graphviz-graphs  - optional demo graphs
