@@ -1,10 +1,10 @@
-# $Id: graphviz.spec,v 1.18 2005/09/28 16:44:17 oliver Exp $ $Revision: 1.18 $
+# $Id: graphviz.spec,v 1.19 2005/10/17 08:15:12 oliver Exp $ $Revision: 1.19 $
 
 Summary:			Graph Visualization Tools
 Name:				graphviz
 
 Version:			2.6
-Release:			1
+Release:			1%{?dist}
 
 Group:				Applications/Multimedia
 License:			CPL
