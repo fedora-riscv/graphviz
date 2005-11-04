@@ -1,4 +1,4 @@
-# $Id: graphviz.spec,v 1.20 2005/11/04 08:47:46 oliver Exp $ $Revision: 1.20 $
+# $Id: graphviz.spec,v 1.21 2005/11/04 08:48:01 oliver Exp $ $Revision: 1.21 $
 
 Summary:			Graph Visualization Tools
 Name:				graphviz
@@ -139,7 +139,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/dot -c
 
 %changelog
-* Fri Nov 04 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-1
+* Fri Nov 04 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-2
 - BuildRequires fixes for "Modular X"; Thanks to John Ellson
 
 * Mon Aug 29 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-1
