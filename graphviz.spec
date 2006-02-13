@@ -1,10 +1,10 @@
-# $Id: graphviz.spec,v 1.22 2005/11/21 08:29:21 oliver Exp $ $Revision: 1.22 $
+# $Id: graphviz.spec,v 1.23 2006/02/13 16:35:07 oliver Exp $ $Revision: 1.23 $
 
 Summary:			Graph Visualization Tools
 Name:				graphviz
 
 Version:			2.6
-Release:			3%{?dist}
+Release:			4%{?dist}
 
 Group:				Applications/Multimedia
 License:			CPL
@@ -21,6 +21,7 @@ BuildRequires:		php-devel guile-devel
 BuildRequires:		fontconfig-devel libtool-ltdl-devel
 BuildRequires:		libXaw-devel libSM-devel libICE-devel libXpm-devel
 BuildRequires:		libXt-devel libXmu-devel libXext-devel libX11-devel
+BuildRequires:		ruby-devel
 Requires(post):		%{_bindir}/dot
 Requires(postun):	%{_bindir}/dot
 Requires:			urw-fonts
@@ -139,6 +140,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/dot -c
 
 %changelog
+* Mon Feb 13 2006 Oliver Falk <oliver@linux-kernel.at>		- 2.6-4
+- BR: ruby-devel
+
 * Mon Nov 21 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-3
 - Rebuild
 
