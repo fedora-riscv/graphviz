@@ -1,4 +1,4 @@
-# $Id: graphviz.spec,v 1.24 2006/02/22 17:28:01 oliver Exp $ $Revision: 1.24 $
+# $Id: graphviz.spec,v 1.25 2006/02/24 07:14:16 oliver Exp $ $Revision: 1.25 $
 # graphviz.spec.  Generated from graphviz.spec.in by configure.
 
 # Note: graphviz requires gd with gif support (and other fixes), hence use
@@ -45,7 +45,7 @@
 Summary:	Graph Visualization Tools
 Name:		graphviz
 Version:	2.8
-Release:	1%{?dist}
+Release:	2%{?dist}
 Group:		Applications/Multimedia
 License:	CPL
 URL:		http://www.graphviz.org/
@@ -272,13 +272,10 @@ This package contains development files for %{name}.
 %files devel
 %defattr(-,root,root,-)
 %{_includedir}/%{name}
-#%{_includedir}/ltdl.h
-#%{_libdir}/*.so*
 %{_libdir}/%{name}/*.so
 %{_libdir}/pkgconfig/*.pc
 %{_mandir}/man3/*.3*
 %exclude %{_libdir}/%{name}/*/*
-#%exclude %{_libdir}/libltdl*
 
 #------------------------------------------------------------------
 %package graphs
@@ -326,6 +323,10 @@ chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/lefty/*
 cp -a $RPM_BUILD_ROOT%{_datadir}/%{name}/doc __doc
 rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/doc
 
+# There files are crated on x86_64 for what reason? I don't know...
+rm -f %{_includedir}/ltdl.h
+rm -f %{_libdir}/libltdl*
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -338,6 +339,9 @@ rm -rf $RPM_BUILD_ROOT
 if ! test -x %{_bindir}/dot; then rm -f %{_libdir}/%{name}/config; fi
 
 %changelog
+* Fri Feb 24 2006 Oliver Falk <oliver@linux-kernel.at>		- 2.8-2
+- Fix unpackaged files on x86_64
+
 * Wed Feb 22 2006 Oliver Falk <oliver@linux-kernel.at>		- 2.8-1
 - Merge with specfile from Paul F. Johnson
 - Update
