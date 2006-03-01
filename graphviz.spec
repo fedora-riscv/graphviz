@@ -1,4 +1,4 @@
-# $Id: graphviz.spec,v 1.25 2006/02/24 07:14:16 oliver Exp $ $Revision: 1.25 $
+# $Id: graphviz.spec,v 1.26 2006/03/01 08:30:07 oliver Exp $ $Revision: 1.26 $
 # graphviz.spec.  Generated from graphviz.spec.in by configure.
 
 # Note: graphviz requires gd with gif support (and other fixes), hence use
@@ -45,7 +45,7 @@
 Summary:	Graph Visualization Tools
 Name:		graphviz
 Version:	2.8
-Release:	2%{?dist}
+Release:	3%{?dist}
 Group:		Applications/Multimedia
 License:	CPL
 URL:		http://www.graphviz.org/
@@ -59,9 +59,10 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	zlib-devel libpng-devel libjpeg-devel expat-devel freetype-devel >= 2
 BuildRequires:	/bin/ksh bison m4 flex tk tcl >= 8.3 swig
 BuildRequires:	tcl-devel tk-devel
-%{?fc5:BuildRequires: fontconfig-devel libtool-ltdl-devel}
+BuildRequires:	libtool-ltdl-devel  libtool-ltdl
+%{?fc5:BuildRequires: fontconfig-devel}
 %{?fc5:BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel}
-%{?fc4:BuildRequires: fontconfig-devel xorg-x11-devel libtool-ltdl-devel} 
+%{?fc4:BuildRequires: fontconfig-devel xorg-x11-devel}
 %{?fc3:BuildRequires: fontconfig-devel xorg-x11-devel} 
 
 %description
@@ -307,7 +308,7 @@ Provides some additional PDF and HTML documentation for %{name}.
 %setup -q
 
 %build
-%configure
+%configure --disable-static --with-mylibgd
 %__make %{?_smp_mflags}
 
 %install
@@ -318,14 +319,10 @@ rm -rf $RPM_BUILD_ROOT __doc
     pkgconfigdir=%{_libdir}/pkgconfig \
     install
 find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
-find ${RPM_BUILD_ROOT} -type f -name "*.a" -exec rm -f {} ';'
+#find ${RPM_BUILD_ROOT} -type f -name "*.a" -exec rm -f {} ';'
 chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/lefty/*
 cp -a $RPM_BUILD_ROOT%{_datadir}/%{name}/doc __doc
 rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/doc
-
-# There files are crated on x86_64 for what reason? I don't know...
-rm -f %{_includedir}/ltdl.h
-rm -f %{_libdir}/libltdl*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -339,6 +336,10 @@ rm -rf $RPM_BUILD_ROOT
 if ! test -x %{_bindir}/dot; then rm -f %{_libdir}/%{name}/config; fi
 
 %changelog
+* Wed Mar 01 2006 Oliver Falk <oliver@linux-kernel.at>		- 2.8-3
+- Add libtool-ltdl, libtool-ltdl-devel
+- Fix fixes
+
 * Fri Feb 24 2006 Oliver Falk <oliver@linux-kernel.at>		- 2.8-2
 - Fix unpackaged files on x86_64
 
