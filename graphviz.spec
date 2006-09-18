@@ -1,69 +1,30 @@
-# $Id: graphviz.spec,v 1.26 2006/03/01 08:30:07 oliver Exp $ $Revision: 1.26 $
+# $Id: graphviz.spec,v 1.27 2006/09/18 01:59:11 jima Exp $ $Revision: 1.27 $
 # graphviz.spec.  Generated from graphviz.spec.in by configure.
+
+# Keeping one conditional because I can't figure out what it's looking for!
+# - Jima
+%define _IO 0
 
 # Note: graphviz requires gd with gif support (and other fixes), hence use
 # internal one for now.
 
-# Define a default set incase none of the conditionals apply
-%define SHARP   0
-%define GUILE   0
-%define _IO     0
-%define JAVA    0
-%define LUA     0
-%define OCAML   0
-%define PERL    0
-%define PHP     0
-%define PYTHON  0
-%define RUBY    0
-%define TCL     1
-
-# Select packages according to dist (set in .rpmmacros on each build host)
-
-# These are all single line conditional blocks because older versions
-# of rpm can't handle multiline blocks/
-
-%{?fc3: %{expand: %%define PERL    1}}
-%{?fc3: %{expand: %%define TCL     1}}
-
-%{?fc4: %{expand: %%define GUILE   1}}
-%{?fc4: %{expand: %%define PERL    1}}
-%{?fc4: %{expand: %%define PYTHON  1}}
-%{?fc4: %{expand: %%define RUBY    1}}
-%{?fc4: %{expand: %%define TCL     1}}
-
-%{?fc5: %{expand: %%define SHARP   1}}
-%{?fc5: %{expand: %%define GUILE   1}}
-%{?fc5: %{expand: %%define JAVA    1}}
-%{?fc5: %{expand: %%define LUA     1}}
-%{?fc5: %{expand: %%define OCAML   1}}
-%{?fc5: %{expand: %%define PERL    1}}
-%{?fc5: %{expand: %%define PHP     1}}
-%{?fc5: %{expand: %%define PYTHON  1}}
-%{?fc5: %{expand: %%define RUBY    1}}
-%{?fc5: %{expand: %%define TCL     1}}
-
 Summary:	Graph Visualization Tools
 Name:		graphviz
 Version:	2.8
-Release:	3%{?dist}
+Release:	4%{?dist}
 Group:		Applications/Multimedia
 License:	CPL
 URL:		http://www.graphviz.org/
 Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
-%{?fc5:Requires: urw-fonts}
-%{?fc4:Requires: urw-fonts}
-%{?fc3:Requires: urw-fonts}
+Requires:	urw-fonts
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	zlib-devel libpng-devel libjpeg-devel expat-devel freetype-devel >= 2
-BuildRequires:	/bin/ksh bison m4 flex tk tcl >= 8.3 swig
-BuildRequires:	tcl-devel tk-devel
-BuildRequires:	libtool-ltdl-devel  libtool-ltdl
-%{?fc5:BuildRequires: fontconfig-devel}
-%{?fc5:BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel}
-%{?fc4:BuildRequires: fontconfig-devel xorg-x11-devel}
-%{?fc3:BuildRequires: fontconfig-devel xorg-x11-devel} 
+BuildRequires:	libpng-devel libjpeg-devel expat-devel ksh bison flex 
+BuildRequires:	libtool-ltdl-devel fontconfig-devel swig libXaw-devel 
+BuildRequires:	libSM-devel libXpm-devel libXext-devel libXt-devel
+BuildRequires:	mono-core guile-devel libgcj-devel java-1.4.2-gcj-compat-devel
+BuildRequires:	lua-devel ocaml php-devel python-devel ruby-devel tk-devel
 
 %description
 A collection of tools for the manipulation and layout
@@ -81,7 +42,6 @@ of graphs (as in nodes and edges, not as in barcharts).
 %exclude %{_libdir}/%{name}/*/*
 
 #------------------------------------------------------------------
-%if %{SHARP}
 %package sharp
 Group:	Applications/Multimedia
 Summary:	C# extension for %{name}
@@ -94,10 +54,8 @@ C# extensions for %{name}.
 %defattr(-,root,root,-)
 %dir %{_libdir}/%{name}/sharp
 %{_libdir}/%{name}/sharp/*
-%endif
 
 #------------------------------------------------------------------
-%if %{GUILE}
 %package guile
 Group:		Applications/Multimedia
 Summary:	Guile extension for %{name}
@@ -110,7 +68,6 @@ Guile extensions for %{name}.
 %defattr(-,root,root,-)
 %dir %{_libdir}/%{name}/guile
 %{_libdir}/%{name}/guile/*
-%endif
 
 #------------------------------------------------------------------
 %if %{_IO}
@@ -129,7 +86,6 @@ Java extensions for %{name}.
 %endif
 
 #------------------------------------------------------------------
-%if %{JAVA}
 %package java
 Group:		Applications/Multimedia
 Summary:	Java extension for %{name}
@@ -142,10 +98,8 @@ Java extensions for %{name}.
 %defattr(-,root,root,-)
 %dir %{_libdir}/%{name}/java
 %{_libdir}/%{name}/java/*
-%endif
 
 #------------------------------------------------------------------
-%if %{LUA}
 %package lua
 Group:		Applications/Multimedia
 Summary:	Lua extension for %{name}
@@ -158,10 +112,8 @@ Java extensions for %{name}.
 %defattr(-,root,root,-)
 %dir %{_libdir}/%{name}/lua
 %{_libdir}/%{name}/lua/*
-%endif
 
 #------------------------------------------------------------------
-%if %{OCAML}
 %package ocaml
 Group:		Applications/Multimedia
 Summary:	Ocaml extension for %{name}
@@ -174,10 +126,8 @@ Ocaml extensions for %{name}.
 %defattr(-,root,root,-)
 %dir %{_libdir}/%{name}/ocaml
 %{_libdir}/%{name}/ocaml/*
-%endif
 
 #------------------------------------------------------------------
-%if %{PERL}
 %package perl
 Group:		Applications/Multimedia
 Summary:	Perl extension for %{name}
@@ -190,10 +140,8 @@ Perl extensions for %{name}.
 %defattr(-,root,root,-)
 %dir %{_libdir}/%{name}/perl
 %{_libdir}/%{name}/perl/*
-%endif
 
 #------------------------------------------------------------------
-%if %{PHP}
 %package php
 Group:		Applications/Multimedia
 Summary:	PHP extension for %{name}
@@ -206,10 +154,8 @@ PHP extensions for %{name}.
 %defattr(-,root,root,-)
 %dir %{_libdir}/%{name}/php
 %{_libdir}/%{name}/php/*
-%endif
 
 #------------------------------------------------------------------
-%if %{PYTHON}
 %package python
 Group:		Applications/Multimedia
 Summary:	Python extension for %{name}
@@ -222,10 +168,8 @@ Python extensions for %{name}.
 %defattr(-,root,root,-)
 %dir %{_libdir}/%{name}/python
 %{_libdir}/%{name}/python/*
-%endif
 
 #------------------------------------------------------------------
-%if %{RUBY}
 %package ruby
 Group:		Applications/Multimedia
 Summary:	Ruby extension for %{name}
@@ -238,10 +182,8 @@ Ruby extensions for %{name}.
 %defattr(-,root,root,-)
 %dir %{_libdir}/%{name}/ruby
 %{_libdir}/%{name}/ruby/*
-%endif
 
 #------------------------------------------------------------------
-%if %{TCL}
 %package tcl
 Group:		Applications/Multimedia
 Summary:	Tcl extension & tools for %{name}
@@ -257,7 +199,6 @@ Various tcl packages (extensions) for the %{name} tools.
 %{_libdir}/%{name}/pkgIndex.tcl
 %{_datadir}/%{name}/demo
 %{_mandir}/mann/*.n*
-%endif
 
 #------------------------------------------------------------------
 %package devel
@@ -308,7 +249,7 @@ Provides some additional PDF and HTML documentation for %{name}.
 %setup -q
 
 %build
-%configure --disable-static --with-mylibgd
+%configure --disable-static --with-mylibgd --disable-io
 %__make %{?_smp_mflags}
 
 %install
@@ -336,6 +277,15 @@ rm -rf $RPM_BUILD_ROOT
 if ! test -x %{_bindir}/dot; then rm -f %{_libdir}/%{name}/config; fi
 
 %changelog
+* Thu Sep 14 2006 Patrick "Jima" Laughton <jima@beer.tclug.org>	- 2.8-4
+- Fixing BZ#188148 & BZ#184171
+- Dropped the unified spec file logic; it complicated matters unnecessarily
+- Removed VERY broken fc5/fc4/fc3 conditionals
+- Removed redundant BuildReqs
+- Disabled io support due to not knowing what it was
+- General cleanup
+- Lots of help from Alex Lancaster on this package! Thanks!
+
 * Wed Mar 01 2006 Oliver Falk <oliver@linux-kernel.at>		- 2.8-3
 - Add libtool-ltdl, libtool-ltdl-devel
 - Fix fixes
