@@ -1,7 +1,8 @@
-# $Id: graphviz.spec,v 1.27 2006/09/18 01:59:11 jima Exp $ $Revision: 1.27 $
+# $Id: graphviz.spec,v 1.28 2006/10/04 21:35:44 jima Exp $ $Revision: 1.28 $
 # graphviz.spec.  Generated from graphviz.spec.in by configure.
 
-# Keeping one conditional because I can't figure out what it's looking for!
+# Io is disabled because it's not (yet?) found in Fedora.
+# http://www.iolanguage.com/about/
 # - Jima
 %define _IO 0
 
@@ -11,7 +12,7 @@
 Summary:	Graph Visualization Tools
 Name:		graphviz
 Version:	2.8
-Release:	4%{?dist}
+Release:	5%{?dist}
 Group:		Applications/Multimedia
 License:	CPL
 URL:		http://www.graphviz.org/
@@ -277,6 +278,9 @@ rm -rf $RPM_BUILD_ROOT
 if ! test -x %{_bindir}/dot; then rm -f %{_libdir}/%{name}/config; fi
 
 %changelog
+* Wed Oct 04 2006 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.8-5
+- Bump-n-build
+
 * Thu Sep 14 2006 Patrick "Jima" Laughton <jima@beer.tclug.org>	- 2.8-4
 - Fixing BZ#188148 & BZ#184171
 - Dropped the unified spec file logic; it complicated matters unnecessarily
