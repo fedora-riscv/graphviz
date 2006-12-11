@@ -1,31 +1,122 @@
-# $Id: graphviz.spec.in,v 1.68 2006/01/30 23:45:06 ellson Exp $ $Revision: 1.68 $
+# $Id: graphviz.spec.in,v 1.96 2006/10/24 13:46:11 ellson Exp $ $Revision: 1.96 $
 # graphviz.spec.  Generated from graphviz.spec.in by configure.
-
-# Io is disabled because it's not (yet?) found in Fedora.
-# http://www.iolanguage.com/about/
-# - Jima
-%define _IO 0
 
 # Note: graphviz requires gd with gif support (and other fixes), hence use
 # internal one for now.
 
-Summary:	Graph Visualization Tools
+#-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
-Version:	2.8
-Release:	5%{?dist}
-Group:		Applications/Multimedia
+Version:	2.12
+Release:	1%{?dist}
+
 License:	CPL
 URL:		http://www.graphviz.org/
-Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
-Requires:	urw-fonts
+Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.12.tar.gz
+Patch0:		%{name}-php5.patch
+
+# graphviz is relocatable
+#Prefix: /usr
+
+#-- feature and package selection -------------------------------------------
+#        depends on %dist and %fedora (or %rhl or %rhel) which are set
+#        in .rpmmacros on each build host
+
+# Define a default set of features incase none of the conditionals apply
+%define SHARP   0
+%define GUILE   0
+%define _IO     0
+%define JAVA    0
+%define LUA     0
+%define OCAML   0
+%define PERL    0
+%define PHP     0
+%define PYTHON  0
+%define RUBY    0
+%define TCL     1
+%define IPSEPCOLA --without-ipsepcola
+%define MYLIBGD --with-mylibgd
+%define MING --without-ming
+
+# SuSE uses a different mechanism to generate BuildRequires
+# norootforbuild
+# neededforbuild  expat freetype2 freetype2-devel gcc libjpeg libpng-devel-packages tcl tcl-devel tk tk-devel x-devel-packages
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:	libpng-devel libjpeg-devel expat-devel ksh bison flex 
-BuildRequires:	libtool-ltdl-devel fontconfig-devel swig libXaw-devel 
-BuildRequires:	libSM-devel libXpm-devel libXext-devel libXt-devel
-BuildRequires:	mono-core guile-devel libgcj-devel java-1.4.2-gcj-compat-devel
-BuildRequires:	lua-devel ocaml php-devel python-devel ruby-devel tk-devel
+BuildRequires:	zlib-devel libpng-devel libjpeg-devel expat-devel freetype-devel >= 2
+BuildRequires:	/bin/ksh bison m4 flex tk tcl >= 8.3 swig
+
+# This just indicates the requirement for tcl.h, tk.h, but doesn't identify
+# where to get them from. In RH9 and earlier they were in the tcl, tk,
+# base packages which are always BR'd anyway (above).
+BuildRequires:	/usr/include/tcl.h /usr/include/tk.h
+
+%if 0%{?rhl}
+%define PERL    1
+%define TCL     1
+BuildRequires: XFree86-devel perl
+%endif
+
+%if 0%{?rhel}
+%define PERL    1
+%define TCL     1
+BuildRequires: perl
+%if "%rhel" < "4"
+BuildRequires: XFree86-devel
+%endif
+%if "%rhel" >= "3"
+%define IPSEPCOLA --with-ipsepcola
+BuildRequires: fontconfig-devel tcl-devel tk-devel
+%endif
+%if "%rhel" >= "4"
+%define PHP     1
+%define RUBY    1
+BuildRequires: xorg-x11-devel php-devel ruby-devel
+%endif
+%if "%rhel" >= "5"
+BuildRequires: libtool-ltdl libtool-ltdl-devel libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel
+%endif
+%endif
+
+%if 0%{?fedora}
+%define PERL    1
+%define TCL     1
+BuildRequires: fontconfig-devel tcl-devel tk-devel 
+%if "%fedora" < "3"
+BuildRequires: XFree86-devel
+%endif
+%if "%fedora" == "3"
+BuildRequires: xorg-x11-devel
+%endif
+%if "%fedora" == "4"
+BuildRequires: xorg-x11-devel
+%endif
+%if "%fedora" >= "3"
+%define IPSEPCOLA --with-ipsepcola
+%endif
+%if "%fedora" >= "4"
+%define PHP     1
+%define RUBY    1
+%define GUILE   1
+BuildRequires: libtool-ltdl libtool-ltdl-devel php-devel ruby-devel guile-devel 
+%endif
+%if "%fedora" >= "5"
+%define SHARP   1
+%define JAVA    1
+%define OCAML   1
+%define PYTHON  1
+BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel libgcj-devel mono-core ocaml python-devel java-devel
+%endif
+%if "%fedora" >= "6"
+%define LUA     1
+BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel
+%endif
+%endif
+
+#-- graphviz rpm --------------------------------------------------
+Group:		Applications/Multimedia
+Summary:	Graph Visualization Tools
+Requires:	urw-fonts
 
 %description
 A collection of tools for the manipulation and layout
@@ -35,222 +126,289 @@ of graphs (as in nodes and edges, not as in barcharts).
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING ChangeLog NEWS README
 %{_bindir}/*
-%dir %{_libdir}/%{name}
-%{_libdir}/%{name}/*.so.*
+%dir %{_libdir}/graphviz
+%{_libdir}/*.so.*
+%{_libdir}/graphviz/*.so.*
 %{_mandir}/man1/*.1*
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/lefty
-%exclude %{_libdir}/%{name}/*/*
+%dir %{_datadir}/graphviz
+%{_datadir}/graphviz/lefty
+%exclude %{_libdir}/graphviz/*/*
+%exclude %{_libdir}/graphviz/libgvplugin_gd.*
 
-#------------------------------------------------------------------
+# run "dot -c" to generate plugin config in %{_libdir}/graphviz/config
+%post
+LD_LIBRARY_PATH=$RPM_INSTALL_PREFIX0/%{_lib} $RPM_INSTALL_PREFIX0/bin/dot -c
+
+# if there is no dot after everything else is done, the remove config
+%postun
+if ! test -x $RPM_INSTALL_PREFIX0/bin/dot; then rm -f $RPM_INSTALL_PREFIX0/%{_lib}/graphviz/config; fi
+
+#-- graphviz-gd rpm --------------------------------------------------
+%package gd
+Group:		Applications/Multimedia
+Summary:	graphviz plugin for renderers based on gd
+Requires:	graphviz = %{version}-%{release}
+
+%description gd
+graphviz plugin for renderers based on gd
+
+%files gd
+%{_libdir}/graphviz/libgvplugin_gd.so.*
+
+# run "dot -c" to generate plugin config in %{_libdir}/graphviz/config
+%post gd
+LD_LIBRARY_PATH=$RPM_INSTALL_PREFIX0/%{_lib} $RPM_INSTALL_PREFIX0/bin/dot -c
+
+# if there is not dot after everything else is done, the remove config
+%postun gd
+if ! test -x $RPM_INSTALL_PREFIX0/bin/dot; then rm -f $RPM_INSTALL_PREFIX0/%{_lib}/graphviz/config; fi
+
+#-- graphviz-sharp rpm --------------------------------------------
+%if %{SHARP}
 %package sharp
-Group:	Applications/Multimedia
-Summary:	C# extension for %{name}
-Requires:	%{name} = %{version}-%{release}
+Group:		Applications/Multimedia
+Summary:	C# extension for graphviz
+Requires:	graphviz = %{version}-%{release} mono-core
 
 %description sharp
-C# extensions for %{name}.
+C# extension for graphviz.
 
 %files sharp
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/sharp
-%{_libdir}/%{name}/sharp/*
+%dir %{_libdir}/graphviz/sharp
+%{_libdir}/graphviz/sharp/*
+%endif
 
-#------------------------------------------------------------------
+#-- graphviz-guile rpm --------------------------------------------
+%if %{GUILE}
 %package guile
 Group:		Applications/Multimedia
-Summary:	Guile extension for %{name}
-Requires:	%{name} = %{version}-%{release}
+Summary:	Guile extension for graphviz
+Requires:	graphviz = %{version}-%{release} guile
 
 %description guile
-Guile extensions for %{name}.
+Guile extension for graphviz.
 
 %files guile
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/guile
-%{_libdir}/%{name}/guile/*
+%dir %{_libdir}/graphviz/guile
+%{_libdir}/graphviz/guile/*
+%endif
 
-#------------------------------------------------------------------
+#-- graphviz-io rpm -----------------------------------------------
 %if %{_IO}
 %package io
 Group:		Applications/Multimedia
-Summary:	Io extension for %{name}
-Requires:	%{name} = %{version}-%{release}
+Summary:	Io extension for graphviz
+Requires:	graphviz = %{version}-%{release} io
 
 %description io
-Java extensions for %{name}.
+Io extension for graphviz.
 
 %files io
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/io
-%{_libdir}/%{name}/io/*
+%dir %{_libdir}/graphviz/io
+%{_libdir}/graphviz/io/*
 %endif
 
-#------------------------------------------------------------------
+#-- graphviz-java rpm ---------------------------------------------
+%if %{JAVA}
 %package java
 Group:		Applications/Multimedia
-Summary:	Java extension for %{name}
-Requires:	%{name} = %{version}-%{release}
+Summary:	Java extension for graphviz
+Requires:	graphviz = %{version}-%{release} libgcj java
 
 %description java
-Java extensions for %{name}.
+Java extension for graphviz.
 
 %files java
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/java
-%{_libdir}/%{name}/java/*
+%dir %{_libdir}/graphviz/java
+%{_libdir}/graphviz/java/*
+%endif
 
-#------------------------------------------------------------------
+#-- graphviz-lua rpm ----------------------------------------------
+%if %{LUA}
 %package lua
 Group:		Applications/Multimedia
-Summary:	Lua extension for %{name}
-Requires:	%{name} = %{version}-%{release}
+Summary:	Lua extension for graphviz
+Requires:	graphviz = %{version}-%{release} lua
 
 %description lua
-Java extensions for %{name}.
+Lua extension for graphviz.
 
 %files lua
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/lua
-%{_libdir}/%{name}/lua/*
+%dir %{_libdir}/graphviz/lua
+%{_libdir}/graphviz/lua/*
+%endif
 
-#------------------------------------------------------------------
+#-- graphviz-ocaml rpm --------------------------------------------
+%if %{OCAML}
 %package ocaml
 Group:		Applications/Multimedia
-Summary:	Ocaml extension for %{name}
-Requires:	%{name} = %{version}-%{release}
+Summary:	Ocaml extension for graphviz
+Requires:	graphviz = %{version}-%{release} ocaml
 
 %description ocaml
-Ocaml extensions for %{name}.
+Ocaml extension for graphviz.
 
 %files ocaml
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/ocaml
-%{_libdir}/%{name}/ocaml/*
+%dir %{_libdir}/graphviz/ocaml
+%{_libdir}/graphviz/ocaml/*
+%endif
 
-#------------------------------------------------------------------
+#-- graphviz-perl rpm ---------------------------------------------
+%if %{PERL}
 %package perl
 Group:		Applications/Multimedia
-Summary:	Perl extension for %{name}
-Requires:	%{name} = %{version}-%{release}
+Summary:	Perl extension for graphviz
+Requires:	graphviz = %{version}-%{release} perl
 
 %description perl
-Perl extensions for %{name}.
+Perl extension for graphviz.
 
 %files perl
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/perl
-%{_libdir}/%{name}/perl/*
+%dir %{_libdir}/graphviz/perl
+%{_libdir}/graphviz/perl/*
+%endif
 
-#------------------------------------------------------------------
+#-- graphviz-php rpm ----------------------------------------------
+%if %{PHP}
 %package php
 Group:		Applications/Multimedia
-Summary:	PHP extension for %{name}
-Requires:	%{name} = %{version}-%{release}
+Summary:	PHP extension for graphviz
+Requires:	graphviz = %{version}-%{release} php
 
 %description php
-PHP extensions for %{name}.
+PHP extension for graphviz.
 
 %files php
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/php
-%{_libdir}/%{name}/php/*
+%dir %{_libdir}/graphviz/php
+%{_libdir}/graphviz/php/*
+%endif
 
-#------------------------------------------------------------------
+#-- graphviz-python rpm -------------------------------------------
+%if %{PYTHON}
 %package python
 Group:		Applications/Multimedia
-Summary:	Python extension for %{name}
-Requires:	%{name} = %{version}-%{release}
+Summary:	Python extension for graphviz
+Requires:	graphviz = %{version}-%{release} python
 
 %description python
-Python extensions for %{name}.
+Python extension for graphviz.
 
 %files python
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/python
-%{_libdir}/%{name}/python/*
+%dir %{_libdir}/graphviz/python
+%{_libdir}/graphviz/python/*
+%endif
 
-#------------------------------------------------------------------
+#-- graphviz-ruby rpm ---------------------------------------------
+%if %{RUBY}
 %package ruby
 Group:		Applications/Multimedia
-Summary:	Ruby extension for %{name}
-Requires:	%{name} = %{version}-%{release}
+Summary:	Ruby extension for graphviz
+Requires:	graphviz = %{version}-%{release} ruby
 
 %description ruby
-Ruby extensions for %{name}.
+Ruby extension for graphviz.
 
 %files ruby
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/ruby
-%{_libdir}/%{name}/ruby/*
+%dir %{_libdir}/graphviz/ruby
+%{_libdir}/graphviz/ruby/*
+%endif
 
-#------------------------------------------------------------------
+#-- graphviz-tcl rpm ----------------------------------------------
+%if %{TCL}
 %package tcl
 Group:		Applications/Multimedia
-Summary:	Tcl extension & tools for %{name}
-Requires:	%{name} = %{version}-%{release} tcl >= 8.3 tk
+Summary:	Tcl extension & tools for graphviz
+Requires:	graphviz = %{version}-%{release} tcl >= 8.3 tk
 
 %description tcl
-Various tcl packages (extensions) for the %{name} tools.
+Various tcl packages (extensions) for the graphviz tools.
 
 %files tcl
 %defattr(-,root,root,-)
-%dir %{_libdir}/%{name}/tcl
-%{_libdir}/%{name}/tcl/*
-%{_libdir}/%{name}/pkgIndex.tcl
-%{_datadir}/%{name}/demo
+%dir %{_libdir}/graphviz/tcl
+%{_libdir}/graphviz/tcl/*
+%{_libdir}/graphviz/pkgIndex.tcl
+%{_datadir}/graphviz/demo
 %{_mandir}/mann/*.n*
+%endif
 
-#------------------------------------------------------------------
+#-- graphviz-devel rpm --------------------------------------------
 %package devel
 Group:		Development/Libraries
-Summary:	Development package for %{name}
-Requires:	%{name} = %{version}-%{release} pkgconfig
+Summary:	Development package for graphviz
+Requires:	graphviz = %{version}-%{release} pkgconfig
 
 %description devel
 A collection of tools for the manipulation and layout
 of graphs (as in nodes and edges, not as in barcharts).
-This package contains development files for %{name}.
+This package contains development files for graphviz.
 
 %files devel
 %defattr(-,root,root,-)
-%{_includedir}/%{name}
-%{_libdir}/%{name}/*.so
+%{_includedir}/graphviz
+%{_libdir}/*.so
 %{_libdir}/pkgconfig/*.pc
 %{_mandir}/man3/*.3*
-%exclude %{_libdir}/%{name}/*/*
+%exclude %{_libdir}/graphviz/*/*
+%exclude %{_libdir}/graphviz/libgvplugin*
+%exclude %{_libdir}/graphviz/*.so
 
-#------------------------------------------------------------------
+#-- graphviz-graphs rpm -------------------------------------------
 %package graphs
 Group:		Applications/Multimedia
-Summary:	Demo graphs for %{name}
+Summary:	Demo graphs for graphviz
 
 %description graphs
-Some demo graphs for %{name}.
+Some demo graphs for graphviz.
 
 %files graphs
 %defattr(-,root,root,-)
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/graphs
+%dir %{_datadir}/graphviz
+%{_datadir}/graphviz/graphs
 
-#------------------------------------------------------------------
+#-- graphviz-doc rpm ----------------------------------------------
 %package doc
 Group:		Documentation
-Summary:	PDF and HTML documents for %{name}
+Summary:	PDF and HTML documents for graphviz
 
 %description doc
-Provides some additional PDF and HTML documentation for %{name}.
+Provides some additional PDF and HTML documentation for graphviz.
 
 %files doc
 %defattr(-,root,root,-)
 %doc __doc/*
 
-#------------------------------------------------------------------
+#-- building --------------------------------------------------
+
 %prep
 %setup -q
+%patch0 -p1
 
 %build
-%configure --disable-static --with-mylibgd --disable-io
+# XXX ix86 only used to have -ffast-math, let's use everywhere
+%{expand: %%define optflags %{optflags} -ffast-math}
+# %%configure is broken in RH7.3 rpmbuild
+CFLAGS="$RPM_OPT_FLAGS" \
+./configure \
+      --prefix=%{_prefix} \
+      --bindir=%{_bindir} \
+      --libdir=%{_libdir} \
+      --includedir=%{_includedir} \
+      --datadir=%{_datadir} \
+      --mandir=%{_mandir} \
+      --with-x \
+      --disable-static \
+      --disable-dependency-tracking %{MYLIBGD} %{IPSEPCOLA} %{MING}
 %__make %{?_smp_mflags}
 
 %install
@@ -261,7 +419,6 @@ rm -rf $RPM_BUILD_ROOT __doc
     pkgconfigdir=%{_libdir}/pkgconfig \
     install
 find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
-#find ${RPM_BUILD_ROOT} -type f -name "*.a" -exec rm -f {} ';'
 chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/lefty/*
 cp -a $RPM_BUILD_ROOT%{_datadir}/%{name}/doc __doc
 rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/doc
@@ -269,129 +426,21 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/doc
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-# run "dot -c" to generate plugin config in %{_libdir}/%{name}/config
-%post
-%{_bindir}/dot -c
-
-# if there is not dot after everything else is done, the remove config
-%postun
-if ! test -x %{_bindir}/dot; then rm -f %{_libdir}/%{name}/config; fi
+#-- changelog --------------------------------------------------
 
 %changelog
-* Wed Oct 04 2006 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.8-5
-- Bump-n-build
+* Mon Dec 11 2006 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-1
+- Fixed dist tag
+- Fixed minor typo in -lua description (BZ#218191)
+- Added upstream-supplied "php5" patch (due to newer swig)
+- Added BR: java-devel & R: java
 
-* Thu Sep 14 2006 Patrick "Jima" Laughton <jima@beer.tclug.org>	- 2.8-4
-- Fixing BZ#188148 & BZ#184171
-- Dropped the unified spec file logic; it complicated matters unnecessarily
-- Removed VERY broken fc5/fc4/fc3 conditionals
-- Removed redundant BuildReqs
-- Disabled io support due to not knowing what it was
-- General cleanup
-- Lots of help from Alex Lancaster on this package! Thanks!
+* Tue Sep 13 2005 John Ellson <ellson@research.att.com>
+- split out language bindings into their own rpms so that 
+    main rpm doesn't depend on (e.g.) ocaml
 
-* Wed Mar 01 2006 Oliver Falk <oliver@linux-kernel.at>		- 2.8-3
-- Add libtool-ltdl, libtool-ltdl-devel
-- Fix fixes
+* Sat Aug 13 2005 John Ellson <ellson@research.att.com>
+- imported various fixes from the Fedora-Extras .spec by Oliver Falk <oliver@linux-kernel.at>
 
-* Fri Feb 24 2006 Oliver Falk <oliver@linux-kernel.at>		- 2.8-2
-- Fix unpackaged files on x86_64
-
-* Wed Feb 22 2006 Oliver Falk <oliver@linux-kernel.at>		- 2.8-1
-- Merge with specfile from Paul F. Johnson
-- Update
-
-* Mon Feb 13 2006 Oliver Falk <oliver@linux-kernel.at>		- 2.6-4
-- BR: ruby-devel
-
-* Mon Nov 21 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-3
-- Rebuild
-
-* Fri Nov 04 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-2
-- BuildRequires fixes for "Modular X"; Thanks to John Ellson
-
-* Mon Aug 29 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-1
-- Update
-
-* Mon Aug 22 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.4-2
-- Bug #163840
-
-* Thu Aug 11 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.4-1
-- Update
-- Took over maintainership
-- Merge with spec provided within source tarball
-
-* Sun May 22 2005 Jeremy Katz <katzj@redhat.com> - 2.2.1-2
-- rebuild on all arches
-
-* Fri Apr  7 2005 John Ellson <ellson@research.att.com> - 2.2.1-1
-- update to graphviz-2.2.1
-
-* Fri Apr  7 2005 Michael Schwendt <mschwendt[AT]users.sf.net>
-- rebuilt
-
-* Sun Jan 23 2005 John Ellson <ellson@research.att.com> - 0:2.2-3
-- change BuildRequires to /bin/ksh, since ksh doesn't provide a /usr/bin/ksh
-- change devel exclude to also exclude libtcl*.la
-
-* Sat Jan 22 2005 Ville Skyttä <ville.skytta at iki.fi> - 0:2.2-2
-- Move -doc back to %%{__docdir}, remove unused docdir=... from build.
-- Own %%{_datadir}/%%{name} in -graphs.
-- Require tcl and tk in -tcl.
-- Require pkgconfig in -devel, fix *.pc install location.
-- Build without dependency tracking.
-- Honor $RPM_OPT_FLAGS again.
-- Move dotneato-config to -devel.
-- Fix lefty/* permissions.
-
-* Sat Jan 22 2005 John Ellson <ellson@research.att.com> - 0:2.2-1
-- Updated to 2.2
-- split out:
-    graphviz-docs    - optional and large
-    graphviz-graphs  - optional demo graphs
-    graphviz-tcl     - optional, of interest only to tcl users, requires tcl
-- avoid use of %%configure which breaks on RH73
-- add some pkgconfigs - probably in wrong place they're a bit experimental
-  so OK for now
-- add BuildRequires /usr/bin/ksh  (either pdksh or the real one)
-
-* Thu Jun  3 2004 Ville Skyttä <ville.skytta at iki.fi> - 0:1.12-0.fdr.2
-- BuildRequire m4 to work around https://bugzilla.redhat.com/108655 on FC1.
-
-* Tue May 25 2004 Ville Skyttä <ville.skytta at iki.fi> - 0:1.12-0.fdr.1
-- Update to 1.12.
-
-* Tue Nov 11 2003 Dams <anvil[AT]livna.org> 0:1.10-0.fdr.3
-- Applied patch to fix build on FC1
-
-* Sat Aug 23 2003 Dams <anvil[AT]livna.org> 0:1.10-0.fdr.2
-- Hopefully fixed BuildRequires
-
-* Sun Aug 17 2003 Dams <anvil[AT]livna.org> 0:1.10-0.fdr.2
-- Added some BuildRequires to satisfy build conditions on severn.
-
-* Sat Aug 16 2003 Dams <anvil[AT]livna.org> 0:1.10-0.fdr.1
-- Added _smp_mflags
-- Removed "transform='s,x,x,'" configure arg
-
-* Tue Jul 29 2003 Ville Skyttä <ville.skytta at iki.fi> - 0:1.10-0.fdr.1
-- Update to 1.10.
-- BuildRequires expat-devel.
-- Include *.la (uses ltdl).
-- %%configure in %%build.
-
-* Thu Jul 10 2003 Dams <anvil[AT]livna.org> 0:1.9-0.fdr.1
-- Updated to 1.9
-- Split devel package
-
-* Tue Jul  8 2003 Dams <anvil[AT]livna.org> 0:1.7.14-0.fdr.1
-- Applied fedora spec file look&feel
-
-* Tue Jan  1 2002 Jeff Johnson <jbj@redhat.com>
-- update to 1.7.14.
-
-* Wed Apr 25 2001 Jeff Johnson <jbj@redhat.com>
-- repackage for powertools.
-- simplify spec file.
-- add -ffast-math for all arch's, not just ix86.
-- remove Requires: webfonts.
+* Wed Jul 20 2005 John Ellson <ellson@research.att.com>
+- release 2.4
