@@ -7,7 +7,7 @@
 #-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
 Version:	2.12
-Release:	1%{?dist}
+Release:	2%{?dist}
 
 License:	CPL
 URL:		http://www.graphviz.org/
@@ -15,7 +15,7 @@ Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.12.tar.gz
 Patch0:		%{name}-php5.patch
 
 # graphviz is relocatable
-#Prefix: /usr
+Prefix: /usr
 
 #-- feature and package selection -------------------------------------------
 #        depends on %dist and %fedora (or %rhl or %rhel) which are set
@@ -429,6 +429,9 @@ rm -rf $RPM_BUILD_ROOT
 #-- changelog --------------------------------------------------
 
 %changelog
+* Wed Dec 13 2006 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-2
+- Use of RPM_INSTALL_PREFIX0 in %%post requires Prefix: to be set
+
 * Mon Dec 11 2006 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-1
 - Fixed dist tag
 - Fixed minor typo in -lua description (BZ#218191)
