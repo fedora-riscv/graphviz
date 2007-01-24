@@ -7,7 +7,7 @@
 #-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
 Version:	2.12
-Release:	2%{?dist}
+Release:	3%{?dist}
 
 License:	CPL
 URL:		http://www.graphviz.org/
@@ -18,24 +18,24 @@ Patch0:		%{name}-php5.patch
 Prefix: /usr
 
 #-- feature and package selection -------------------------------------------
-#        depends on %dist and %fedora (or %rhl or %rhel) which are set
-#        in .rpmmacros on each build host
+#	depends on %dist and %fedora (or %rhl or %rhel) which are set
+#	in .rpmmacros on each build host
 
 # Define a default set of features incase none of the conditionals apply
-%define SHARP   0
-%define GUILE   0
-%define _IO     0
-%define JAVA    0
-%define LUA     0
-%define OCAML   0
-%define PERL    0
-%define PHP     0
-%define PYTHON  0
-%define RUBY    0
-%define TCL     1
-%define IPSEPCOLA --without-ipsepcola
-%define MYLIBGD --with-mylibgd
-%define MING --without-ming
+%define SHARP	0
+%define GUILE	0
+%define _IO	0
+%define JAVA	0
+%define LUA	0
+%define OCAML	0
+%define PERL	0
+%define PHP	0
+%define PYTHON	0
+%define RUBY	0
+%define TCL	1
+%define IPSEPCOLA	--without-ipsepcola
+%define MYLIBGD		--with-mylibgd
+%define MING		--without-ming
 
 # SuSE uses a different mechanism to generate BuildRequires
 # norootforbuild
@@ -52,14 +52,14 @@ BuildRequires:	/bin/ksh bison m4 flex tk tcl >= 8.3 swig
 BuildRequires:	/usr/include/tcl.h /usr/include/tk.h
 
 %if 0%{?rhl}
-%define PERL    1
-%define TCL     1
+%define PERL	1
+%define TCL	1
 BuildRequires: XFree86-devel perl
 %endif
 
 %if 0%{?rhel}
-%define PERL    1
-%define TCL     1
+%define PERL	1
+%define TCL	1
 BuildRequires: perl
 %if "%rhel" < "4"
 BuildRequires: XFree86-devel
@@ -69,9 +69,9 @@ BuildRequires: XFree86-devel
 BuildRequires: fontconfig-devel tcl-devel tk-devel
 %endif
 %if "%rhel" >= "4"
-%define PHP     1
-%define RUBY    1
-BuildRequires: xorg-x11-devel php-devel ruby-devel
+%define PHP	1
+%define RUBY	1
+BuildRequires: xorg-x11-devel php-devel ruby ruby-devel
 %endif
 %if "%rhel" >= "5"
 BuildRequires: libtool-ltdl libtool-ltdl-devel libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel
@@ -79,8 +79,8 @@ BuildRequires: libtool-ltdl libtool-ltdl-devel libXaw-devel libSM-devel libICE-d
 %endif
 
 %if 0%{?fedora}
-%define PERL    1
-%define TCL     1
+%define PERL	1
+%define TCL	1
 BuildRequires: fontconfig-devel tcl-devel tk-devel 
 %if "%fedora" < "3"
 BuildRequires: XFree86-devel
@@ -95,20 +95,20 @@ BuildRequires: xorg-x11-devel
 %define IPSEPCOLA --with-ipsepcola
 %endif
 %if "%fedora" >= "4"
-%define PHP     1
-%define RUBY    1
-%define GUILE   1
-BuildRequires: libtool-ltdl libtool-ltdl-devel php-devel ruby-devel guile-devel 
+%define PHP	1
+%define RUBY	1
+%define GUILE	1
+BuildRequires: libtool-ltdl libtool-ltdl-devel php-devel ruby ruby-devel guile-devel
 %endif
 %if "%fedora" >= "5"
-%define SHARP   1
-%define JAVA    1
-%define OCAML   1
-%define PYTHON  1
+%define SHARP	1
+%define JAVA	1
+%define OCAML	1
+%define PYTHON	1
 BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel libgcj-devel mono-core ocaml python-devel java-devel
 %endif
 %if "%fedora" >= "6"
-%define LUA     1
+%define LUA	1
 BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel
 %endif
 %endif
@@ -117,6 +117,8 @@ BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel
 Group:		Applications/Multimedia
 Summary:	Graph Visualization Tools
 Requires:	urw-fonts
+Requires(post):	/sbin/ldconfig
+Requires(postun):	/sbin/ldconfig
 
 %description
 A collection of tools for the manipulation and layout
@@ -138,15 +140,17 @@ of graphs (as in nodes and edges, not as in barcharts).
 # run "dot -c" to generate plugin config in %{_libdir}/graphviz/config
 %post
 LD_LIBRARY_PATH=$RPM_INSTALL_PREFIX0/%{_lib} $RPM_INSTALL_PREFIX0/bin/dot -c
+/sbin/ldconfig
 
 # if there is no dot after everything else is done, the remove config
 %postun
 if ! test -x $RPM_INSTALL_PREFIX0/bin/dot; then rm -f $RPM_INSTALL_PREFIX0/%{_lib}/graphviz/config; fi
+/sbin/ldconfig
 
 #-- graphviz-gd rpm --------------------------------------------------
 %package gd
 Group:		Applications/Multimedia
-Summary:	graphviz plugin for renderers based on gd
+Summary:	Graphviz plugin for renderers based on gd
 Requires:	graphviz = %{version}-%{release}
 
 %description gd
@@ -216,7 +220,7 @@ Io extension for graphviz.
 %package java
 Group:		Applications/Multimedia
 Summary:	Java extension for graphviz
-Requires:	graphviz = %{version}-%{release} libgcj java
+Requires:	graphviz = %{version}-%{release} java
 
 %description java
 Java extension for graphviz.
@@ -400,24 +404,24 @@ Provides some additional PDF and HTML documentation for graphviz.
 # %%configure is broken in RH7.3 rpmbuild
 CFLAGS="$RPM_OPT_FLAGS" \
 ./configure \
-      --prefix=%{_prefix} \
-      --bindir=%{_bindir} \
-      --libdir=%{_libdir} \
-      --includedir=%{_includedir} \
-      --datadir=%{_datadir} \
-      --mandir=%{_mandir} \
-      --with-x \
-      --disable-static \
-      --disable-dependency-tracking %{MYLIBGD} %{IPSEPCOLA} %{MING}
+	--prefix=%{_prefix} \
+	--bindir=%{_bindir} \
+	--libdir=%{_libdir} \
+	--includedir=%{_includedir} \
+	--datadir=%{_datadir} \
+	--mandir=%{_mandir} \
+	--with-x \
+	--disable-static \
+	--disable-dependency-tracking %{MYLIBGD} %{IPSEPCOLA} %{MING}
 %__make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT __doc
 %{__make} \
-    DESTDIR=$RPM_BUILD_ROOT \
-    docdir=$RPM_BUILD_ROOT%{_docdir}/%{name} \
-    pkgconfigdir=%{_libdir}/pkgconfig \
-    install
+	DESTDIR=$RPM_BUILD_ROOT \
+	docdir=$RPM_BUILD_ROOT%{_docdir}/%{name} \
+	pkgconfigdir=%{_libdir}/pkgconfig \
+	install
 find ${RPM_BUILD_ROOT} -type f -name "*.la" -exec rm -f {} ';'
 chmod -x $RPM_BUILD_ROOT%{_datadir}/%{name}/lefty/*
 cp -a $RPM_BUILD_ROOT%{_datadir}/%{name}/doc __doc
@@ -429,6 +433,13 @@ rm -rf $RPM_BUILD_ROOT
 #-- changelog --------------------------------------------------
 
 %changelog
+* Wed Jan 24 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-3
+- Added running of /sbin/ldconfig in post/postun (and Reqs)
+- Minor edit to -gd summary
+- Removed explicit dependency on libgcj in -java
+- Added BR for ruby (not pulled in by ruby-devel!)
+- Cleanup of spaces/tabs to minimize rpmlint warnings
+
 * Wed Dec 13 2006 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-2
 - Use of RPM_INSTALL_PREFIX0 in %%post requires Prefix: to be set
 
@@ -440,7 +451,7 @@ rm -rf $RPM_BUILD_ROOT
 
 * Tue Sep 13 2005 John Ellson <ellson@research.att.com>
 - split out language bindings into their own rpms so that 
-    main rpm doesn't depend on (e.g.) ocaml
+  main rpm doesn't depend on (e.g.) ocaml
 
 * Sat Aug 13 2005 John Ellson <ellson@research.att.com>
 - imported various fixes from the Fedora-Extras .spec by Oliver Falk <oliver@linux-kernel.at>
