@@ -7,7 +7,7 @@
 #-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
 Version:	2.12
-Release:	3%{?dist}
+Release:	4%{?dist}
 
 License:	CPL
 URL:		http://www.graphviz.org/
@@ -433,6 +433,9 @@ rm -rf $RPM_BUILD_ROOT
 #-- changelog --------------------------------------------------
 
 %changelog
+* Thu Feb 01 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-4
+- Bump-n-build due to tk upgrade
+
 * Wed Jan 24 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-3
 - Added running of /sbin/ldconfig in post/postun (and Reqs)
 - Minor edit to -gd summary
