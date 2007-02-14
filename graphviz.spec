@@ -7,13 +7,12 @@
 #-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
 Version:	2.12
-Release:	5%{?dist}
+Release:	6%{?dist}
 
 License:	CPL
 URL:		http://www.graphviz.org/
 Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.12.tar.gz
 Patch0:		%{name}-php5.patch
-Patch1:		%{name}-tk8.5.patch
 
 # graphviz is relocatable
 Prefix: /usr
@@ -398,9 +397,6 @@ Provides some additional PDF and HTML documentation for graphviz.
 %prep
 %setup -q
 %patch0 -p1
-%if "%fedora" >= "7"
-%patch1 -p1
-%endif
 
 %build
 # XXX ix86 only used to have -ffast-math, let's use everywhere
@@ -437,6 +433,9 @@ rm -rf $RPM_BUILD_ROOT
 #-- changelog --------------------------------------------------
 
 %changelog
+* Wed Feb 14 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-6
+- Removed patch, as tcl/tk got rolled back to 8.4
+
 * Wed Feb 07 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-5
 - Added patch for slightly broken tk 8.5
 
