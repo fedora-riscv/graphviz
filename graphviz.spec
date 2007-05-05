@@ -7,15 +7,17 @@
 #-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
 Version:	2.12
-Release:	6%{?dist}
+Release:	7%{?dist}
 
 License:	CPL
 URL:		http://www.graphviz.org/
 Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.12.tar.gz
 Patch0:		%{name}-php5.patch
+Patch1:		%{name}-libcdt.patch
 
 # graphviz is relocatable
-Prefix: /usr
+#Prefix: /usr
+# not until we can figure out why relocatabilty is broken
 
 #-- feature and package selection -------------------------------------------
 #	depends on %dist and %fedora (or %rhl or %rhel) which are set
@@ -101,11 +103,14 @@ BuildRequires: xorg-x11-devel
 BuildRequires: libtool-ltdl libtool-ltdl-devel php-devel ruby ruby-devel guile-devel
 %endif
 %if "%fedora" >= "5"
-%define SHARP	1
 %define JAVA	1
-%define OCAML	1
 %define PYTHON	1
-BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel libgcj-devel mono-core ocaml python-devel java-devel
+BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel libgcj-devel python-devel java-devel
+%ifnarch ppc64
+%define SHARP	1
+%define OCAML	1
+BuildRequires: mono-core ocaml
+%endif
 %endif
 %if "%fedora" >= "6"
 %define LUA	1
@@ -139,12 +144,12 @@ of graphs (as in nodes and edges, not as in barcharts).
 
 # run "dot -c" to generate plugin config in %{_libdir}/graphviz/config
 %post
-LD_LIBRARY_PATH=$RPM_INSTALL_PREFIX0/%{_lib} $RPM_INSTALL_PREFIX0/bin/dot -c
+%{_bindir}/dot -c
 /sbin/ldconfig
 
 # if there is no dot after everything else is done, the remove config
 %postun
-if ! test -x $RPM_INSTALL_PREFIX0/bin/dot; then rm -f $RPM_INSTALL_PREFIX0/%{_lib}/graphviz/config; fi
+if ! test -x %{_bindir}/dot; then rm -f %{_libdir}/graphviz/config; fi
 /sbin/ldconfig
 
 #-- graphviz-gd rpm --------------------------------------------------
@@ -161,11 +166,11 @@ graphviz plugin for renderers based on gd
 
 # run "dot -c" to generate plugin config in %{_libdir}/graphviz/config
 %post gd
-LD_LIBRARY_PATH=$RPM_INSTALL_PREFIX0/%{_lib} $RPM_INSTALL_PREFIX0/bin/dot -c
+%{_bindir}/dot -c
 
 # if there is not dot after everything else is done, the remove config
 %postun gd
-if ! test -x $RPM_INSTALL_PREFIX0/bin/dot; then rm -f $RPM_INSTALL_PREFIX0/%{_lib}/graphviz/config; fi
+if ! test -x %{_bindir}/dot; then rm -f %{_libdir}/graphviz/config; fi
 
 #-- graphviz-sharp rpm --------------------------------------------
 %if %{SHARP}
@@ -397,6 +402,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 # XXX ix86 only used to have -ffast-math, let's use everywhere
@@ -433,6 +439,11 @@ rm -rf $RPM_BUILD_ROOT
 #-- changelog --------------------------------------------------
 
 %changelog
+* Sat May 05 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-7
+- Patch to fix BZ#237496
+- Disabling relocatability to work around BZ#237082
+- Disabling -ocaml and -sharp subpackages for ppc64 to remedy BZ#239078
+
 * Wed Feb 14 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-6
 - Removed patch, as tcl/tk got rolled back to 8.4
 
