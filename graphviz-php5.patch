@@ -1,0 +1,30 @@
+diff -urN graphviz-2.12/configure graphviz-2.12-patched/configure
+--- graphviz-2.12/configure	2006-12-04 16:02:10.000000000 -0600
++++ graphviz-2.12-patched/configure	2006-12-08 09:45:19.000000000 -0600
+@@ -25552,7 +25552,7 @@
+ 
+ fi;
+ if test "x$enable_php" != "xno"; then
+-if test `$SWIG -help 2>&1 | $GREP -c '\-php *- Generate'` = 0; then
++if test `$SWIG -help 2>&1 | $GREP -c '\-php[5 ]*- Generate'` = 0; then
+ 	PHP=
+ 	{ echo "$as_me:$LINENO: WARNING: swig does not support php. The PHP packages will not be built" >&5
+ echo "$as_me: WARNING: swig does not support php. The PHP packages will not be built" >&2;}
+diff -urN graphviz-2.12/configure.ac graphviz-2.12-patched/configure.ac
+--- graphviz-2.12/configure.ac	2006-12-04 15:11:58.000000000 -0600
++++ graphviz-2.12-patched/configure.ac	2006-12-08 08:07:10.000000000 -0600
+@@ -1,4 +1,4 @@
+-# $Id: graphviz-php5.patch,v 1.1 2007/05/24 17:05:14 jima Exp $ $Revision: 1.1 $
++# $Id: graphviz-php5.patch,v 1.1 2007/05/24 17:05:14 jima Exp $ $Revision: 1.1 $
+ 
+ # Process this file with autoconf to produce a configure script
+ AC_PREREQ(2.54)
+@@ -628,7 +628,7 @@
+ AC_ARG_ENABLE(php,
+   [AC_HELP_STRING([--disable-php], [don't support php language bindings])])
+ if test "x$enable_php" != "xno"; then
+-if test `$SWIG -help 2>&1 | $GREP -c '\-php *- Generate'` = 0; then
++if test `$SWIG -help 2>&1 | $GREP -c '\-php[[5 ]]*- Generate'` = 0; then
+ 	PHP=
+ 	AC_MSG_WARN([swig does not support php. The PHP packages will not be built])
+ else
