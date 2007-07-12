@@ -7,13 +7,14 @@
 #-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
 Version:	2.12
-Release:	7%{?dist}
+Release:	8%{?dist}
 
 License:	CPL
 URL:		http://www.graphviz.org/
 Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.12.tar.gz
 Patch0:		%{name}-php5.patch
 Patch1:		%{name}-libcdt.patch
+Patch2:		%{name}-black.patch
 
 # graphviz is relocatable
 #Prefix: /usr
@@ -403,6 +404,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # XXX ix86 only used to have -ffast-math, let's use everywhere
@@ -439,6 +441,9 @@ rm -rf $RPM_BUILD_ROOT
 #-- changelog --------------------------------------------------
 
 %changelog
+* Thu Jul 12 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-8
+- Patch to fix BZ#241790 (thanks John!)
+
 * Sat May 05 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-7
 - Patch to fix BZ#237496
 - Disabling relocatability to work around BZ#237082
