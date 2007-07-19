@@ -1,10 +1,10 @@
-# $Id: graphviz.spec,v 1.9 2007/07/19 21:26:13 jima Exp $ $Revision: 1.9 $
+# $Id: graphviz.spec,v 1.10 2007/07/19 21:45:17 jima Exp $ $Revision: 1.10 $
 
 Summary:			Graph Visualization Tools
 Name:				graphviz
 
 Version:			2.6
-Release:			2%{?dist}
+Release:			3%{?dist}
 
 Group:				Applications/Multimedia
 License:			CPL
@@ -96,8 +96,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/lefty
 #%exclude %{_libdir}/%{name}/lib*tcl*.so.*
 #%exclude %{_libdir}/%{name}/libtk*.so.*
-#%exclude %{_includedir}/ltdl*
-#%exclude %{_libdir}/libltdl*
+%exclude %{_includedir}/ltdl*
+%exclude %{_libdir}/libltdl*
 
 %files tcl
 %defattr(-,root,root,-)
@@ -137,6 +137,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/dot -c
 
 %changelog
+* Thu Jul 19 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.6-3
+- Uncommenting %%excludes to exclude erroneously installed ltdl libs
+
 * Thu Jul 19 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.6-2
 - Hoping BR on libtool-ltdl-devel is non-fatal (not found in EL-4)
 
