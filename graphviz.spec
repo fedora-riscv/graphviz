@@ -1,10 +1,10 @@
-# $Id: graphviz.spec,v 1.8 2005/10/17 08:14:43 oliver Exp $ $Revision: 1.8 $
+# $Id: graphviz.spec,v 1.9 2007/07/19 21:26:13 jima Exp $ $Revision: 1.9 $
 
 Summary:			Graph Visualization Tools
 Name:				graphviz
 
 Version:			2.6
-Release:			1%{?dist}
+Release:			2%{?dist}
 
 Group:				Applications/Multimedia
 License:			CPL
@@ -18,7 +18,7 @@ BuildRequires:		zlib-devel libpng-devel libjpeg-devel expat-devel freetype-devel
 BuildRequires:		/bin/ksh bison m4 flex tcl-devel >= 8.3 tk-devel swig
 BuildRequires:		/usr/include/tcl.h /usr/include/tk.h
 BuildRequires:		php-devel guile-devel
-BuildRequires:		fontconfig-devel xorg-x11-devel libtool-ltdl-devel
+BuildRequires:		fontconfig-devel xorg-x11-devel
 Requires(post):		%{_bindir}/dot
 Requires(postun):	%{_bindir}/dot
 Requires:			urw-fonts
@@ -137,6 +137,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/dot -c
 
 %changelog
+* Thu Jul 19 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.6-2
+- Hoping BR on libtool-ltdl-devel is non-fatal (not found in EL-4)
+
 * Mon Aug 29 2005 Oliver Falk <oliver@linux-kernel.at>		- 2.6-1
 - Update
 
