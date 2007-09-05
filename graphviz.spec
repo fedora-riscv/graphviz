@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.14.1
 
-%define truerelease 2
+%define truerelease 3
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -18,6 +18,7 @@ Group:   Applications/Multimedia
 License: CPL
 URL:     http://www.graphviz.org/
 Source0: http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.14.1.tar.gz
+Patch0:  %{name}-arith.patch
 
 #-- feature and package selection -------------------------------------------
 #   depends on %dist and %fedora (or %rhl or %rhel) which are set
@@ -437,6 +438,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 
 %prep
 %setup -q
+%patch0 -p0
 
 %build
 %if ! %{SHARP}
@@ -509,6 +511,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Tue Sep 04 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.14.1-3
+- Patch to resurrect arith.h
+
 * Thu Aug 23 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.14.1-2
 - Added perl-devel to BR for F7+
 
