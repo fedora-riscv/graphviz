@@ -1,10 +1,10 @@
-# $Id: graphviz.spec,v 1.10 2007/07/19 21:45:17 jima Exp $ $Revision: 1.10 $
+# $Id: graphviz.spec,v 1.11 2007/09/10 13:17:08 jima Exp $ $Revision: 1.11 $
 
 Summary:			Graph Visualization Tools
 Name:				graphviz
 
 Version:			2.6
-Release:			3%{?dist}
+Release:			4%{?dist}
 
 Group:				Applications/Multimedia
 License:			CPL
@@ -137,6 +137,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/dot -c
 
 %changelog
+* Mon Sep 10 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.6-4
+- Bump-n-build to fix libperl.so dependency
+
 * Thu Jul 19 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.6-3
 - Uncommenting %%excludes to exclude erroneously installed ltdl libs
 
