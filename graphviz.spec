@@ -6,9 +6,9 @@
 #-- Global graphviz rpm and src.rpm tags-------------------------------------
 Name:    graphviz
 Summary: Graph Visualization Tools
-Version: 2.14.1
+Version: 2.16
 
-%define truerelease 3
+%define truerelease 1
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -17,8 +17,11 @@ Release: %{?release}
 Group:   Applications/Multimedia
 License: CPL
 URL:     http://www.graphviz.org/
-Source0: http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.14.1.tar.gz
-Patch0:  %{name}-arith.patch
+Source0: http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
+
+# graphviz is relocatable - Caution: this feature is used in AT&T,
+#   but probably will not be supported in Redhat/Fedora/Centos distros
+#Prefix: /usr
 
 #-- feature and package selection -------------------------------------------
 #   depends on %dist and %fedora (or %rhl or %rhel) which are set
@@ -38,8 +41,10 @@ Patch0:  %{name}-arith.patch
 %define TCL    1
 %define IPSEPCOLA --without-ipsepcola
 %define MYLIBGD --with-mylibgd
-%define MING --without-ming
 %define PANGOCAIRO --without-pangocairo
+%define DEVIL 0
+%define MING 0
+%define GDK_PIXBUF --without-gdk-pixbuf
 
 # SuSE uses a different mechanism to generate BuildRequires
 # norootforbuild
@@ -89,6 +94,11 @@ BuildRequires: perl php-devel ruby ruby-devel guile-devel python-devel
 BuildRequires: libtool-ltdl libtool-ltdl-devel libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel java-devel
 BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel gtk2-devel libgnomeui-devel
 %endif
+%if "%rhel" >= "6"
+%define MYLIBGD --without-mylibgd
+%define GDK_PIXBUF --with-gdk-pixbuf
+BuildRequires: gd gd-devel perl-devel
+%endif
 %endif
 
 #-- Fedora specific Build Requirements --------------------------------------
@@ -130,8 +140,14 @@ BuildRequires: mono-core ocaml
 BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel gtk2-devel libgnomeui-devel
 %endif
 %if "%fedora" >= "7"
-BuildRequires: gd gd-devel perl-devel
+%define DEVIL 1
 %define MYLIBGD --without-mylibgd
+%define GDK_PIXBUF --with-gdk-pixbuf
+BuildRequires: gd gd-devel perl-devel DevIL-devel
+%endif
+%if "%fedora" >= "9"
+%define MING 1
+BuildRequires: ming ming-devel
 %endif
 %endif
 
@@ -169,6 +185,12 @@ fi
 %{_datadir}/graphviz/lefty
 %exclude %{_libdir}/graphviz/*/*
 %exclude %{_libdir}/graphviz/libgvplugin_gd.*
+%if %{DEVIL}
+%exclude %{_libdir}/graphviz/libgvplugin_devil.*
+%endif
+%if %{MING}
+%exclude %{_libdir}/graphviz/libgvplugin_ming.*
+%endif
 
 #-- graphviz-gd rpm --------------------------------------------------
 %package gd
@@ -195,6 +217,50 @@ based renderer.)
 
 %files gd
 %{_libdir}/graphviz/libgvplugin_gd.so.*
+
+#-- graphviz-devil rpm --------------------------------------------------
+%if %{DEVIL}
+%package devil
+Group:            Applications/Multimedia
+Summary:          Graphviz plugin for renderers based on DevIL
+Requires:         graphviz = %{version}-%{release}
+
+%description devil
+Graphviz plugin for renderers based on DevIL.  (Unless you absolutely have
+to use BMP, TIF, or TGA, you are recommended to use the PNG format instead
+support directly by the cairo+pango based renderer in the base graphviz rpm.)
+
+# run "dot -c" to generate plugin config in %{_libdir}/graphviz/config
+%post devil
+%{_bindir}/dot -c
+
+%postun devil
+[ -x %{_bindir}/dot ] && %{_bindir}/dot -c || :
+
+%files devil
+%{_libdir}/graphviz/libgvplugin_devil.so.*
+%endif
+
+#-- graphviz-ming rpm --------------------------------------------------
+%if %{MING}
+%package ming
+Group:            Applications/Multimedia
+Summary:          Graphviz plugin for flash renderer based on ming
+Requires:         graphviz = %{version}-%{release}
+
+%description ming
+Graphviz plugin for -Tswf (flash) renderer based on ming.
+
+# run "dot -c" to generate plugin config in %{_libdir}/graphviz/config
+%post ming
+%{_bindir}/dot -c
+
+%postun ming
+[ -x %{_bindir}/dot ] && %{_bindir}/dot -c || :
+
+%files ming
+%{_libdir}/graphviz/libgvplugin_ming.so.*
+%endif
 
 #-- graphviz-sharp rpm --------------------------------------------
 %if %{SHARP}
@@ -438,7 +504,6 @@ Provides some additional PDF and HTML documentation for graphviz.
 
 %prep
 %setup -q
-%patch0 -p0
 
 %build
 %if ! %{SHARP}
@@ -474,6 +539,12 @@ Provides some additional PDF and HTML documentation for graphviz.
 %if ! %{TCL}
 %define NO_TCL --disable-tcl
 %endif
+%if ! %{DEVIL}
+%define NO_DEVIL --without-devil
+%endif
+%if ! %{MING}
+%define NO_MING --without-ming
+%endif
 
 # XXX ix86 only used to have -ffast-math, let's use everywhere
 %{expand: %%define optflags %{optflags} -ffast-math}
@@ -488,10 +559,10 @@ CFLAGS="$RPM_OPT_FLAGS" \
         --datadir=%{_datadir} \
         --mandir=%{_mandir} \
         --with-x \
-        --disable-static \
-        --disable-dependency-tracking %{MYLIBGD} %{IPSEPCOLA} %{MING} %{PANGOCAIRO} \
-        %{?NO_SHARP} %{?NO_GUILE} %{?NO_IO} %{?NO_JAVA} %{?NO_LUA} %{?NO_OCAML} \
-        %{?NO_PERL} %{?NO_PHP} %{?NO_PYTHON} %{?NO_RUBY} %{?NO_TCL}
+	--disable-static \
+        --disable-dependency-tracking \
+	%{MYLIBGD} %{IPSEPCOLA} %{PANGOCAIRO} %{GDK_PIXBUF} \
+        %{?NO_SHARP} %{?NO_GUILE} %{?NO_IO} %{?NO_JAVA} %{?NO_LUA} %{?NO_OCAML} %{?NO_PERL} %{?NO_PHP} %{?NO_PYTHON} %{?NO_RUBY} %{?NO_TCL} %{?NO_DEVIL} %{?NO_MING}
 make %{?_smp_mflags}
 
 %install
@@ -511,6 +582,10 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Wed Nov 28 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16-1
+- New upstream release
+- Remove arith.h patch
+
 * Tue Sep 04 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.14.1-3
 - Patch to resurrect arith.h
 
