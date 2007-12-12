@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.16
 
-%define truerelease 1
+%define truerelease 2
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -145,10 +145,10 @@ BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel gtk2-devel 
 %define GDK_PIXBUF --with-gdk-pixbuf
 BuildRequires: gd gd-devel perl-devel DevIL-devel
 %endif
-%if "%fedora" >= "9"
-%define MING 1
-BuildRequires: ming ming-devel
-%endif
+#%if "%fedora" >= "9"
+#%define MING 1
+#BuildRequires: ming ming-devel
+#%endif
 %endif
 
 #-- main graphviz rpm ------------------------------------------------
@@ -582,6 +582,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Wed Dec 12 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16-2
+- What the heck?  Can't BR stuff that hasn't even gotten reviewed yet.
+
 * Wed Nov 28 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16-1
 - New upstream release
 - Remove arith.h patch
