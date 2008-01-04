@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.16
 
-%define truerelease 2
+%define truerelease 3
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -582,6 +582,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Thu Jan  3 2008 Alex Lancaster <alexlan[AT]fedoraproject.org> - 2.16-3
+- Rebuild against new Tcl 8.5
+
 * Wed Dec 12 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16-2
 - What the heck?  Can't BR stuff that hasn't even gotten reviewed yet.
 
