@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.16
 
-%define truerelease 3.1
+%define truerelease 3.2
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -18,6 +18,7 @@ Group:   Applications/Multimedia
 License: CPL
 URL:     http://www.graphviz.org/
 Source0: http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
+Patch0:  %{name}-tk8.5.patch
 
 # graphviz is relocatable - Caution: this feature is used in AT&T,
 #   but probably will not be supported in Redhat/Fedora/Centos distros
@@ -145,10 +146,10 @@ BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel gtk2-devel 
 %define GDK_PIXBUF --with-gdk-pixbuf
 BuildRequires: gd gd-devel perl-devel DevIL-devel
 %endif
-#%if "%fedora" >= "9"
-#%define MING 1
+%if "%fedora" >= "9"
+%define MING 0
 #BuildRequires: ming ming-devel
-#%endif
+%endif
 %endif
 
 #-- main graphviz rpm ------------------------------------------------
@@ -504,6 +505,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %if ! %{SHARP}
@@ -582,6 +584,10 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Thu Jan  3 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16-3.2
+- Re-added tcl/tk 8.5 patch
+- Tweaked ming stuff
+
 * Thu Jan  3 2008 Alex Lancaster <alexlan[AT]fedoraproject.org> - 2.16-3.1
 - Rebuild against new Tcl 8.5
 

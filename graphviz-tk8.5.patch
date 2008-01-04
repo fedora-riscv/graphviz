@@ -1,37 +1,37 @@
-diff -urN graphviz-2.12/configure graphviz-2.12-patched/configure
---- graphviz-2.12/configure	2006-12-04 16:02:10.000000000 -0600
-+++ graphviz-2.12-patched/configure	2007-02-07 08:20:19.000000000 -0600
-@@ -26251,8 +26251,8 @@
- fi;
+diff -urN graphviz-2.16.orig/configure graphviz-2.16/configure
+--- graphviz-2.16.orig/configure	2007-11-09 23:41:41.000000000 -0600
++++ graphviz-2.16/configure	2008-01-03 08:52:00.000000000 -0600
+@@ -28003,8 +28003,8 @@
+ 
  
  if test "x$TCLSH" = "x"; then
 -    # Extract the first word of "tclsh8.4", so it can be a program name with args.
 -set dummy tclsh8.4; ac_word=$2
 +    # Extract the first word of "tclsh8.5", so it can be a program name with args.
 +set dummy tclsh8.5; ac_word=$2
- echo "$as_me:$LINENO: checking for $ac_word" >&5
- echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+ { echo "$as_me:$LINENO: checking for $ac_word" >&5
+ echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
  if test "${ac_cv_path_TCLSH+set}" = set; then
-@@ -26291,8 +26291,8 @@
- fi
+@@ -28044,8 +28044,8 @@
+ 
  
      if test "x$TCLSH" = "x"; then
 -        # Extract the first word of "tclsh8.3", so it can be a program name with args.
 -set dummy tclsh8.3; ac_word=$2
 +        # Extract the first word of "tclsh8.4", so it can be a program name with args.
 +set dummy tclsh8.4; ac_word=$2
- echo "$as_me:$LINENO: checking for $ac_word" >&5
- echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+ { echo "$as_me:$LINENO: checking for $ac_word" >&5
+ echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
  if test "${ac_cv_path_TCLSH+set}" = set; then
-@@ -26331,7 +26331,47 @@
- fi
+@@ -28085,7 +28085,48 @@
+ 
  
          if test "x$TCLSH" = "x"; then
 -            # Extract the first word of "tclsh", so it can be a program name with args.
 +            # Extract the first word of "tclsh8.3", so it can be a program name with args.
 +set dummy tclsh8.3; ac_word=$2
-+echo "$as_me:$LINENO: checking for $ac_word" >&5
-+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
++{ echo "$as_me:$LINENO: checking for $ac_word" >&5
++echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
 +if test "${ac_cv_path_TCLSH+set}" = set; then
 +  echo $ECHO_N "(cached) $ECHO_C" >&6
 +else
@@ -46,60 +46,72 @@ diff -urN graphviz-2.12/configure graphviz-2.12-patched/configure
 +  IFS=$as_save_IFS
 +  test -z "$as_dir" && as_dir=.
 +  for ac_exec_ext in '' $ac_executable_extensions; do
-+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
++  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
 +    ac_cv_path_TCLSH="$as_dir/$ac_word$ac_exec_ext"
 +    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
 +    break 2
 +  fi
 +done
 +done
++IFS=$as_save_IFS
 +
 +  ;;
 +esac
 +fi
 +TCLSH=$ac_cv_path_TCLSH
-+
 +if test -n "$TCLSH"; then
-+  echo "$as_me:$LINENO: result: $TCLSH" >&5
-+echo "${ECHO_T}$TCLSH" >&6
++  { echo "$as_me:$LINENO: result: $TCLSH" >&5
++echo "${ECHO_T}$TCLSH" >&6; }
 +else
-+  echo "$as_me:$LINENO: result: no" >&5
-+echo "${ECHO_T}no" >&6
++  { echo "$as_me:$LINENO: result: no" >&5
++echo "${ECHO_T}no" >&6; }
 +fi
++
 +
 +            if test "x$TCLSH" = "x"; then
 +                # Extract the first word of "tclsh", so it can be a program name with args.
  set dummy tclsh; ac_word=$2
- echo "$as_me:$LINENO: checking for $ac_word" >&5
- echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-@@ -26370,6 +26410,7 @@
- echo "${ECHO_T}no" >&6
+ { echo "$as_me:$LINENO: checking for $ac_word" >&5
+ echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+@@ -28125,6 +28166,7 @@
  fi
+ 
  
 +            fi
          fi
      fi
+     if test "x$TCLSH" = "x"; then
+@@ -28413,8 +28455,8 @@
  fi
-@@ -26674,8 +26715,8 @@
-   WISH=$withval
- fi;
+ 
      if test "x$WISH" = "x"; then
 -        # Extract the first word of "wish8.4", so it can be a program name with args.
 -set dummy wish8.4; ac_word=$2
 +        # Extract the first word of "wish8.5", so it can be a program name with args.
 +set dummy wish8.5; ac_word=$2
- echo "$as_me:$LINENO: checking for $ac_word" >&5
- echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+ { echo "$as_me:$LINENO: checking for $ac_word" >&5
+ echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
  if test "${ac_cv_path_WISH+set}" = set; then
-@@ -26714,7 +26755,47 @@
- fi
+@@ -28454,8 +28496,8 @@
+ 
  
          if test "x$WISH" = "x"; then
 -    	    # Extract the first word of "wish8.3", so it can be a program name with args.
-+            # Extract the first word of "wish8.4", so it can be a program name with args.
+-set dummy wish8.3; ac_word=$2
++    	    # Extract the first word of "wish8.4", so it can be a program name with args.
 +set dummy wish8.4; ac_word=$2
-+echo "$as_me:$LINENO: checking for $ac_word" >&5
-+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+ { echo "$as_me:$LINENO: checking for $ac_word" >&5
+ echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+ if test "${ac_cv_path_WISH+set}" = set; then
+@@ -28495,7 +28537,48 @@
+ 
+ 
+     	    if test "x$WISH" = "x"; then
+-                # Extract the first word of "wish", so it can be a program name with args.
++                # Extract the first word of "wish8.3", so it can be a program name with args.
++set dummy wish8.3; ac_word=$2
++{ echo "$as_me:$LINENO: checking for $ac_word" >&5
++echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
 +if test "${ac_cv_path_WISH+set}" = set; then
 +  echo $ECHO_N "(cached) $ECHO_C" >&6
 +else
@@ -114,52 +126,42 @@ diff -urN graphviz-2.12/configure graphviz-2.12-patched/configure
 +  IFS=$as_save_IFS
 +  test -z "$as_dir" && as_dir=.
 +  for ac_exec_ext in '' $ac_executable_extensions; do
-+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
++  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
 +    ac_cv_path_WISH="$as_dir/$ac_word$ac_exec_ext"
 +    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
 +    break 2
 +  fi
 +done
 +done
++IFS=$as_save_IFS
 +
 +  ;;
 +esac
 +fi
 +WISH=$ac_cv_path_WISH
-+
 +if test -n "$WISH"; then
-+  echo "$as_me:$LINENO: result: $WISH" >&5
-+echo "${ECHO_T}$WISH" >&6
++  { echo "$as_me:$LINENO: result: $WISH" >&5
++echo "${ECHO_T}$WISH" >&6; }
 +else
-+  echo "$as_me:$LINENO: result: no" >&5
-+echo "${ECHO_T}no" >&6
++  { echo "$as_me:$LINENO: result: no" >&5
++echo "${ECHO_T}no" >&6; }
 +fi
 +
-+            if test "x$WISH" = "x"; then
-+                # Extract the first word of "wish8.3", so it can be a program name with args.
- set dummy wish8.3; ac_word=$2
- echo "$as_me:$LINENO: checking for $ac_word" >&5
- echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-@@ -26753,8 +26834,8 @@
- echo "${ECHO_T}no" >&6
- fi
- 
--    	    if test "x$WISH" = "x"; then
--                # Extract the first word of "wish", so it can be a program name with args.
-+                if test "x$WISH" = "x"; then
++
++    	        if test "x$WISH" = "x"; then
 +                    # Extract the first word of "wish", so it can be a program name with args.
  set dummy wish; ac_word=$2
- echo "$as_me:$LINENO: checking for $ac_word" >&5
- echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-@@ -26793,6 +26874,7 @@
- echo "${ECHO_T}no" >&6
+ { echo "$as_me:$LINENO: checking for $ac_word" >&5
+ echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+@@ -28535,6 +28618,7 @@
  fi
+ 
  
 +                fi
              fi
          fi
      fi
-@@ -26815,7 +26897,7 @@
+@@ -28557,7 +28641,7 @@
      WISH_EXEC_PREFIX=`echo $WISH|sed -e 's%/bin/wish.*$%%'`
  
      if test -f ${WISH_EXEC_PREFIX}/include/tk${TK_VERSION_FOUND}/tk.h; then
@@ -168,65 +170,7 @@ diff -urN graphviz-2.12/configure graphviz-2.12-patched/configure
      else
          if test "x${WISH_EXEC_PREFIX}" != "x/usr" -a -f ${WISH_EXEC_PREFIX}/include/tk.h; then
  	    TK_INCLUDES=-I${WISH_EXEC_PREFIX}/include
-@@ -33490,7 +33572,7 @@
- # -----------------------------------
- # tkInt.h
- if test -f "$TK_SRC_DIR/generic/tkInt.h"; then
--TKINT_INCLUDES="-I$TK_SRC_DIR/generic"
-+TKINT_INCLUDES="-I$TK_SRC_DIR/generic -I$TK_SRC_DIR/unix"
- else
- if test -f "/usr/include/tkInt.h"; then
- TKINT_INCLUDES=""
-diff -urN graphviz-2.12/configure.ac graphviz-2.12-patched/configure.ac
---- graphviz-2.12/configure.ac	2006-12-04 15:11:58.000000000 -0600
-+++ graphviz-2.12-patched/configure.ac	2007-02-07 08:20:02.000000000 -0600
-@@ -755,11 +755,14 @@
-     TCLSH=$withval,)
- 
- if test "x$TCLSH" = "x"; then
--    AC_PATH_PROG(TCLSH,tclsh8.4)
-+    AC_PATH_PROG(TCLSH,tclsh8.5)
-     if test "x$TCLSH" = "x"; then
--        AC_PATH_PROG(TCLSH,tclsh8.3)
-+        AC_PATH_PROG(TCLSH,tclsh8.4)
-         if test "x$TCLSH" = "x"; then
--            AC_PATH_PROG(TCLSH,tclsh)
-+            AC_PATH_PROG(TCLSH,tclsh8.3)
-+            if test "x$TCLSH" = "x"; then
-+                AC_PATH_PROG(TCLSH,tclsh)
-+            fi
-         fi
-     fi
- fi
-@@ -904,11 +907,14 @@
-         [  --with-wish=PROG        build graphviz for specific wish],
-         WISH=$withval,)
-     if test "x$WISH" = "x"; then
--        AC_PATH_PROG(WISH,wish8.4)
-+        AC_PATH_PROG(WISH,wish8.5)
-         if test "x$WISH" = "x"; then
--    	    AC_PATH_PROG(WISH,wish8.3)
--    	    if test "x$WISH" = "x"; then
--                AC_PATH_PROG(WISH,wish)
-+            AC_PATH_PROG(WISH,wish8.4)
-+            if test "x$WISH" = "x"; then
-+                AC_PATH_PROG(WISH,wish8.3)
-+                if test "x$WISH" = "x"; then
-+                    AC_PATH_PROG(WISH,wish)
-+                fi
-             fi
-         fi
-     fi
-@@ -930,7 +936,7 @@
-     WISH_EXEC_PREFIX=`echo $WISH|sed -e 's%/bin/wish.*$%%'`
- 
-     if test -f ${WISH_EXEC_PREFIX}/include/tk${TK_VERSION_FOUND}/tk.h; then
--	TK_INCLUDES="-I${WISH_EXEC_PREFIX}/include/tk${TK_VERSION_FOUND} -I${WISH_EXEC_PREFIX}/include/tk${TK_VERSION_FOUND}/generic"
-+	TK_INCLUDES="-I${WISH_EXEC_PREFIX}/include/tk${TK_VERSION_FOUND} -I${WISH_EXEC_PREFIX}/include/tk${TK_VERSION_FOUND}/generic -I${WISH_EXEC_PREFIX}/include/tk${TK_VERSION_FOUND}/unix"
-     else
-         if test "x${WISH_EXEC_PREFIX}" != "x/usr" -a -f ${WISH_EXEC_PREFIX}/include/tk.h; then
- 	    TK_INCLUDES=-I${WISH_EXEC_PREFIX}/include
-@@ -1673,7 +1679,7 @@
+@@ -34721,7 +34805,7 @@
  # -----------------------------------
  # tkInt.h
  if test -f "$TK_SRC_DIR/generic/tkInt.h"; then
