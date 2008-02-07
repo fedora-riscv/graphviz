@@ -7,7 +7,7 @@
 #-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
 Version:	2.12
-Release:	8%{?dist}
+Release:	9%{?dist}
 
 License:	CPL
 URL:		http://www.graphviz.org/
@@ -116,6 +116,10 @@ BuildRequires: mono-core ocaml
 %if "%fedora" >= "6"
 %define LUA	1
 BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel
+%endif
+%if "%fedora" >= "7"
+BuildRequires: gd gd-devel perl-devel
+%define MYLIBGD --without-mylibgd
 %endif
 %endif
 
@@ -441,6 +445,9 @@ rm -rf $RPM_BUILD_ROOT
 #-- changelog --------------------------------------------------
 
 %changelog
+* Thu Feb 07 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-9
+- Use system gd instead of internal
+
 * Thu Jul 12 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-8
 - Patch to fix BZ#241790 (thanks John!)
 
