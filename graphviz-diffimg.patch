@@ -1,0 +1,24 @@
+diff -up graphviz-2.12/contrib/Makefile.am.orig graphviz-2.12/contrib/Makefile.am
+--- graphviz-2.12/contrib/Makefile.am.orig	2006-04-07 13:50:32.000000000 -0500
++++ graphviz-2.12/contrib/Makefile.am	2008-02-07 15:05:31.000000000 -0600
+@@ -1,7 +1,7 @@
+ # $Id: Makefile.am,v 1.6 2006/04/07 18:50:32 ellson Exp $ $Revision: 1.6 $
+ ## Process this file with automake to produce Makefile.in
+ 
+-SUBDIRS = prune diffimg
++SUBDIRS = prune
+ 
+ EXTRA_DIST = INDEX dotmcl.pl gprof2dot.awk webdot.cgi Makefile.old \
+ 	sdlshapes lefty-grace dirgraph
+diff -up graphviz-2.12/contrib/Makefile.in.orig graphviz-2.12/contrib/Makefile.in
+--- graphviz-2.12/contrib/Makefile.in.orig	2006-12-04 16:03:14.000000000 -0600
++++ graphviz-2.12/contrib/Makefile.in	2008-02-07 15:05:39.000000000 -0600
+@@ -354,7 +354,7 @@ sharedstatedir = @sharedstatedir@
+ subdirs = @subdirs@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+-SUBDIRS = prune diffimg
++SUBDIRS = prune
+ EXTRA_DIST = INDEX dotmcl.pl gprof2dot.awk webdot.cgi Makefile.old \
+ 	sdlshapes lefty-grace dirgraph
+ 

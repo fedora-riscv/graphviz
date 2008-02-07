@@ -7,7 +7,7 @@
 #-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
 Version:	2.12
-Release:	9%{?dist}
+Release:	10%{?dist}
 
 License:	CPL
 URL:		http://www.graphviz.org/
@@ -15,6 +15,7 @@ Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.12.tar.gz
 Patch0:		%{name}-php5.patch
 Patch1:		%{name}-libcdt.patch
 Patch2:		%{name}-black.patch
+Patch3:		%{name}-diffimg.patch
 
 # graphviz is relocatable
 #Prefix: /usr
@@ -409,6 +410,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 # XXX ix86 only used to have -ffast-math, let's use everywhere
@@ -445,6 +447,9 @@ rm -rf $RPM_BUILD_ROOT
 #-- changelog --------------------------------------------------
 
 %changelog
+* Thu Feb 07 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-10
+- Disable building of diffimg, as recommended by upstream
+
 * Thu Feb 07 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-9
 - Use system gd instead of internal
 
