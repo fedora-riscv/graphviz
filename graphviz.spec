@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.16
 
-%define truerelease 3.2
+%define truerelease 3.3
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -19,6 +19,7 @@ License: CPL
 URL:     http://www.graphviz.org/
 Source0: http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:  %{name}-tk8.5.patch
+Patch1:  %{name}-gcc43.patch
 
 # graphviz is relocatable - Caution: this feature is used in AT&T,
 #   but probably will not be supported in Redhat/Fedora/Centos distros
@@ -506,6 +507,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %if ! %{SHARP}
@@ -584,6 +586,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Tue Feb 12 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16-3.3
+- Added upstream-provided patch for building under GCC 4.3 (thanks John!)
+
 * Thu Jan  3 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16-3.2
 - Re-added tcl/tk 8.5 patch
 - Tweaked ming stuff
