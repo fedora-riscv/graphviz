@@ -1,0 +1,32 @@
+--- graphviz-2.16/lib/vpsc/generate-constraints.cpp.orig	2008-02-11 13:42:16.000000000 -0500
++++ graphviz-2.16/lib/vpsc/generate-constraints.cpp	2008-02-11 13:05:19.000000000 -0500
+@@ -18,6 +18,7 @@
+ 
+ #include <set>
+ #include <cassert>
++#include <cstdlib>
+ #include "generate-constraints.h"
+ #include "constraint.h"
+ 
+--- graphviz-2.16/lib/vpsc/csolve_VPSC.cpp.orig	2008-02-11 13:42:00.000000000 -0500
++++ graphviz-2.16/lib/vpsc/csolve_VPSC.cpp	2008-02-11 13:05:19.000000000 -0500
+@@ -21,6 +21,7 @@
+ #include <constraint.h>
+ #include <generate-constraints.h>
+ #include <solve_VPSC.h>
++#include <cstdlib>
+ #include <cassert>
+ #include "csolve_VPSC.h"
+ extern "C" {
+--- graphviz-2.16/tclpkg/gv/gv.i.orig	2008-02-11 13:41:21.000000000 -0500
++++ graphviz-2.16/tclpkg/gv/gv.i	2008-02-11 13:38:57.000000000 -0500
+@@ -25,6 +25,9 @@
+ #undef TRUE
+ #undef FALSE
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
+ #include "gvc.h"
+ %}
+ 
