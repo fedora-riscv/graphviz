@@ -1,4 +1,4 @@
-# $Id: graphviz.spec.in,v 1.117 2007/08/16 01:53:22 ellson Exp $ $Revision: 1.117 $
+# $Id: graphviz.spec.in,v 1.135 2007/12/12 19:26:17 ellson Exp $ $Revision: 1.135 $
 # graphviz.spec.  Generated from graphviz.spec.in by configure.
 
 # Note: pre gd-2.0.34 graphviz uses its own gd tree with gif support and other fixes
@@ -6,9 +6,9 @@
 #-- Global graphviz rpm and src.rpm tags-------------------------------------
 Name:    graphviz
 Summary: Graph Visualization Tools
-Version: 2.16
+Version: 2.16.1
 
-%define truerelease 3.3
+%define truerelease 0.2
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -20,6 +20,7 @@ URL:     http://www.graphviz.org/
 Source0: http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:  %{name}-tk8.5.patch
 Patch1:  %{name}-gcc43.patch
+Patch2:  %{name}-multilib.patch
 
 # graphviz is relocatable - Caution: this feature is used in AT&T,
 #   but probably will not be supported in Redhat/Fedora/Centos distros
@@ -40,6 +41,7 @@ Patch1:  %{name}-gcc43.patch
 %define PHP    0
 %define PYTHON 0
 %define RUBY   0
+%define R_LANG 0
 %define TCL    1
 %define IPSEPCOLA --without-ipsepcola
 %define MYLIBGD --with-mylibgd
@@ -84,11 +86,10 @@ BuildRequires: xorg-x11-devel
 %if "%rhel" >= "4"
 # PERL is available earlier, but a suitable SWIG isn't
 %define PERL   1
-%define PHP    1
 %define RUBY   1
 %define GUILE  1
 %define PYTHON 1
-BuildRequires: perl php-devel ruby ruby-devel guile-devel python-devel
+BuildRequires: perl ruby-devel guile-devel python-devel
 %endif
 %if "%rhel" >= "5"
 %define JAVA   1
@@ -97,9 +98,10 @@ BuildRequires: libtool-ltdl libtool-ltdl-devel libXaw-devel libSM-devel libICE-d
 BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel gtk2-devel libgnomeui-devel
 %endif
 %if "%rhel" >= "6"
+%define PHP    1
 %define MYLIBGD --without-mylibgd
 %define GDK_PIXBUF --with-gdk-pixbuf
-BuildRequires: gd gd-devel perl-devel
+BuildRequires: gd gd-devel perl-devel php-devel
 %endif
 %endif
 
@@ -121,15 +123,15 @@ BuildRequires: xorg-x11-devel
 %define IPSEPCOLA --with-ipsepcola
 %endif
 %if "%fedora" >= "4"
-%define PHP    1
 %define RUBY   1
 %define GUILE  1
 %define PYTHON 1
-BuildRequires: libtool-ltdl libtool-ltdl-devel php-devel ruby ruby-devel guile-devel python-devel
+BuildRequires: libtool-ltdl libtool-ltdl-devel ruby ruby-devel guile-devel python-devel
 %endif
 %if "%fedora" >= "5"
+%define PHP    1
 %define JAVA   1
-BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel java-devel
+BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel java-devel php-devel
 %ifnarch ppc64
 %define SHARP  1
 %define OCAML  1
@@ -146,6 +148,10 @@ BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel gtk2-devel 
 %define MYLIBGD --without-mylibgd
 %define GDK_PIXBUF --with-gdk-pixbuf
 BuildRequires: gd gd-devel perl-devel DevIL-devel
+%endif
+%if "%fedora" >= "8"
+%define R_LANG 1
+BuildRequires: R swig >= 1.3.33
 %endif
 %if "%fedora" >= "9"
 %define MING 0
@@ -192,6 +198,7 @@ fi
 %endif
 %if %{MING}
 %exclude %{_libdir}/graphviz/libgvplugin_ming.*
+%exclude %{_libdir}/graphviz/*fdb
 %endif
 
 #-- graphviz-gd rpm --------------------------------------------------
@@ -230,7 +237,7 @@ Requires:         graphviz = %{version}-%{release}
 %description devil
 Graphviz plugin for renderers based on DevIL.  (Unless you absolutely have
 to use BMP, TIF, or TGA, you are recommended to use the PNG format instead
-support directly by the cairo+pango based renderer in the base graphviz rpm.)
+supported directly by the cairo+pango based renderer in the base graphviz rpm.)
 
 # run "dot -c" to generate plugin config in %{_libdir}/graphviz/config
 %post devil
@@ -262,6 +269,7 @@ Graphviz plugin for -Tswf (flash) renderer based on ming.
 
 %files ming
 %{_libdir}/graphviz/libgvplugin_ming.so.*
+%{_libdir}/graphviz/*fdb
 %endif
 
 #-- graphviz-sharp rpm --------------------------------------------
@@ -417,6 +425,23 @@ Python extension for graphviz.
 %{_mandir}/mann/gv_python.n*
 %endif
 
+#-- graphviz-r rpm ---------------------------------------------
+%if %{R_LANG}
+%package r
+Group:          Applications/Multimedia
+Summary:        R extension for graphviz
+Requires:       graphviz = %{version}-%{release} r
+
+%description r
+R extension for graphviz.
+
+%files r
+%defattr(-,root,root,-)
+%dir %{_libdir}/graphviz/r
+%{_libdir}/graphviz/r/*
+%{_mandir}/mann/gv_r.n*
+%endif
+
 #-- graphviz-ruby rpm ---------------------------------------------
 %if %{RUBY}
 %package ruby
@@ -508,6 +533,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %if ! %{SHARP}
@@ -536,6 +562,9 @@ Provides some additional PDF and HTML documentation for graphviz.
 %endif
 %if ! %{PYTHON}
 %define NO_PYTHON --disable-python
+%endif
+%if ! %{R_LANG}
+%define NO_R_LANG --disable-r
 %endif
 %if ! %{RUBY}
 %define NO_RUBY --disable-ruby
@@ -566,7 +595,7 @@ CFLAGS="$RPM_OPT_FLAGS" \
 	--disable-static \
         --disable-dependency-tracking \
 	%{MYLIBGD} %{IPSEPCOLA} %{PANGOCAIRO} %{GDK_PIXBUF} \
-        %{?NO_SHARP} %{?NO_GUILE} %{?NO_IO} %{?NO_JAVA} %{?NO_LUA} %{?NO_OCAML} %{?NO_PERL} %{?NO_PHP} %{?NO_PYTHON} %{?NO_RUBY} %{?NO_TCL} %{?NO_DEVIL} %{?NO_MING}
+        %{?NO_SHARP} %{?NO_GUILE} %{?NO_IO} %{?NO_JAVA} %{?NO_LUA} %{?NO_OCAML} %{?NO_PERL} %{?NO_PHP} %{?NO_PYTHON} %{?NO_R_LANG} %{?NO_RUBY} %{?NO_TCL} %{?NO_DEVIL} %{?NO_MING}
 make %{?_smp_mflags}
 
 %install
@@ -581,11 +610,20 @@ cp -a %{buildroot}%{_datadir}/%{name}/doc __doc
 rm -rf %{buildroot}%{_datadir}/%{name}/doc
 
 %clean
+# regression test
+cd rtest
+make rtest
+# clean up temporary installation
 rm -rf %{buildroot}
 
 #-- changelog --------------------------------------------------
 
 %changelog
+* Mon Mar 03 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16.1-0.2
+- New upstream release (fixes BZ#433205, BZ#427376)
+- Merged spec changes in from upstream
+- Added patch from BZ#432683
+
 * Tue Feb 12 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16-3.3
 - Added upstream-provided patch for building under GCC 4.3 (thanks John!)
 
