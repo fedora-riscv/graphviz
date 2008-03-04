@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.16.1
 
-%define truerelease 0.2
+%define truerelease 0.4
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -150,8 +150,8 @@ BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel gtk2-devel 
 BuildRequires: gd gd-devel perl-devel DevIL-devel
 %endif
 %if "%fedora" >= "8"
-%define R_LANG 1
-BuildRequires: R swig >= 1.3.33
+#define R_LANG 1
+#BuildRequires: R-devel swig >= 1.3.33
 %endif
 %if "%fedora" >= "9"
 %define MING 0
@@ -619,6 +619,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Tue Mar 04 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16.1-0.4
+- Disable R support
+
 * Mon Mar 03 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16.1-0.2
 - New upstream release (fixes BZ#433205, BZ#427376)
 - Merged spec changes in from upstream
