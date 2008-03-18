@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.16.1
 
-%define truerelease 0.4
+%define truerelease 0.5
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -379,7 +379,8 @@ Ocaml extension for graphviz.
 %package perl
 Group:          Applications/Multimedia
 Summary:        Perl extension for graphviz
-Requires:       graphviz = %{version}-%{release} perl
+Requires:       graphviz = %{version}-%{release}
+Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
 %description perl
 Perl extension for graphviz.
@@ -619,6 +620,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Tue Mar 18 2008 Tom "spot" Callaway <tcallawa@redhat.com> 2.16.1-0.5
+- add Requires for versioned perl (libperl.so)
+
 * Tue Mar 04 2008 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.16.1-0.4
 - Disable R support
 
