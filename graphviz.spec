@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.14.1
 
-%define truerelease 3
+%define truerelease 4
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -64,17 +64,17 @@ BuildRequires: XFree86-devel
 #-- Red Hat Enterprise Linux specific Build Requirements --------------------
 %if 0%{?rhel}
 %define TCL    1
-%if "%rhel" < "4"
+%if 0%{?rhel} < 4
 BuildRequires:  XFree86-devel
 %endif
-%if "%rhel" >= "3"
+%if 0%{?rhel} >= 3
 %define IPSEPCOLA --with-ipsepcola
 BuildRequires: fontconfig-devel tcl-devel tk-devel
 %endif
-%if "%rhel" == "4"
+%if 0%{?rhel} == 4
 BuildRequires: xorg-x11-devel
 %endif
-%if "%rhel" >= "4"
+%if 0%{?rhel} >= 4
 # PERL is available earlier, but a suitable SWIG isn't
 %define PERL   1
 %define PHP    1
@@ -83,7 +83,7 @@ BuildRequires: xorg-x11-devel
 %define PYTHON 1
 BuildRequires: perl php-devel ruby ruby-devel guile-devel python-devel
 %endif
-%if "%rhel" >= "5"
+%if 0%{?rhel} >= 5
 %define JAVA   1
 %define PANGOCAIRO --with-pangocairo
 BuildRequires: libtool-ltdl libtool-ltdl-devel libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel java-devel
@@ -96,26 +96,26 @@ BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel gtk2-devel libgnomeui
 %define PERL   1
 %define TCL    1
 BuildRequires: fontconfig-devel tcl-devel tk-devel 
-%if "%fedora" < "3"
+%if 0%{?fedora} < 3
 BuildRequires: XFree86-devel
 %endif
-%if "%fedora" == "3"
+%if 0%{?fedora} == 3
 BuildRequires: xorg-x11-devel
 %endif
-%if "%fedora" == "4"
+%if 0%{?fedora} == 4
 BuildRequires: xorg-x11-devel
 %endif
-%if "%fedora" >= "3"
+%if 0%{?fedora} >= 3
 %define IPSEPCOLA --with-ipsepcola
 %endif
-%if "%fedora" >= "4"
+%if 0%{?fedora} >= 4
 %define PHP    1
 %define RUBY   1
 %define GUILE  1
 %define PYTHON 1
 BuildRequires: libtool-ltdl libtool-ltdl-devel php-devel ruby ruby-devel guile-devel python-devel
 %endif
-%if "%fedora" >= "5"
+%if 0%{?fedora} >= 5
 %define JAVA   1
 BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel java-devel
 %ifnarch ppc64
@@ -124,12 +124,12 @@ BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel li
 BuildRequires: mono-core ocaml
 %endif
 %endif
-%if "%fedora" >= "6"
+%if 0%{?fedora} >= 6
 %define LUA    1
 %define PANGOCAIRO --with-pangocairo
 BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel gtk2-devel libgnomeui-devel
 %endif
-%if "%fedora" >= "7"
+%if 0%{fedora} >= 7
 BuildRequires: gd gd-devel perl-devel
 %define MYLIBGD --without-mylibgd
 %endif
@@ -511,6 +511,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Mon Jul 07 2008 Tom "spot" Callaway <tcallawa@redhat.com> 2.14.1-4
+- fix conditional comparison
+
 * Tue Sep 04 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.14.1-3
 - Patch to resurrect arith.h
 
