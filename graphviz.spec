@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.16.1
 
-%define truerelease 0.5
+%define truerelease 0.6
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -73,17 +73,17 @@ BuildRequires: XFree86-devel
 #-- Red Hat Enterprise Linux specific Build Requirements --------------------
 %if 0%{?rhel}
 %define TCL    1
-%if "%rhel" < "4"
+%if}0%{?rhel} < 4
 BuildRequires:  XFree86-devel
 %endif
-%if "%rhel" >= "3"
+%if 0%{?rhel} >= 3
 %define IPSEPCOLA --with-ipsepcola
 BuildRequires: fontconfig-devel tcl-devel tk-devel
 %endif
-%if "%rhel" == "4"
+%if 0%{?rhel} == 4
 BuildRequires: xorg-x11-devel
 %endif
-%if "%rhel" >= "4"
+%if 0%{?rhel} >= 4
 # PERL is available earlier, but a suitable SWIG isn't
 %define PERL   1
 %define RUBY   1
@@ -91,13 +91,13 @@ BuildRequires: xorg-x11-devel
 %define PYTHON 1
 BuildRequires: perl ruby-devel guile-devel python-devel
 %endif
-%if "%rhel" >= "5"
+%if 0%{?rhel} >= 5
 %define JAVA   1
 %define PANGOCAIRO --with-pangocairo
 BuildRequires: libtool-ltdl libtool-ltdl-devel libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel java-devel
 BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel gtk2-devel libgnomeui-devel
 %endif
-%if "%rhel" >= "6"
+%if 0%{?rhel} >= 6
 %define PHP    1
 %define MYLIBGD --without-mylibgd
 %define GDK_PIXBUF --with-gdk-pixbuf
@@ -110,25 +110,25 @@ BuildRequires: gd gd-devel perl-devel php-devel
 %define PERL   1
 %define TCL    1
 BuildRequires: fontconfig-devel tcl-devel tk-devel 
-%if "%fedora" < "3"
+%if 0%{?fedora} < 3
 BuildRequires: XFree86-devel
 %endif
-%if "%fedora" == "3"
+%if 0%{?fedora} == 3
 BuildRequires: xorg-x11-devel
 %endif
-%if "%fedora" == "4"
+%if 0%{?fedora} == 4
 BuildRequires: xorg-x11-devel
 %endif
-%if "%fedora" >= "3"
+%if 0%{?fedora} >= 3
 %define IPSEPCOLA --with-ipsepcola
 %endif
-%if "%fedora" >= "4"
+%if 0%{?fedora} >= 4
 %define RUBY   1
 %define GUILE  1
 %define PYTHON 1
 BuildRequires: libtool-ltdl libtool-ltdl-devel ruby ruby-devel guile-devel python-devel
 %endif
-%if "%fedora" >= "5"
+%if 0%{?fedora} >= 5
 %define PHP    1
 %define JAVA   1
 BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel java-devel php-devel
@@ -138,22 +138,22 @@ BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel li
 BuildRequires: mono-core ocaml
 %endif
 %endif
-%if "%fedora" >= "6"
+%if 0%{?fedora} >= 6
 %define LUA    1
 %define PANGOCAIRO --with-pangocairo
 BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel gtk2-devel libgnomeui-devel
 %endif
-%if "%fedora" >= "7"
+%if 0%{?fedora} >= 7
 %define DEVIL 1
 %define MYLIBGD --without-mylibgd
 %define GDK_PIXBUF --with-gdk-pixbuf
 BuildRequires: gd gd-devel perl-devel DevIL-devel
 %endif
-%if "%fedora" >= "8"
+%if 0%{?fedora} >= 8
 #define R_LANG 1
 #BuildRequires: R-devel swig >= 1.3.33
 %endif
-%if "%fedora" >= "9"
+%if 0%{?fedora} >= 9
 %define MING 0
 #BuildRequires: ming ming-devel
 %endif
@@ -620,6 +620,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Mon Jul  7 2008 Tom "spot" Callaway <tcallawa@redhat.com> 2.16.1-0.6
+- fix conditional comparison
+
 * Tue Mar 18 2008 Tom "spot" Callaway <tcallawa@redhat.com> 2.16.1-0.5
 - add Requires for versioned perl (libperl.so)
 
