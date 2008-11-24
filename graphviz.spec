@@ -6,9 +6,9 @@
 #-- Global graphviz rpm and src.rpm tags-------------------------------------
 Name:    graphviz
 Summary: Graph Visualization Tools
-Version: 2.16.1
+Version: 2.20.3
 
-%define truerelease 0.7
+%define truerelease 1
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -18,9 +18,6 @@ Group:   Applications/Multimedia
 License: CPL
 URL:     http://www.graphviz.org/
 Source0: http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
-Patch0:  %{name}-tk8.5.patch
-Patch1:  %{name}-gcc43.patch
-Patch2:  %{name}-multilib.patch
 
 # graphviz is relocatable - Caution: this feature is used in AT&T,
 #   but probably will not be supported in Redhat/Fedora/Centos distros
@@ -150,8 +147,8 @@ BuildRequires: cairo-devel >= 1.1.10 pango-devel gmp-devel lua-devel gtk2-devel 
 BuildRequires: gd gd-devel perl-devel DevIL-devel
 %endif
 %if 0%{?fedora} >= 8
-#define R_LANG 1
-#BuildRequires: R-devel swig >= 1.3.33
+%define R_LANG 1
+BuildRequires: R-devel swig >= 1.3.33
 %endif
 %if 0%{?fedora} >= 9
 %define MING 0
@@ -354,6 +351,7 @@ Lua extension for graphviz.
 %defattr(-,root,root,-)
 %dir %{_libdir}/graphviz/lua
 %{_libdir}/graphviz/lua/*
+%{_libdir}/lua*/*
 %{_mandir}/mann/gv_lua.n*
 %endif
 
@@ -389,6 +387,7 @@ Perl extension for graphviz.
 %defattr(-,root,root,-)
 %dir %{_libdir}/graphviz/perl
 %{_libdir}/graphviz/perl/*
+%{_libdir}/perl*/*
 %{_mandir}/mann/gv_perl.n*
 %endif
 
@@ -406,6 +405,8 @@ PHP extension for graphviz.
 %defattr(-,root,root,-)
 %dir %{_libdir}/graphviz/php
 %{_libdir}/graphviz/php/*
+%{_libdir}/php*/*
+%{_datadir}/php*/*
 %{_mandir}/mann/gv_php.n*
 %endif
 
@@ -423,24 +424,25 @@ Python extension for graphviz.
 %defattr(-,root,root,-)
 %dir %{_libdir}/graphviz/python
 %{_libdir}/graphviz/python/*
+%{_libdir}/python*/*
 %{_mandir}/mann/gv_python.n*
 %endif
 
 #-- graphviz-r rpm ---------------------------------------------
 %if %{R_LANG}
-%package r
+%package R
 Group:          Applications/Multimedia
 Summary:        R extension for graphviz
-Requires:       graphviz = %{version}-%{release} r
+Requires:       graphviz = %{version}-%{release} R-core
 
-%description r
+%description R
 R extension for graphviz.
 
-%files r
+%files R
 %defattr(-,root,root,-)
-%dir %{_libdir}/graphviz/r
-%{_libdir}/graphviz/r/*
-%{_mandir}/mann/gv_r.n*
+%dir %{_libdir}/graphviz/R
+%{_libdir}/graphviz/R/*
+%{_mandir}/mann/gv_R.n*
 %endif
 
 #-- graphviz-ruby rpm ---------------------------------------------
@@ -457,6 +459,7 @@ Ruby extension for graphviz.
 %defattr(-,root,root,-)
 %dir %{_libdir}/graphviz/ruby
 %{_libdir}/graphviz/ruby/*
+%{_libdir}/*ruby*/*
 %{_mandir}/mann/gv_ruby.n*
 %endif
 
@@ -474,8 +477,8 @@ Various tcl packages (extensions) for the graphviz tools.
 %defattr(-,root,root,-)
 %dir %{_libdir}/graphviz/tcl
 %{_libdir}/graphviz/tcl/*
-%{_libdir}/graphviz/pkgIndex.tcl
-%{_datadir}/graphviz/demo
+%{_libdir}/tcl*/*
+%{_datadir}/graphviz/demo/
 # hack to include gv_tcl.n only if available
 #  always includes tcldot.n, gdtclft.n
 %{_mandir}/mann/*tcl*.n*
@@ -532,9 +535,6 @@ Provides some additional PDF and HTML documentation for graphviz.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
 %if ! %{SHARP}
@@ -620,6 +620,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Mon Nov 24 2008 Tom "spot" Callaway <tcallawa@redhat.com> 2.20.3-1
+- update to 2.20.3
+
 * Sat Nov 22 2008 Rex Dieter <rdieter@fedoraproject.org> 2.16.1-0.7
 - respin (libtool)
 
