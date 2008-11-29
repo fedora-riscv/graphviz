@@ -12,7 +12,7 @@ Version: 2.20.3
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
-Release: %{?release}
+Release: %{?release}.1
 
 Group:   Applications/Multimedia
 License: CPL
@@ -620,6 +620,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 2.20.3-1.1
+- Rebuild for Python 2.6
+
 * Mon Nov 24 2008 Tom "spot" Callaway <tcallawa@redhat.com> 2.20.3-1
 - update to 2.20.3
 
