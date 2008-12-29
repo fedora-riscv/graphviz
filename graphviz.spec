@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.16.1
 
-%define truerelease 0.6
+%define truerelease 0.7
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -132,7 +132,7 @@ BuildRequires: libtool-ltdl libtool-ltdl-devel ruby ruby-devel guile-devel pytho
 %define PHP    1
 %define JAVA   1
 BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel java-devel php-devel
-%ifnarch ppc64
+%ifnarch ppc64 sparc64
 %define SHARP  1
 %define OCAML  1
 BuildRequires: mono-core ocaml
@@ -620,6 +620,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Sun Dec 28 2008 Dennis Gilmore <dennis@ausil.us> 2.16.1-0.7
+- build sparc64 same as ppc64
+
 * Mon Jul  7 2008 Tom "spot" Callaway <tcallawa@redhat.com> 2.16.1-0.6
 - fix conditional comparison
 
