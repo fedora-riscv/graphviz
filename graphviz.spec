@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.16.1
 
-%define truerelease 0.7
+%define truerelease 0.8
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -21,6 +21,7 @@ Source0: http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:  %{name}-tk8.5.patch
 Patch1:  %{name}-gcc43.patch
 Patch2:  %{name}-multilib.patch
+Patch3:  graphviz-2.16.1-sparc64-libpostfix.patch
 
 # graphviz is relocatable - Caution: this feature is used in AT&T,
 #   but probably will not be supported in Redhat/Fedora/Centos distros
@@ -535,6 +536,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 %if ! %{SHARP}
@@ -620,6 +622,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Wed Dec 31 2008 Dennis Gilmore <dennis@ausil.us> 2.16.1-0.8
+- patch for sparc64 libprefix
+
 * Sun Dec 28 2008 Dennis Gilmore <dennis@ausil.us> 2.16.1-0.7
 - build sparc64 same as ppc64
 

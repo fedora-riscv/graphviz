@@ -1,0 +1,11 @@
+--- graphviz-2.16.1/configure.BAD	2008-12-31 19:16:28.000000000 -0600
++++ graphviz-2.16.1/configure	2008-12-31 19:16:56.000000000 -0600
+@@ -2464,7 +2464,7 @@
+ case "${host_os}" in
+   *linux* )
+     case "${host_cpu}" in
+-      powerpc64 | s390x | x86_64 )
++      powerpc64 | s390x | x86_64 | sparc64 )
+         LIBPOSTFIX="64"
+         ;;
+     esac
