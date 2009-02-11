@@ -12,7 +12,7 @@ Version: 2.20.3
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
-Release: %{?release}.1
+Release: %{?release}.2
 
 Group:   Applications/Multimedia
 License: CPL
@@ -129,7 +129,7 @@ BuildRequires: libtool-ltdl libtool-ltdl-devel ruby ruby-devel guile-devel pytho
 %define PHP    1
 %define JAVA   1
 BuildRequires: libXaw-devel libSM-devel libICE-devel libXpm-devel libXt-devel libXmu-devel libXext-devel libX11-devel java-devel php-devel
-%ifnarch ppc64
+%ifnarch ppc64 s390 s390x
 %define SHARP  1
 %define OCAML  1
 BuildRequires: mono-core ocaml
@@ -620,6 +620,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Wed Feb 11 2009 Karsten Hopp <karsten@redhat.com> 2.20.3-.2
+- make it build on s390, s390x (#469044)
+
 * Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 2.20.3-1.1
 - Rebuild for Python 2.6
 
