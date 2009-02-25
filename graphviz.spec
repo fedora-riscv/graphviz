@@ -12,7 +12,7 @@ Version: 2.20.3
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
-Release: %{?release}.2
+Release: %{?release}.3
 
 Group:   Applications/Multimedia
 License: CPL
@@ -620,6 +620,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Tue Feb 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.20.3-1.3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
 * Wed Feb 11 2009 Karsten Hopp <karsten@redhat.com> 2.20.3-.2
 - make it build on s390, s390x (#469044)
 
