@@ -1,0 +1,13 @@
+--- graphviz-2.20.3/configure.orig	2009-02-25 13:14:22.000000000 -0500
++++ graphviz-2.20.3/configure	2009-02-25 13:15:02.000000000 -0500
+@@ -27376,8 +27376,8 @@
+   if test "x$use_swig" != "xYes"; then
+     use_php="No (swig not available)"
+   else
+-    if test `$SWIG -help 2>&1 | $GREP -c '\-php5 *- Generate'` = 0; then
+-      use_php="No (swig does not support -php5 option)"
++    if test `$SWIG -help 2>&1 | $GREP -c '\-php5* *- Generate'` = 0; then
++      use_php="No (swig does not support -php or -php5 option)"
+     else
+       # Extract the first word of "php", so it can be a program name with args.
+ set dummy php; ac_word=$2
