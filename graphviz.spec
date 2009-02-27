@@ -8,7 +8,7 @@ Name:    graphviz
 Summary: Graph Visualization Tools
 Version: 2.20.3
 
-%define truerelease 1
+%define truerelease 2
 %{?distroagnostic: %define release %{truerelease}}
 %{!?distroagnostic: %define release %{truerelease}%{?dist}}
 
@@ -18,6 +18,9 @@ Group:   Applications/Multimedia
 License: CPL
 URL:     http://www.graphviz.org/
 Source0: http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
+Patch0:  graphviz-2.20.3-configure-php.patch
+Patch1:  graphviz-2.20.3-gv.i.patch
+
 
 # graphviz is relocatable - Caution: this feature is used in AT&T,
 #   but probably will not be supported in Redhat/Fedora/Centos distros
@@ -535,6 +538,8 @@ Provides some additional PDF and HTML documentation for graphviz.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 %build
 %if ! %{SHARP}
@@ -620,6 +625,9 @@ rm -rf %{buildroot}
 #-- changelog --------------------------------------------------
 
 %changelog
+* Wed Feb 25 2009 John Ellson <ellson@graphviz.org> 2.20.3-2.2
+- fixes for swig changes
+
 * Tue Feb 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.20.3-1.3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
