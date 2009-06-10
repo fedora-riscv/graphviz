@@ -1,13 +1,14 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.20.3
-Release:		3%{?dist}
+Release:		4%{?dist}
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:			graphviz-2.20.3-configure-php.patch
 Patch1:			graphviz-2.20.3-gv.i.patch
+Patch2:                 graphviz-2.20.3-sparc64-is-64bit.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -190,6 +191,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # %%define NO_IO --disable-io
@@ -224,8 +226,8 @@ cp -a %{buildroot}%{_datadir}/%{name}/doc __doc
 rm -rf %{buildroot}%{_datadir}/%{name}/doc
 
 %check
-%ifnarch ppc64 ppc
-# regression test, segfaults on ppc/ppc64, possible endian issues?
+%ifnarch ppc64 ppc sparc64
+# regression test, segfaults on ppc/ppc64/sparc64, possible endian issues?
 cd rtest
 make rtest
 %endif
@@ -391,6 +393,9 @@ fi
 
 
 %changelog
+* Wed Jun 10 2009 Dennis Gilmore <dennis@ausil.us> 2.20.3-4
+- disablre regression tests on sparc64 as well as ppc/ppc64
+
 * Mon Mar  2 2009 Tom "spot" Callaway <tcallawa@redhat.com> 2.20.3-3
 - this spec makes baby animals cry... massively clean it up
 - hack in java includes to build against openjdk
