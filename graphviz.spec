@@ -1,7 +1,10 @@
+%define php_extdir %(php-config --extension-dir 2>/dev/null || echo %{_libdir}/php4)
+%global php_apiver %((echo 0; php -i 2>/dev/null | sed -n 's/^PHP API => //p') | tail -1)
+
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.20.3
-Release:		3%{?dist}
+Release:		4%{?dist}
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
@@ -139,7 +142,13 @@ Perl extension for graphviz.
 %package php
 Group:			Applications/Multimedia
 Summary:		PHP extension for graphviz
-Requires:		%{name} = %{version}-%{release}, php
+Requires:		%{name} = %{version}-%{release}
+%if %{?php_zend_api}0
+Requires:	php(zend-abi) = %{php_zend_api}
+Requires:	php(api) = %{php_core_api}
+%else
+Requires:	php-api = %{php_apiver}
+%endif
 
 %description php
 PHP extension for graphviz.
@@ -223,11 +232,18 @@ chmod -x %{buildroot}%{_datadir}/%{name}/lefty/*
 cp -a %{buildroot}%{_datadir}/%{name}/doc __doc
 rm -rf %{buildroot}%{_datadir}/%{name}/doc
 
+# PHP configuration file
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/php.d
+%{__cat} << __EOF__ > %{buildroot}%{_sysconfdir}/php.d/%{name}.ini
+; Enable %{name} extension module
+extension=gv.so
+__EOF__
+
 %check
 %ifnarch ppc64 ppc
 # regression test, segfaults on ppc/ppc64, possible endian issues?
 cd rtest
-make rtest
+LANG=C make rtest
 %endif
 
 %clean
@@ -350,8 +366,9 @@ fi
 
 %files php
 %defattr(-,root,root,-)
+%config(noreplace) %{_sysconfdir}/php.d/%{name}.ini
 %{_libdir}/graphviz/php/
-%{_libdir}/php*/*
+%{php_extdir}/gv.so
 %{_datadir}/php*/*
 %{_mandir}/mann/gv_php.n*
 
@@ -391,6 +408,12 @@ fi
 
 
 %changelog
+* Mon Jul 13 2009 Remi Collet <Fedora@FamilleCollet.com> 2.20.3-4
+- rebuild for new PHP 5.3.0 ABI (20090626)
+- add PHP ABI check
+- use php_extdir (and don't own it)
+- add php configuration file (/etc/php.d/graphviz.ini)
+
 * Mon Mar  2 2009 Tom "spot" Callaway <tcallawa@redhat.com> 2.20.3-3
 - this spec makes baby animals cry... massively clean it up
 - hack in java includes to build against openjdk
