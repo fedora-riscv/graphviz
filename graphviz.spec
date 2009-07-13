@@ -4,7 +4,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.20.3
-Release:		4%{?dist}
+Release:		4%{?dist}.1
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
@@ -243,7 +243,7 @@ __EOF__
 %ifnarch ppc64 ppc
 # regression test, segfaults on ppc/ppc64, possible endian issues?
 cd rtest
-LANG=C make rtest
+make rtest
 %endif
 
 %clean
@@ -408,6 +408,9 @@ fi
 
 
 %changelog
+* Mon Jul 13 2009 Remi Collet <Fedora@FamilleCollet.com> 2.20.3-4.1
+- fix mistake in make rtest fix
+
 * Mon Jul 13 2009 Remi Collet <Fedora@FamilleCollet.com> 2.20.3-4
 - rebuild for new PHP 5.3.0 ABI (20090626)
 - add PHP ABI check
