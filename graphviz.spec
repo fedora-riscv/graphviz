@@ -3,14 +3,13 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.20.3
-Release:		5%{?dist}.1
+Version:		2.26.0
+Release:		1%{?dist}
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
-Patch0:			graphviz-2.20.3-configure-php.patch
-Patch1:			graphviz-2.20.3-gv.i.patch
+Patch0:			graphviz-sparc64.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -18,7 +17,7 @@ BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-de
 BuildRequires:		libXaw-devel, libSM-devel, libXext-devel, java-devel, php-devel
 BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel, libgnomeui-devel
 BuildRequires:		gd-devel, perl-devel, DevIL-devel, R-devel, swig >= 1.3.33
-%ifnarch ppc64 s390 s390x sparc64
+%ifnarch ppc64 s390 s390x sparc64 %{arm}
 BuildRequires:		mono-core, ocaml
 %endif
 Requires:		urw-fonts
@@ -26,7 +25,7 @@ Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
 
 # Necessary conditionals
-%ifarch ppc64 s390 s390x sparc64
+%ifarch ppc64 s390 s390x sparc64 %{arm}
 %global SHARP  0
 %global OCAML  0
 %else
@@ -198,7 +197,6 @@ Various tcl packages (extensions) for the graphviz tools.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 # %%define NO_IO --disable-io
@@ -240,8 +238,8 @@ extension=gv.so
 __EOF__
 
 %check
-%ifnarch ppc64 ppc
-# regression test, segfaults on ppc/ppc64, possible endian issues?
+%ifnarch ppc64 ppc sparc64
+# regression test, segfaults on ppc/ppc64/sparc64, possible endian issues?
 cd rtest
 make rtest
 %endif
@@ -309,7 +307,7 @@ fi
 %{_libdir}/*.so
 %{_libdir}/graphviz/*.so
 %{_libdir}/pkgconfig/*.pc
-%{_mandir}/man3/*.3*
+%{_mandir}/man3/*.3.gz
 
 %files devil
 %defattr(-,root,root,-)
@@ -331,18 +329,18 @@ fi
 %files guile
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/guile/
-%{_mandir}/mann/gv_guile.n*
+%{_mandir}/man3/gv.3guile*
 
 %files java
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/java/
-%{_mandir}/mann/gv_java.n*
+%{_mandir}/man3/gv.3java*
 
 %files lua
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/lua/
 %{_libdir}/lua*/*
-%{_mandir}/mann/gv_lua.n*
+%{_mandir}/man3/gv.3lua*
 
 %if %{MING}
 %files ming
@@ -355,14 +353,14 @@ fi
 %files ocaml
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/ocaml/
-%{_mandir}/mann/gv_ocaml.n*
+%{_mandir}/man3/gv.3ocaml*
 %endif
 
 %files perl
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/perl/
 %{_libdir}/perl*/*
-%{_mandir}/mann/gv_perl.n*
+%{_mandir}/man3/gv.3perl*
 
 %files php
 %defattr(-,root,root,-)
@@ -370,30 +368,30 @@ fi
 %{_libdir}/graphviz/php/
 %{php_extdir}/gv.so
 %{_datadir}/php*/*
-%{_mandir}/mann/gv_php.n*
+%{_mandir}/man3/gv.3php*
 
 %files python
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/python/
 %{_libdir}/python*/*
-%{_mandir}/mann/gv_python.n*
+%{_mandir}/man3/gv.3python*
 
 %files R
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/R/
-%{_mandir}/mann/gv_R.n*
+%{_mandir}/man3/gv.3r.gz
 
 %files ruby
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/ruby/
 %{_libdir}/*ruby*/*
-%{_mandir}/mann/gv_ruby.n*
+%{_mandir}/man3/gv.3ruby*
 
 %if %{SHARP}
 %files sharp
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/sharp/
-%{_mandir}/mann/gv_sharp.n*
+%{_mandir}/man3/gv.3sharp*
 %endif
 
 %files tcl
@@ -401,13 +399,20 @@ fi
 %{_libdir}/graphviz/tcl/
 %{_libdir}/tcl*/*
 %{_datadir}/graphviz/demo/
-# hack to include gv_tcl.n only if available
-#  always includes tcldot.n, gdtclft.n
-%{_mandir}/mann/*tcl*.n*
-%{_mandir}/mann/tkspline.n*
+# hack to include gv.3tcl only if available
+#  always includes tcldot.3tcl, gdtclft.3tcl
+%{_mandir}/man3/*.3tcl*
+%{_mandir}/man3/tkspline.3tk*
 
 
 %changelog
+* Fri Dec 18 2009 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.26.0-1
+- Updated to latest release
+- Removed patches that have been applied upstream
+- Fixed man page paths (mann -> man3)
+- Disabled mono and ocaml for ARM (Jitesh Shah, BZ#532047)
+- Disabled regression tests on sparc64 as well as ppc/ppc64 (Dennis Gilmore)
+
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.20.3-5.1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
