@@ -4,7 +4,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.26.0
-Release:		1%{?dist}
+Release:		2%{?dist}
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
@@ -406,6 +406,10 @@ fi
 
 
 %changelog
+* Mon Jan 04 2010 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.26.0-2
+- Rebuild for updated ocaml
+- Happy new year, Fedora!
+
 * Fri Dec 18 2009 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.26.0-1
 - Updated to latest release
 - Removed patches that have been applied upstream
