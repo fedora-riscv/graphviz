@@ -4,7 +4,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.20.3
-Release:		5%{?dist}.1
+Release:		5%{?dist}.2
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
@@ -240,7 +240,7 @@ extension=gv.so
 __EOF__
 
 %check
-%ifnarch ppc64 ppc
+%ifnarch ppc64 ppc %{sparc}
 # regression test, segfaults on ppc/ppc64, possible endian issues?
 cd rtest
 make rtest
@@ -406,8 +406,10 @@ fi
 %{_mandir}/mann/*tcl*.n*
 %{_mandir}/mann/tkspline.n*
 
-
 %changelog
+* Wed Jan 27 2910 Dennis Gilmore <dennis@ausil.us> - 2.20.3-5.2
+- disable tests on spaec arches in adidion to the ppc ones
+
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.20.3-5.1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
