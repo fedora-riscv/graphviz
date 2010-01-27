@@ -4,13 +4,14 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.20.3
-Release:		5%{?dist}.2
+Release:		5%{?dist}.3
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:			graphviz-2.20.3-configure-php.patch
 Patch1:			graphviz-2.20.3-gv.i.patch
+Patch2:                 graphviz-sparc64-libpostfix.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -199,6 +200,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # %%define NO_IO --disable-io
@@ -407,8 +409,11 @@ fi
 %{_mandir}/mann/tkspline.n*
 
 %changelog
+* Wed Jan 27 2010 Dennis Gilmore <dennis@ausil.us> - 2.20.3-5.3
+- add patch to tell things that sparc64 has a LIBPOSTFIX of 64
+
 * Wed Jan 27 2010 Dennis Gilmore <dennis@ausil.us> - 2.20.3-5.2
-- disable tests on spaec arches in addition to the ppc ones
+- disable tests on sparc arches in addition to the ppc ones
 
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.20.3-5.1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
