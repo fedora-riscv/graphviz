@@ -407,8 +407,8 @@ fi
 %{_mandir}/mann/tkspline.n*
 
 %changelog
-* Wed Jan 27 2910 Dennis Gilmore <dennis@ausil.us> - 2.20.3-5.2
-- disable tests on spaec arches in adidion to the ppc ones
+* Wed Jan 27 2010 Dennis Gilmore <dennis@ausil.us> - 2.20.3-5.2
+- disable tests on spaec arches in addition to the ppc ones
 
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.20.3-5.1
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
