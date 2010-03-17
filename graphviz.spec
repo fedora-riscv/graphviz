@@ -238,7 +238,7 @@ extension=gv.so
 __EOF__
 
 %check
-%ifnarch ppc64 ppc sparc64
+%ifnarch ppc64 ppc %{sparc}
 # regression test, segfaults on ppc/ppc64/sparc64, possible endian issues?
 cd rtest
 make rtest
