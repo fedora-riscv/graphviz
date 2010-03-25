@@ -4,12 +4,13 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.26.0
-Release:		2%{?dist}
+Release:		3%{?dist}
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:			graphviz-sparc64.patch
+Patch1:			graphviz-powerpc-ruby-fix.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -197,6 +198,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 # %%define NO_IO --disable-io
@@ -406,6 +408,10 @@ fi
 
 
 %changelog
+* Thu Mar 24 2010 Josh Boyer <jwboyer@gmail.com> 2.26.0-3
+- Backport patch from upstream graphviz to fix broken powerpc-darwin workaround
+  that prevented this from building on ppc64 (#569454)
+
 * Mon Jan 04 2010 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.26.0-2
 - Rebuild for updated ocaml
 - Happy new year, Fedora!
