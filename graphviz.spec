@@ -3,14 +3,22 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.26.0
-Release:		3%{?dist}
+Version:		2.26.3
+Release:		1%{?dist}
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
+# Fix for sparc64.
 Patch0:			graphviz-sparc64.patch
-Patch1:			graphviz-powerpc-ruby-fix.patch
+# Fix gtk plugin program-name (#640671).
+Patch1:			graphviz-2.26.0-gtk-progname.patch
+# Fix broken links in doc index (#642536).
+Patch2:			graphviz-2.26.0-doc-index-fix.patch
+# Fix SIGSEGVs on testsuite (#645703).
+Patch3:			graphviz-2.26.0-testsuite-sigsegv-fix.patch
+# Testsuite now do diff check also in case of err output (#645703).
+Patch4:			graphviz-2.26.0-rtest-errout-fix.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -21,7 +29,7 @@ BuildRequires:		gd-devel, perl-devel, DevIL-devel, R-devel, swig >= 1.3.33
 %ifnarch ppc64 s390 s390x sparc64 %{arm}
 BuildRequires:		mono-core, ocaml
 %endif
-Requires:		urw-fonts
+BuildRequires:		urw-fonts
 Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
 
@@ -51,9 +59,9 @@ and edges, not as in barcharts). This package contains development files for
 graphviz.
 
 %package devil
-Group:                  Applications/Multimedia
-Summary:                Graphviz plugin for renderers based on DevIL
-Requires:               %{name} = %{version}-%{release}
+Group:			Applications/Multimedia
+Summary:		Graphviz plugin for renderers based on DevIL
+Requires:		%{name} = %{version}-%{release}
 
 %description devil
 Graphviz plugin for renderers based on DevIL. (Unless you absolutely have
@@ -197,8 +205,11 @@ Various tcl packages (extensions) for the graphviz tools.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+%patch0 -p1 -b .sparc64
+%patch1 -p1 -b .gtk-progname
+%patch2 -p1 -b .doc-index-fix
+%patch3 -p1 -b .testsuite-sigsegv-fix
+%patch4 -p1 -b .rtest-errout-fix
 
 %build
 # %%define NO_IO --disable-io
@@ -219,14 +230,14 @@ sed -i 's|_MY_JAVA_INCLUDES_|-I%{java_home}/include/ -I%{java_home}/include/linu
 	--without-ming \
 %endif
 
-make %{?_smp_mflags}
+make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 %install
 rm -rf %{buildroot} __doc
 make DESTDIR=%{buildroot} \
-        docdir=%{buildroot}%{_docdir}/%{name} \
-        pkgconfigdir=%{_libdir}/pkgconfig \
-        install
+	docdir=%{buildroot}%{_docdir}/%{name} \
+	pkgconfigdir=%{_libdir}/pkgconfig \
+	install
 find %{buildroot} -type f -name "*.la" -exec rm -f {} ';'
 chmod -x %{buildroot}%{_datadir}/%{name}/lefty/*
 cp -a %{buildroot}%{_datadir}/%{name}/doc __doc
@@ -240,11 +251,8 @@ extension=gv.so
 __EOF__
 
 %check
-%ifnarch ppc64 ppc %{sparc}
-# regression test, segfaults on ppc/ppc64/sparc64, possible endian issues?
 cd rtest
 make rtest
-%endif
 
 %clean
 rm -rf %{buildroot}
@@ -256,11 +264,11 @@ rm -rf %{buildroot}
 # if there is no dot after everything else is done, then remove config
 %postun
 if [ $1 -eq 0 ]; then
-        rm -f %{_libdir}/graphviz/config || :
+	rm -f %{_libdir}/graphviz/config || :
 fi
 /sbin/ldconfig
 
-# run "dot -c" to generate plugin config in %{_libdir}/graphviz/config
+# run "dot -c" to generate plugin config in %%{_libdir}/graphviz/config
 %post devil
 %{_bindir}/dot -c
 
@@ -276,7 +284,7 @@ fi
 [ -x %{_bindir}/dot ] && %{_bindir}/dot -c || :
 
 %if %{MING}
-# run "dot -c" to generate plugin config in %{_libdir}/graphviz/config
+# run "dot -c" to generate plugin config in %%{_libdir}/graphviz/config
 %post ming
 %{_bindir}/dot -c
 
@@ -408,6 +416,19 @@ fi
 
 
 %changelog
+* Thu Jan 06 2011 Jaroslav Škarvada <jskarvad@redhat.com> - 2.26.3-1
+- New version (#580017)
+- Fixed gtk plugin program-name (#640671, gtk-progname patch)
+- Fixed broken links in doc index (#642536, doc-index-fix patch)
+- Fixed SIGSEGVs on testsuite (#645703, testsuite-sigsegv-fix patch)
+- Testsuite now do diff check also in case of err output (#645703,
+  rtest-errout-fix patch)
+- Testsuite enabled on all arches (#645703)
+- Added urw-fonts to BuildRequires
+- Compiled with -fno-strict-aliasing
+- Fixed rpmlint warnings on spec file
+- Removed unused patches
+
 * Thu Mar 24 2010 Josh Boyer <jwboyer@gmail.com> 2.26.0-3
 - Backport patch from upstream graphviz to fix broken powerpc-darwin workaround
   that prevented this from building on ppc64 (#569454)
