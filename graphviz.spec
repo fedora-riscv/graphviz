@@ -4,7 +4,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.26.3
-Release:		1%{?dist}
+Release:		2%{?dist}
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
@@ -30,6 +30,7 @@ BuildRequires:		gd-devel, perl-devel, DevIL-devel, R-devel, swig >= 1.3.33
 BuildRequires:		mono-core, ocaml
 %endif
 BuildRequires:		urw-fonts
+Requires:		urw-fonts
 Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
 
@@ -416,6 +417,9 @@ fi
 
 
 %changelog
+* Tue Feb 22 2011 Jaroslav Škarvada <jskarvad@redhat.com> - 2.26.3-2
+- Added urw-fonts to requires (#677114)
+
 * Thu Jan 06 2011 Jaroslav Škarvada <jskarvad@redhat.com> - 2.26.3-1
 - New version (#580017)
 - Fixed gtk plugin program-name (#640671, gtk-progname patch)
