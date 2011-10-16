@@ -4,7 +4,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.26.3
-Release:		4%{?dist}
+Release:		5%{?dist}
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
@@ -54,6 +54,7 @@ and edges, not as in barcharts).
 Group:			Development/Libraries
 Summary:		Development package for graphviz
 Requires:		%{name} = %{version}-%{release}, pkgconfig
+Requires:		%{name}-gd = %{version}-%{release}
 
 %description devel
 A collection of tools for the manipulation and layout of graphs (as in nodes 
@@ -153,12 +154,8 @@ Perl extension for graphviz.
 Group:			Applications/Multimedia
 Summary:		PHP extension for graphviz
 Requires:		%{name} = %{version}-%{release}
-%if %{?php_zend_api}0
 Requires:	php(zend-abi) = %{php_zend_api}
 Requires:	php(api) = %{php_core_api}
-%else
-Requires:	php-api = %{php_apiver}
-%endif
 
 %description php
 PHP extension for graphviz.
@@ -233,7 +230,7 @@ sed -i 's|_MY_JAVA_INCLUDES_|-I%{java_home}/include/ -I%{java_home}/include/linu
 	--without-ming \
 %endif
 
-make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
+make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 
 %install
 rm -rf %{buildroot} __doc
@@ -419,6 +416,11 @@ fi
 
 
 %changelog
+* Sun Oct 16 2011 Jaroslav Škarvada <jskarvad@redhat.com> - 2.26.3-5
+- Recompiled with -fno-strict-aliasing in CXXFLAGS
+- Fixed build failure due to change in php_zend_api macro type
+- Added gd as devel requirement
+
 * Tue Feb 22 2011 Jaroslav Škarvada <jskarvad@redhat.com> - 2.26.3-4
 - Added urw-fonts to requires (#677114)
 
