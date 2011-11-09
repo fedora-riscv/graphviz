@@ -4,7 +4,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.26.3
-Release:		5%{?dist}
+Release:		6%{?dist}
 Group:			Applications/Multimedia
 License:		CPL
 URL:			http://www.graphviz.org/
@@ -416,6 +416,9 @@ fi
 
 
 %changelog
+* Wed Nov  9 2011 Tom Callaway <spot@fedoraproject.org> - 2.26.3-6
+- rebuild for R 2.14.0
+
 * Sun Oct 16 2011 Jaroslav Škarvada <jskarvad@redhat.com> - 2.26.3-5
 - Recompiled with -fno-strict-aliasing in CXXFLAGS
 - Fixed build failure due to change in php_zend_api macro type
