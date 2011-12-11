@@ -1,10 +1,40 @@
-%define php_extdir %(php-config --extension-dir 2>/dev/null || echo %{_libdir}/php4)
+# Necessary conditionals
+%ifarch ppc64 s390 s390x sparc64 %{arm} alpha
+%global SHARP  0
+%global OCAML  0
+%else
+%global SHARP  1
+%global OCAML  1
+%endif
+
+%global DEVIL  1
+%global ARRRR  1
+
+# Build with QT applications (currently only gvedit)
+# Disabled until the package gets better structuring, see bug #447133
+%global QTAPPS 0
+
+%global GTS    1
+%global LASI   1
+
+# Not in Fedora yet.
+%global MING   0
+
+%if 0%{?rhel}
+%global SHARP  0
+%global ARRRR  0
+%global DEVIL  0
+%global GTS    0
+%global LASI   0
+%endif
+
+%global php_extdir %(php-config --extension-dir 2>/dev/null || echo %{_libdir}/php4)
 %global php_apiver %((echo 0; php -i 2>/dev/null | sed -n 's/^PHP API => //p') | tail -1)
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.28.0
-Release:		10%{?dist}
+Release:		11%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -21,25 +51,32 @@ BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel, python-devel
 BuildRequires:		libXaw-devel, libSM-devel, libXext-devel, java-devel, php-devel
 BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel, libgnomeui-devel
-BuildRequires:		gd-devel, perl-devel, DevIL-devel, R-devel, swig >= 1.3.33
-%ifnarch ppc64 s390 s390x sparc64 %{arm} alpha
-BuildRequires:		mono-core, ocaml
+BuildRequires:		gd-devel, perl-devel, swig >= 1.3.33
+%if %{SHARP}
+BuildRequires:		mono-core
 %endif
-BuildRequires:		urw-fonts, perl-ExtUtils-Embed
+%if %{DEVIL}
+BuildRequires:		DevIL-devel
+%endif
+%if %{ARRRR}
+BuildRequires:		R-devel
+%endif
+%if %{OCAML}
+BuildRequires:		ocaml
+%endif
+%if %{QTAPPS}
+BuildRequires:		qt-devel
+%endif
+%if %{GTS}
+BuildRequires:		gts-devel
+%endif
+%if %{LASI}
+BuildRequires:		lasi-devel
+%endif
+BuildRequires:		urw-fonts, perl-ExtUtils-Embed, ghostscript-devel, librsvg2-devel
 Requires:		urw-fonts
 Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
-
-# Necessary conditionals
-%ifarch ppc64 s390 s390x sparc64 %{arm} alpha
-%global SHARP  0
-%global OCAML  0
-%else
-%global SHARP  1
-%global OCAML  1
-%endif
-# Not in Fedora yet.
-%global MING   0
 
 %description
 A collection of tools for the manipulation and layout of graphs (as in nodes 
@@ -56,6 +93,7 @@ A collection of tools for the manipulation and layout of graphs (as in nodes
 and edges, not as in barcharts). This package contains development files for 
 graphviz.
 
+%if %{DEVIL}
 %package devil
 Group:			Applications/Multimedia
 Summary:		Graphviz plugin for renderers based on DevIL
@@ -65,6 +103,7 @@ Requires:		%{name} = %{version}-%{release}
 Graphviz plugin for renderers based on DevIL. (Unless you absolutely have
 to use BMP, TIF, or TGA, you are recommended to use the PNG format instead
 supported directly by the cairo+pango based renderer in the base graphviz rpm.)
+%endif
 
 %package doc
 Group:			Documentation
@@ -163,6 +202,7 @@ Requires:		%{name} = %{version}-%{release}, python
 %description python
 Python extension for graphviz.
 
+%if %{ARRRR}
 %package R
 Group:			Applications/Multimedia
 Summary:		R extension for graphviz
@@ -170,6 +210,7 @@ Requires:		%{name} = %{version}-%{release}, R-core
 
 %description R
 R extension for graphviz.
+%endif
 
 %package ruby
 Group:			Applications/Multimedia
@@ -203,6 +244,9 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch3 -p1 -b .testsuite-sigsegv-fix
 %patch4 -p1 -b .rtest-errout-fix
 
+# Attempt to fix rpmlint warnings about executable sources
+find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
+
 %build
 # %%define NO_IO --disable-io
 
@@ -212,6 +256,12 @@ Various tcl packages (extensions) for the graphviz tools.
 sed -i '/JavaVM.framework/!s/JAVA_INCLUDES=/JAVA_INCLUDES=\"_MY_JAVA_INCLUDES_\"/g' configure
 sed -i 's|_MY_JAVA_INCLUDES_|-I%{java_home}/include/ -I%{java_home}/include/linux/|g' configure
 %configure --with-x --disable-static --disable-dependency-tracking --without-mylibgd --with-ipsepcola --with-pangocairo --with-gdk-pixbuf \
+%if ! %{LASI}
+	--without-lasi \
+%endif
+%if ! %{GTS}
+	--without-gts \
+%endif
 %if ! %{SHARP}
 	--disable-sharp \
 %endif
@@ -220,6 +270,15 @@ sed -i 's|_MY_JAVA_INCLUDES_|-I%{java_home}/include/ -I%{java_home}/include/linu
 %endif
 %if ! %{MING}
 	--without-ming \
+%endif
+%if ! %{ARRRR}
+	--disable-r \
+%endif
+%if ! %{DEVIL}
+	--without-devil \
+%endif
+%if ! %{QTAPPS}
+	--without-qt \
 %endif
 
 make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
@@ -260,12 +319,14 @@ if [ $1 -eq 0 ]; then
 fi
 /sbin/ldconfig
 
+%if %{DEVIL}
 # run "dot -c" to generate plugin config in %%{_libdir}/graphviz/config
 %post devil
 %{_bindir}/dot -c
 
 %postun devil
 [ -x %{_bindir}/dot ] && %{_bindir}/dot -c || :
+%endif
 
 %post gd
 /sbin/ldconfig
@@ -295,9 +356,16 @@ fi
 %{_mandir}/man7/*.7*
 %dir %{_datadir}/graphviz
 %{_datadir}/graphviz/lefty
+
+%if %{QTAPPS}
+%{_datadir}/graphviz/gvedit
+%endif
+
 %exclude %{_libdir}/graphviz/*/*
 %exclude %{_libdir}/graphviz/libgvplugin_gd.*
+%if %{DEVIL}
 %exclude %{_libdir}/graphviz/libgvplugin_devil.*
+%endif
 %if %{MING}
 %exclude %{_libdir}/graphviz/libgvplugin_ming.*
 %exclude %{_libdir}/graphviz/*fdb
@@ -311,9 +379,11 @@ fi
 %{_libdir}/pkgconfig/*.pc
 %{_mandir}/man3/*.3.gz
 
+%if %{DEVIL}
 %files devil
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/libgvplugin_devil.so.*
+%endif
 
 %files doc
 %defattr(-,root,root,-)
@@ -378,10 +448,12 @@ fi
 %{_libdir}/python*/*
 %{_mandir}/man3/gv.3python*
 
+%if %{ARRRR}
 %files R
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/R/
 %{_mandir}/man3/gv.3r.gz
+%endif
 
 %files ruby
 %defattr(-,root,root,-)
@@ -408,6 +480,15 @@ fi
 
 
 %changelog
+* Thu Dec  8 2011 Jaroslav Škarvada <jskarvad@redhat.com> - 2.28.0-11
+- Added conditionals for ARRRR, DEVIL, QTAPPS (gvedit), GTS, LASI
+- Fixed conditionals for SHARP, OCAML
+- Built with gts, ghostscript, rsvg and lasi
+  Resolves: rhbz#760926
+- Disabled gvedit
+  Resolves: rhbz#751807
+- Fixed rpmlint warnings about executable sources
+
 * Wed Nov  9 2011 Tom Callaway <spot@fedoraproject.org> - 2.28.0-10
 - rebuild for R 2.14.0
 
