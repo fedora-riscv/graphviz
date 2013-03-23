@@ -65,7 +65,7 @@ BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-de
 BuildRequires:		libXaw-devel, libSM-devel, libXext-devel, java-devel, php-devel
 BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel, libgnomeui-devel
 BuildRequires:		gd-devel, perl-devel, swig >= 1.3.33
-# Temporary workaound for perl(Carp) not pulled
+# Temporary workaound for perl(Carp) not pulled (bug #924938)
 BuildRequires:		perl-Carp
 %if %{SHARP}
 BuildRequires:		mono-core
