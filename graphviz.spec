@@ -48,7 +48,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		3%{?dist}
+Release:		4%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -64,8 +64,8 @@ BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel, python-devel
 BuildRequires:		libXaw-devel, libSM-devel, libXext-devel, java-devel, php-devel
 BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel, libgnomeui-devel
-BuildRequires:		gd-devel, perl-devel, swig >= 1.3.33
-# Temporary workaound for perl(Carp) not pulled (bug #924938)
+BuildRequires:		gd-devel, perl-devel, swig >= 1.3.33, automake, autoconf, libtool
+# Temporary workaound for perl(Carp) not pulled
 BuildRequires:		perl-Carp
 %if %{SHARP}
 BuildRequires:		mono-core
@@ -263,6 +263,7 @@ Various tcl packages (extensions) for the graphviz tools.
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
 
 %build
+autoreconf -i
 # Hack in the java includes we need
 sed -i '/JavaVM.framework/!s/JAVA_INCLUDES=/JAVA_INCLUDES=\"_MY_JAVA_INCLUDES_\"/g' configure
 sed -i 's|_MY_JAVA_INCLUDES_|-I%{java_home}/include/ -I%{java_home}/include/linux/|g' configure
@@ -533,6 +534,10 @@ fi
 
 
 %changelog
+* Mon Mar 25 2013 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-4
+- Added support for aarch64
+  Resolves: rhbz#925487
+
 * Fri Mar 22 2013 Remi Collet <rcollet@redhat.com> - 2.30.1-3
 - rebuild for http://fedoraproject.org/wiki/Features/Php55
 - add explicit BuildRequires: perl-Carp (workaround)
