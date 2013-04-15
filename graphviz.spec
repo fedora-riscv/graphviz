@@ -48,7 +48,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		4%{?dist}
+Release:		5%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -534,6 +534,9 @@ fi
 
 
 %changelog
+* Thu Apr 11 2013 Tom Callaway <spot@fedoraproject.org> - 2.30.1-5
+- rebuild for R3 (may not be needed, but better safe than sorry)
+
 * Mon Mar 25 2013 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-4
 - Added support for aarch64
   Resolves: rhbz#925487
