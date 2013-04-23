@@ -48,7 +48,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		5%{?dist}
+Release:		6%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -58,6 +58,8 @@ Patch2:			graphviz-2.30.1-guile2-fix.patch
 Patch3:			graphviz-2.26.0-testsuite-sigsegv-fix.patch
 # Testsuite now do diff check also in case of err output (#645703).
 Patch4:			graphviz-2.26.0-rtest-errout-fix.patch
+# Now that libgraph is gone, reflect that in libgvc.pc
+Patch5:			graphviz-2.30.1-gvc.pc-no-libgraph.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -258,6 +260,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch2 -p1 -b .guile2-fix
 %patch3 -p1 -b .testsuite-sigsegv-fix
 %patch4 -p1 -b .rtest-errout-fix
+%patch5 -p1 -b .cgraph
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -534,6 +537,9 @@ fi
 
 
 %changelog
+* Tue Apr 23 2013 Tom Callaway <spot@fedoraproject.org> - 2.30.1-6
+- patch libgvc.pc.in to refer to -lcgraph (-lgraph is dead and gone)
+
 * Thu Apr 11 2013 Tom Callaway <spot@fedoraproject.org> - 2.30.1-5
 - rebuild for R3 (may not be needed, but better safe than sorry)
 
