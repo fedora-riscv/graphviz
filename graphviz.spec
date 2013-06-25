@@ -32,6 +32,9 @@
 %global LASI   0
 %endif
 
+# Plugins version
+%global pluginsver 6
+
 %global php_extdir %(php-config --extension-dir 2>/dev/null || echo %{_libdir}/php4)
 # Fix private-shared-object-provides
 # RPM 4.8
@@ -48,7 +51,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		6%{?dist}
+Release:		7%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -62,7 +65,7 @@ Patch4:			graphviz-2.26.0-rtest-errout-fix.patch
 Patch5:			graphviz-2.30.1-gvc.pc-no-libgraph.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
-BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
+BuildRequires:		/bin/ksh93, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel, python-devel
 BuildRequires:		libXaw-devel, libSM-devel, libXext-devel, java-devel, php-devel
 BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel, libgnomeui-devel
@@ -266,7 +269,7 @@ Various tcl packages (extensions) for the graphviz tools.
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
 
 %build
-autoreconf -i
+autoreconf -if
 # Hack in the java includes we need
 sed -i '/JavaVM.framework/!s/JAVA_INCLUDES=/JAVA_INCLUDES=\"_MY_JAVA_INCLUDES_\"/g' configure
 sed -i 's|_MY_JAVA_INCLUDES_|-I%{java_home}/include/ -I%{java_home}/include/linux/|g' configure
@@ -340,6 +343,9 @@ find %{buildroot}%{_docdir}/%{name}-%{version}/demo -type f -name "*.py" -exec m
 # Remove dot_builtins, on demand loading should be sufficient
 rm -f %{buildroot}%{_bindir}/dot_builtins
 
+# Ghost plugins config
+touch %{buildroot}%{_libdir}/graphviz/config%{pluginsver}
+
 %check
 # Minimal load test of php extension
 LD_LIBRARY_PATH=%{buildroot}%{_libdir} \
@@ -359,11 +365,7 @@ rm -rf %{buildroot}
 /sbin/ldconfig
 %{_bindir}/dot -c
 
-# if there is no dot after everything else is done, then remove config*
 %postun
-if [ $1 -eq 0 ]; then
-	rm -f %{_libdir}/graphviz/config* || :
-fi
 /sbin/ldconfig
 
 %if %{DEVIL}
@@ -412,6 +414,7 @@ fi
 %exclude %{_docdir}/%{name}-%{version}/demo
 %{_datadir}/graphviz/lefty
 %{_datadir}/graphviz/gvpr
+%ghost %{_libdir}/graphviz/config%{pluginsver}
 
 %if %{QTAPPS}
 %{_datadir}/graphviz/gvedit
@@ -537,6 +540,9 @@ fi
 
 
 %changelog
+* Tue Jun 25 2013 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-7
+- Fixed handling of the libdir/graphviz directory
+
 * Tue Apr 23 2013 Tom Callaway <spot@fedoraproject.org> - 2.30.1-6
 - patch libgvc.pc.in to refer to -lcgraph (-lgraph is dead and gone)
 
