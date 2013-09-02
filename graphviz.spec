@@ -48,7 +48,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.28.0
-Release:		26%{?dist}
+Release:		27%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -60,7 +60,9 @@ Patch3:			graphviz-2.26.0-testsuite-sigsegv-fix.patch
 # Testsuite now do diff check also in case of err output (#645703).
 Patch4:			graphviz-2.26.0-rtest-errout-fix.patch
 # Actually SWIG is broken, but patch the output to work around it.
-Patch5:                 graphviz-ocaml-4.patch
+Patch5:			graphviz-ocaml-4.patch
+# Fix crash in dot (#919308).
+Patch5:			graphviz-2.28.0-dot-crash-fix.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -260,6 +262,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch3 -p1 -b .testsuite-sigsegv-fix
 %patch4 -p1 -b .rtest-errout-fix
 %patch5 -p1 -b .ocaml4
+%patch6 -p1 -b .dot-crash-fix
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -534,6 +537,10 @@ fi
 
 
 %changelog
+* Mon Sep  2 2013 Jaroslav Škarvada <jskarvad@redhat.com> - 2.28.0-27
+- Fixed dot crash (by dot-crash-fix patch)
+  Resolves: rhbz#919308
+
 * Wed Jan  9 2013 Jaroslav Škarvada <jskarvad@redhat.com> - 2.28.0-26
 - Rebuilt with -fno-strict-overflow to workaround the overflow problem
   (upstream ticket: http://www.graphviz.org/mantisbt/view.php?id=2244)
