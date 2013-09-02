@@ -62,7 +62,7 @@ Patch4:			graphviz-2.26.0-rtest-errout-fix.patch
 # Actually SWIG is broken, but patch the output to work around it.
 Patch5:			graphviz-ocaml-4.patch
 # Fix crash in dot (#919308).
-Patch5:			graphviz-2.28.0-dot-crash-fix.patch
+Patch6:			graphviz-2.28.0-dot-crash-fix.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		/bin/ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
