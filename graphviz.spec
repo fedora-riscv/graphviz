@@ -7,13 +7,14 @@
 #-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
 Version:	2.12
-Release:	8%{?dist}
+Release:	9%{?dist}
 
 License:	CPL
 URL:		http://www.graphviz.org/
 Source:		http://www.graphviz.org/pub/graphviz/ARCHIVE/graphviz-2.12.tar.gz
 Patch0:		%{name}-php5.patch
 Patch1:		%{name}-libcdt.patch
+Patch2:		graphviz-2.12-yyerror-overflow-fix.patch
 
 # graphviz is relocatable
 #Prefix: /usr
@@ -408,6 +409,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # XXX ix86 only used to have -ffast-math, let's use everywhere
@@ -444,6 +446,11 @@ rm -rf $RPM_BUILD_ROOT
 #-- changelog --------------------------------------------------
 
 %changelog
+* Tue Jan  7 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.12-9
+- Fixed overflow in yyerror
+  Resolves: rhbz#1049168
+- Fixed malformed php5 patch due to distgit conversion
+
 * Thu May 24 2007 Patrick "Jima" Laughton <jima@beer.tclug.org> 2.12-8
 - Pulled spec from devel/
 - Adapted spec to build for EL-5 (thanks to Christopher Stone)

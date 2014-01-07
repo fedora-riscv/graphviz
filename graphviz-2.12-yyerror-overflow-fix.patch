@@ -1,0 +1,63 @@
+diff -up graphviz-2.12/lib/agraph/Makefile.am.origy graphviz-2.12/lib/agraph/Makefile.am
+--- graphviz-2.12/lib/agraph/Makefile.am.origy	2006-09-26 18:47:54.000000000 +0200
++++ graphviz-2.12/lib/agraph/Makefile.am	2014-01-07 13:59:14.868361095 +0100
+@@ -6,7 +6,8 @@ pkgconfigdir = $(libdir)/pkgconfig
+ 
+ AM_CPPFLAGS = \
+ 	-I$(top_srcdir) \
+-	-I$(top_srcdir)/lib/cdt
++	-I$(top_srcdir)/lib/cdt \
++	-I$(top_srcdir)/lib/graph
+ 
+ pkginclude_HEADERS = aghdr.h agraph.h malloc.h vmstub.h grammar.h
+ noinst_LTLIBRARIES = libagraph_C.la
+@@ -22,7 +23,8 @@ libagraph_C_la_SOURCES = agerror.c apply
+ 
+ libagraph_la_LDFLAGS = -version-info @VERSION_INFO@ -no-undefined
+ libagraph_la_SOURCES = $(libagraph_C_la_SOURCES)
+-libagraph_la_LIBADD = $(top_builddir)/lib/cdt/libcdt.la
++libagraph_la_LIBADD = $(top_builddir)/lib/cdt/libcdt.la \
++	$(top_builddir)/lib/graph/libgraph.la
+ 
+ scan.o scan.lo: scan.c grammar.h
+ 
+diff --git a/lib/agraph/scan.l b/lib/agraph/scan.l
+index b3c4875..a46cd92 100644
+--- a/lib/agraph/scan.l
++++ b/lib/agraph/scan.l
+@@ -20,6 +20,7 @@
+ #include <ctype.h>
+ #include "grammar.h"
+ #include "aghdr.h"
++#include "agxbuf.h"
+ #ifdef WIN32
+ #include <io.h>
+ #endif
+@@ -153,13 +154,21 @@ ID		({NAME}|{NUMBER})
+ %%
+ void yyerror(char *str)
+ {
++	unsigned char	xbuf[BUFSIZ];
+ 	char	buf[BUFSIZ];
+-	if (InputFile)
+-		sprintf(buf,"%s:%d: %s in line %d near '%s'",InputFile, line_num,
+-			str,line_num,yytext);
+-	else
+-		sprintf(buf," %s in line %d near '%s'", str,line_num,yytext);
+-	agerror(AGERROR_SYNTAX,buf);
++	agxbuf  xb;
++
++	agxbinit(&xb, BUFSIZ, xbuf);
++	if (InputFile) {
++		agxbput (&xb, InputFile);
++		agxbput (&xb, ": ");
++	}
++	sprintf(buf," %s in line %d near '", str,line_num);
++	agxbput (&xb, buf);
++	agxbput (&xb, yytext);
++	agxbput (&xb,"'\n");
++	agerror(AGERROR_SYNTAX,agxbuse(&xb));
++	agxbfree(&xb);
+ }
+ /* must be here to see flex's macro defns */
+ void aglexeof() { unput(GRAPH_EOF_TOKEN); }
