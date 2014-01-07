@@ -51,7 +51,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		10%{?dist}
+Release:		11%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -75,6 +75,8 @@ Patch9:			graphviz-2.30.1-lefty-help.patch
 Patch10:		graphviz-2.30.1-prune-help.patch
 # Sent upstream, ticket #2307
 Patch11:		graphviz-2.30.1-man-fix.patch
+# Fix yyerror overflow (#1049167)
+Patch12:		graphviz-2.30.1-yyerror-overflow-fix.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -282,6 +284,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch9 -p1 -b .lefty-help
 %patch10 -p1 -b .prune-help
 %patch11 -p1 -b .man-fix
+%patch12 -p1 -b .yyerror-overflow-fix
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -558,6 +561,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Jan  7 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-11
+- Fixed overflow in yyerror
+  Resolves: rhbz#1049167
+
 * Fri Jul 12 2013 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-10
 - Various man and built-in help fixes
 
