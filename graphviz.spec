@@ -47,7 +47,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.38.0
-Release:		9%{?dist}
+Release:		10%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -86,7 +86,8 @@ BuildRequires:		gts-devel
 BuildRequires:		lasi-devel
 %endif
 BuildRequires:		urw-fonts, perl-ExtUtils-Embed, ghostscript-devel, librsvg2-devel
-Requires:		urw-fonts
+# ISO8859-1 fonts are required by lefty
+Requires:		urw-fonts, xorg-x11-fonts-ISO8859-1-100dpi
 # The vim is required by vimdot. The vim explicit dependency is not the best
 # solution, because gvim can be used instead, but there is nothing like
 # conditional dependencies in RPM, thus explicit dependency on vim shouldn't
@@ -96,7 +97,7 @@ Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
 
 %description
-A collection of tools for the manipulation and layout of graphs (as in nodes 
+A collection of tools for the manipulation and layout of graphs (as in nodes
 and edges, not as in barcharts).
 
 %package devel
@@ -106,8 +107,8 @@ Requires:		%{name} = %{version}-%{release}, pkgconfig
 Requires:		%{name}-gd = %{version}-%{release}
 
 %description devel
-A collection of tools for the manipulation and layout of graphs (as in nodes 
-and edges, not as in barcharts). This package contains development files for 
+A collection of tools for the manipulation and layout of graphs (as in nodes
+and edges, not as in barcharts). This package contains development files for
 graphviz.
 
 %if %{DEVIL}
@@ -137,8 +138,8 @@ Requires(post):		%{_bindir}/dot /sbin/ldconfig
 Requires(postun):	%{_bindir}/dot /sbin/ldconfig
 
 %description gd
-Graphviz plugin for renderers based on gd.  (Unless you absolutely have to use 
-GIF, you are recommended to use the PNG format instead because of the better 
+Graphviz plugin for renderers based on gd.  (Unless you absolutely have to use
+GIF, you are recommended to use the PNG format instead because of the better
 quality anti-aliased lines provided by the cairo+pango based renderer.)
 
 %package graphs
@@ -548,6 +549,11 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Nov 11 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.38.0-10
+- Lefty now uses xdot-1.2, added ISO8859-1 fonts as requirement
+  Resolves: rhbz#1058323
+- Fixed spurious whitespaces
+
 * Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.38.0-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
