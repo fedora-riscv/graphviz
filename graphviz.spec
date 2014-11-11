@@ -52,7 +52,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.34.0
-Release:		8%{?dist}
+Release:		9%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -67,6 +67,8 @@ Patch3:			graphviz-2.34.0-lefty-getaddrinfo.patch
 Patch4:			graphviz-2.34.0-CVE-2014-0978-CVE-2014-1235.patch
 # Fix chknum overflow (CVE-2014-1236)
 Patch5:			graphviz-2.34.0-CVE-2014-1236.patch
+# Backported fix for rhbz#1058323
+Patch6:			graphviz-2.34.0-lefty-xdot12.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -98,7 +100,8 @@ BuildRequires:		gts-devel
 BuildRequires:		lasi-devel
 %endif
 BuildRequires:		urw-fonts, perl-ExtUtils-Embed, ghostscript-devel, librsvg2-devel
-Requires:		urw-fonts
+# ISO8859-1 fonts are required by lefty
+Requires:		urw-fonts, xorg-x11-fonts-ISO8859-1-100dpi
 # The vim is required by vimdot. The vim explicit dependency is not the best
 # solution, because gvim can be used instead, but there is nothing like
 # conditional dependencies in RPM, thus explicit dependency on vim shouldn't
@@ -108,7 +111,7 @@ Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
 
 %description
-A collection of tools for the manipulation and layout of graphs (as in nodes 
+A collection of tools for the manipulation and layout of graphs (as in nodes
 and edges, not as in barcharts).
 
 %package devel
@@ -118,8 +121,8 @@ Requires:		%{name} = %{version}-%{release}, pkgconfig
 Requires:		%{name}-gd = %{version}-%{release}
 
 %description devel
-A collection of tools for the manipulation and layout of graphs (as in nodes 
-and edges, not as in barcharts). This package contains development files for 
+A collection of tools for the manipulation and layout of graphs (as in nodes
+and edges, not as in barcharts). This package contains development files for
 graphviz.
 
 %if %{DEVIL}
@@ -149,8 +152,8 @@ Requires(post):		%{_bindir}/dot /sbin/ldconfig
 Requires(postun):	%{_bindir}/dot /sbin/ldconfig
 
 %description gd
-Graphviz plugin for renderers based on gd.  (Unless you absolutely have to use 
-GIF, you are recommended to use the PNG format instead because of the better 
+Graphviz plugin for renderers based on gd.  (Unless you absolutely have to use
+GIF, you are recommended to use the PNG format instead because of the better
 quality anti-aliased lines provided by the cairo+pango based renderer.)
 
 %package graphs
@@ -274,6 +277,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch3 -p1 -b .lefty-getaddrinfo
 %patch4 -p1 -b .CVE-2014-0978-CVE-2014-1235
 %patch5 -p1 -b .CVE-2014-1236
+%patch6 -p1 -b .left-xdot12
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -562,6 +566,11 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Nov 10 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.34.0-9
+- Lefty now uses xdot-1.2, added ISO8859-1 fonts as requirement
+  Resolves: rhbz#1058323
+- Fixed spurious whitespaces
+
 * Thu Jan  9 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.34.0-8
 - Prevent possible buffer overflow in yyerror()
   Resolves: CVE-2014-1235

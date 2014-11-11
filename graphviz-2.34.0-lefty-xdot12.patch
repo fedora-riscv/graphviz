@@ -1,0 +1,25 @@
+@@ -, +, @@ 
+---
+ cmd/dotty/dotty_layout.lefty | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+--- a/cmd/dotty/dotty_layout.lefty	
++++ a/cmd/dotty/dotty_layout.lefty	
+@@ -5,7 +5,7 @@ dotty.grablserver = function (lserver) {
+     local fd;
+ 
+     if (~dotty.lservers[lserver] | tablesize (dotty.lservers[lserver]) == 0) {
+-        if (~((fd = openio ('pipe', lserver, 'r+', '%e -Txdot')) >= 0)) {
++        if (~((fd = openio ('pipe', lserver, 'r+', '%e -Txdot1.2')) >= 0)) {
+             dotty.message (0, concat ('cannot start ', lserver));
+             return null;
+         }
+@@ -438,6 +438,8 @@ dotty.protogt.unpackdraw = function (gt, attr) {
+             }
+         } else if (t[i] == 'I') {
+             i = i + 7;
++        } else if (t[i] == 't') {
++            i = i + 2;
+         } else {
+             dotty.message (0, concat ('draw language parser error: ', t[i]));
+             return null;
+-- 
