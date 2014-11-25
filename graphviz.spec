@@ -7,7 +7,7 @@
 #-- graphviz src.rpm --------------------------------------------------------
 Name:		graphviz
 Version:	2.12
-Release:	10%{?dist}
+Release:	11%{?dist}
 
 License:	CPL
 URL:		http://www.graphviz.org/
@@ -18,6 +18,8 @@ Patch1:		%{name}-libcdt.patch
 Patch2:		graphviz-2.12-CVE-2014-0978-CVE-2014-1235.patch
 # Fix chknum overflow (CVE-2014-1236)
 Patch3:		graphviz-2.12-CVE-2014-1236.patch
+# Backported from upstream
+Patch4:		graphviz-2.12-format-string.patch
 
 # graphviz is relocatable
 #Prefix: /usr
@@ -414,6 +416,7 @@ Provides some additional PDF and HTML documentation for graphviz.
 %patch1 -p1
 %patch2 -p1 -b .CVE-2014-0978-CVE-2014-1235
 %patch3 -p1 -b .CVE-2014-1236
+%patch4 -p1 -b .format-string
 
 %build
 # XXX ix86 only used to have -ffast-math, let's use everywhere
@@ -450,6 +453,10 @@ rm -rf $RPM_BUILD_ROOT
 #-- changelog --------------------------------------------------
 
 %changelog
+* Tue Nov 25 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.12-11
+- Fixed format string vulnerability
+  Resolves: rhbz#1167869
+
 * Fri Jan 10 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.12-10
 - Prevent possible buffer overflow in yyerror()
   Resolves: CVE-2014-1235
