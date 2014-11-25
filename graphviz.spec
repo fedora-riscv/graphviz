@@ -47,7 +47,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.38.0
-Release:		10%{?dist}
+Release:		11%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -55,6 +55,8 @@ Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 # Fix typo in testsuite (upstream ticket #2441).
 Patch0:			graphviz-2.38.0-rtest-fix.patch
 Patch1:			graphviz-2.38.0-find-fix.patch
+# Backported from upstream
+Patch2:			graphviz-2.38.0-format-string.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -260,6 +262,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %setup -q
 %patch0 -p1 -b .rtest-fix
 %patch1 -p1 -b .find-fix
+%patch2 -p1 -b .format-string
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -549,6 +552,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Nov 25 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.38.0-11
+- Fixed format string vulnerability
+  Resolves: rhbz#1167868
+
 * Tue Nov 11 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.38.0-10
 - Lefty now uses xdot-1.2, added ISO8859-1 fonts as requirement
   Resolves: rhbz#1058323
