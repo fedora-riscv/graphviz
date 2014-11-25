@@ -51,7 +51,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.30.1
-Release:		12%{?dist}
+Release:		13%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -79,6 +79,8 @@ Patch11:		graphviz-2.30.1-man-fix.patch
 Patch12:		graphviz-2.30.1-CVE-2014-0978-CVE-2014-1235.patch
 # Fix chknum overflow (CVE-2014-1236)
 Patch13:		graphviz-2.30.1-CVE-2014-1236.patch
+# Backported from upstream
+Patch14:		graphviz-2.30.1-format-string.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -288,6 +290,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch11 -p1 -b .man-fix
 %patch12 -p1 -b .CVE-2014-0978-CVE-2014-1235
 %patch13 -p1 -b .CVE-2014-1236
+%patch14 -p1 -b .format-string
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -564,6 +567,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Nov 25 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-13
+- Fixed format string vulnerability
+  Resolves: rhbz#1167868
+
 * Fri Jan 10 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.30.1-12
 - Prevent possible buffer overflow in yyerror()
   Resolves: CVE-2014-1235
