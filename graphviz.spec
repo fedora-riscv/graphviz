@@ -47,7 +47,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.38.0
-Release:		11%{?dist}
+Release:		18%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -55,8 +55,12 @@ Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 # Fix typo in testsuite (upstream ticket #2441).
 Patch0:			graphviz-2.38.0-rtest-fix.patch
 Patch1:			graphviz-2.38.0-find-fix.patch
+# Not upstream patch to fix build with OCaml > 4.02.0 (upstream) and Fedora.
+Patch2:			graphviz-2.38.0-ocaml-fix-ints.patch
 # Backported from upstream
-Patch2:			graphviz-2.38.0-format-string.patch
+Patch3:			graphviz-2.38.0-format-string.patch
+# Make vimdot to work with vi (upstream ticket #2507)
+Patch4:			graphviz-2.38.0-vimdot-vi.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -90,11 +94,6 @@ BuildRequires:		lasi-devel
 BuildRequires:		urw-fonts, perl-ExtUtils-Embed, ghostscript-devel, librsvg2-devel
 # ISO8859-1 fonts are required by lefty
 Requires:		urw-fonts, xorg-x11-fonts-ISO8859-1-100dpi
-# The vim is required by vimdot. The vim explicit dependency is not the best
-# solution, because gvim can be used instead, but there is nothing like
-# conditional dependencies in RPM, thus explicit dependency on vim shouldn't
-# harm too much.
-Requires:		vim-enhanced
 Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
 
@@ -262,7 +261,9 @@ Various tcl packages (extensions) for the graphviz tools.
 %setup -q
 %patch0 -p1 -b .rtest-fix
 %patch1 -p1 -b .find-fix
-%patch2 -p1 -b .format-string
+%patch2 -p1
+%patch3 -p1 -b .format-string
+%patch4 -p1 -b .vimdot-vi
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -552,17 +553,37 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Tue Nov 25 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.38.0-11
+* Fri Jan 16 2015 Jaroslav Škarvada <jskarvad@redhat.com> - 2.38.0-18
+- Make vimdot to work with vi, dropped explicit vim-ehnanced requirement
+  Resolves: rhbz#1182764
+
+* Tue Nov 25 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.38.0-17
 - Fixed format string vulnerability
   Resolves: rhbz#1167868
 
-* Tue Nov 11 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.38.0-10
-- Lefty now uses xdot-1.2, added ISO8859-1 fonts as requirement
+* Tue Nov 11 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.38.0-16
+- Added ISO8859-1 fonts as requirement
   Resolves: rhbz#1058323
 - Fixed spurious whitespaces
 
-* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.38.0-9
+* Wed Sep 03 2014 Jitka Plesnikova <jplesnik@redhat.com> - 2.38.0-15
+- Perl 5.20 rebuild
+
+* Sat Aug 30 2014 Richard W.M. Jones <rjones@redhat.com> - 2.38.0-14
+- ocaml-4.02.0 final rebuild.
+- Add patch to fix build with OCaml > 4.02.0 and Fedora 22.
+
+* Thu Aug 28 2014 Jitka Plesnikova <jplesnik@redhat.com> - 2.38.0-12
+- Perl 5.20 rebuild
+
+* Sat Aug 23 2014 Richard W.M. Jones <rjones@redhat.com> - 2.38.0-11
+- ocaml-4.02.0+rc1 rebuild.
+
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.38.0-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
+* Mon Jul 14 2014 Jaroslav Škarvada <jskarvad@redhat.com> - 2.38.0-9
+- Rebuilt for new ocaml
 
 * Thu Jun 19 2014 Remi Collet <rcollet@redhat.com> - 2.38.0-8
 - rebuild for https://fedoraproject.org/wiki/Changes/Php56
