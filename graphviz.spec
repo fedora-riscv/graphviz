@@ -50,24 +50,13 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.38.0
-Release:		40%{?dist}
+Version:		2.40.1
+Release:		1%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
-# Fix typo in testsuite (upstream ticket #2441).
-Patch0:			graphviz-2.38.0-rtest-fix.patch
-Patch1:			graphviz-2.38.0-find-fix.patch
-# Not upstream patch to fix build with OCaml > 4.02.0 (upstream) and Fedora.
-Patch2:			graphviz-2.38.0-ocaml-fix-ints.patch
-# Backported from upstream
-Patch3:			graphviz-2.38.0-format-string.patch
-# Make vimdot to work with vi (upstream ticket #2507)
-Patch4:			graphviz-2.38.0-vimdot-vi.patch
-Patch5:			graphviz-2.38.0-rbconfig.patch
-Patch6:			graphviz-2.38.0-visio.patch
-Patch7:			graphviz-2.38.0-gs-9.18-fix.patch
+Patch0:			graphviz-2.40.1-visio.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -271,15 +260,7 @@ Various tcl packages (extensions) for the graphviz tools.
 
 %prep
 %setup -q
-%patch0 -p1 -b .rtest-fix
-%patch1 -p1 -b .find-fix
-%patch2 -p1
-%patch3 -p1 -b .format-string
-%patch4 -p1 -b .vimdot-vi
-%patch5 -p1 -b .rbconfig
-# Upstream ticket: http://www.graphviz.org/mantisbt/view.php?id=2553
-%patch6 -p1 -b .visio
-%patch7 -p1 -b .gs-9.18-fix
+%patch0 -p1 -b .visio
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -573,10 +554,15 @@ rm -rf %{buildroot}
 # hack to include gv.3tcl only if available
 #  always includes tcldot.3tcl, gdtclft.3tcl
 %{_mandir}/man3/*.3tcl*
-%{_mandir}/man3/tkspline.3tk*
-
 
 %changelog
+* Mon Jan  2 2017 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-1
+- New version
+  Resolves: rhbz#1406954
+- Dropped rtest-fix, find-fix, ocaml-fix-ints, format-string,
+  vimdot-vi, rbconfig, gs-9.18-fix patches (all upstreamed)
+- Defuzzified visio patch
+
 * Sat Nov 05 2016 Richard W.M. Jones <rjones@redhat.com> - 2.38.0-40
 - Rebuild for OCaml 4.04.0.
 
