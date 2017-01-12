@@ -51,7 +51,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		1%{?dist}
+Release:		2%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -556,6 +556,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Jan 12 2017 Mamoru TASAKA <mtasaka@fedoraproject.org> - 2.40.1-2
+- F-26: rebuild for ruby24
+
 * Mon Jan  2 2017 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-1
 - New version
   Resolves: rhbz#1406954
