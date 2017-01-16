@@ -28,9 +28,7 @@
 %global LASI   0
 %endif
 
-# Swig currently doesn't support php7, thus disabling for now
-# rhbz#1356985
-%global PHP 0
+%global PHP 1
 
 # Plugins version
 %global pluginsver 6
@@ -51,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		2%{?dist}
+Release:		3%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -556,6 +554,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Mon Jan 16 2017 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-3
+- Re-enabled PHP support
+
 * Thu Jan 12 2017 Mamoru TASAKA <mtasaka@fedoraproject.org> - 2.40.1-2
 - F-26: rebuild for ruby24
 
