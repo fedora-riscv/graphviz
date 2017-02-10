@@ -49,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		3%{?dist}
+Release:		4%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -554,6 +554,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.40.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Mon Jan 16 2017 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-3
 - Re-enabled PHP support
 
