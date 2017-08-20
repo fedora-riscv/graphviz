@@ -49,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		11%{?dist}
+Release:		12%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -215,6 +215,7 @@ PHP extension for graphviz.
 %package -n python2-graphviz
 %{?python_provide:%python_provide python2-graphviz}
 # Remove before F30
+Provides: %{name}-python = %{version}-%{release}
 Provides: %{name}-python%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-python < %{version}-%{release}
 Group:			Applications/Multimedia
@@ -558,6 +559,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Sun Aug 20 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.40.1-12
+- Add Provides for the old name without %%_isa
+
 * Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.40.1-11
 - Python 2 binary package renamed to python2-graphviz
   See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
