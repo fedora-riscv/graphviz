@@ -49,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		12%{?dist}
+Release:		13%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -559,6 +559,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Oct 04 2017 Remi Collet <remi@fedoraproject.org> - 2.40.1-13
+- rebuild for https://fedoraproject.org/wiki/Changes/php72
+
 * Sun Aug 20 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.40.1-12
 - Add Provides for the old name without %%_isa
 
