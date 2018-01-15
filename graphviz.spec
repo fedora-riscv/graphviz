@@ -88,7 +88,7 @@ BuildRequires:		gts-devel
 %if %{LASI}
 BuildRequires:		lasi-devel
 %endif
-BuildRequires:		urw-fonts, perl-ExtUtils-Embed, perl-generators, ghostscript-devel, librsvg2-devel
+BuildRequires:		urw-fonts, perl-ExtUtils-Embed, perl-generators, libgs-devel, librsvg2-devel
 # ISO8859-1 fonts are required by lefty
 Requires:		urw-fonts, xorg-x11-fonts-ISO8859-1-100dpi
 Requires(post):		/sbin/ldconfig
