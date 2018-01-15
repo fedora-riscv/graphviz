@@ -49,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		15%{?dist}
+Release:		16%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -281,7 +281,7 @@ sed -i 's|sitearchdir|vendorarchdir|' config/config_ruby.rb
 export CPPFLAGS=-I`ruby -e "puts File.join(RbConfig::CONFIG['includedir'], RbConfig::CONFIG['sitearch'])" || echo /dev/null`
 %configure --with-x --disable-static --disable-dependency-tracking \
 	--without-mylibgd --with-ipsepcola --with-pangocairo \
-	--with-gdk-pixbuf --with-visio \
+	--with-gdk-pixbuf --with-visio --disable-silent-rules \
 %if ! %{LASI}
 	--without-lasi \
 %endif
@@ -559,6 +559,11 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Mon Jan 15 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-16
+- Switched to libgs-devel
+  Resolves: rhbz#1534666
+- Made the build verbose (without silent rules)
+
 * Fri Jan 05 2018 Mamoru TASAKA <mtasaka@fedoraproject.org> - 2.40.1-15
 - F-28: rebuild for ruby25
 
