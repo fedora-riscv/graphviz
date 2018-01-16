@@ -49,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		16%{?dist}
+Release:		17%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -58,7 +58,7 @@ Patch0:			graphviz-2.40.1-visio.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
-BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel, python-devel
+BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel, python2-devel
 BuildRequires:		libXaw-devel, libSM-devel, libXext-devel, java-devel
 BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel, libgnomeui-devel
 BuildRequires:		gd-devel, perl-devel, swig >= 1.3.33, automake, autoconf, libtool, qpdf
@@ -220,7 +220,7 @@ Provides: %{name}-python%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-python < %{version}-%{release}
 Group:			Applications/Multimedia
 Summary:		Python extension for graphviz
-Requires:		%{name} = %{version}-%{release}, python
+Requires:		%{name} = %{version}-%{release}, python2
 
 %description -n python2-graphviz
 Python extension for graphviz.
@@ -559,6 +559,10 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Jan 16 2018 Iryna Shcherbina <ishcherb@redhat.com> - 2.40.1-17
+- Update Python 2 dependency declarations to new packaging standards
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
 * Mon Jan 15 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-16
 - Switched to libgs-devel
   Resolves: rhbz#1534666
