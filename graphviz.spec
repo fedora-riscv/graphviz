@@ -49,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		18%{?dist}
+Release:		19%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -559,6 +559,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Feb  1 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-19
+- Rebuilt with urw-base35-fonts
+
 * Sat Jan 20 2018 Björn Esser <besser82@fedoraproject.org> - 2.40.1-18
 - Rebuilt for switch to libxcrypt
 
