@@ -376,9 +376,6 @@ php --no-php-ini \
 # cd rtest
 # make rtest
 
-%clean
-rm -rf %{buildroot}
-
 %post
 /sbin/ldconfig
 %{_bindir}/dot -c
