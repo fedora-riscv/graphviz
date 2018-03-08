@@ -49,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		20%{?dist}
+Release:		21%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -59,7 +59,7 @@ BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-d
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel, python2-devel
 BuildRequires:		libXaw-devel, libSM-devel, libXext-devel, java-devel
-BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel, libgnomeui-devel
+BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel
 BuildRequires:		gd-devel, perl-devel, swig >= 1.3.33, automake, autoconf, libtool, qpdf
 # Temporary workaound for perl(Carp) not pulled
 BuildRequires:		perl-Carp
@@ -555,6 +555,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Mar  8 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-21
+- Dropped libgnomeui-devel requirement, libgnomeui support has been
+  dropped long time ago in upstream
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.40.1-20
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
