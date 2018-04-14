@@ -49,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		21%{?dist}
+Release:		22%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
@@ -212,17 +212,20 @@ Requires:	php(api) = %{?php_core_api}%{?!php_core_api:UNDEFINED}
 PHP extension for graphviz.
 %endif
 
-%package -n python2-graphviz
-%{?python_provide:%python_provide python2-graphviz}
+%package python2
+Group:			Applications/Multimedia
+Summary:		Python extension for graphviz
+Requires:		%{name} = %{version}-%{release}
+# Manually add provides that would be generated automatically if .egg-info was present
+Provides: python2dist(gv) = %{version}
+Provides: python%{python2_version}dist(gv) = %{version}
 # Remove before F30
 Provides: %{name}-python = %{version}-%{release}
 Provides: %{name}-python%{?_isa} = %{version}-%{release}
-Obsoletes: %{name}-python < %{version}-%{release}
-Group:			Applications/Multimedia
-Summary:		Python extension for graphviz
-Requires:		%{name} = %{version}-%{release}, python2
+Obsoletes: %{name}-python < 2.40.1-22
+Obsoletes: python2-%{name} < 2.40.1-22
 
-%description -n python2-graphviz
+%description python2
 Python extension for graphviz.
 
 %if %{ARRRR}
@@ -522,7 +525,7 @@ php --no-php-ini \
 %{_mandir}/man3/gv.3php*
 %endif
 
-%files -n python2-graphviz
+%files python2
 %defattr(-,root,root,-)
 %{_libdir}/graphviz/python/
 %{_libdir}/python*/*
@@ -557,6 +560,11 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Fri May 18 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.40.1-22
+- Rename python2 subpackage to graphviz-python2, because
+  there is intent to package python-graphviz, which is a separate project
+  from graphviz.
+
 * Thu May 17 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-21
 - Fixed CVE-2018-10196
 
