@@ -191,8 +191,8 @@ Perl extension for graphviz.
 %package php
 Summary:		PHP extension for graphviz
 Requires:		%{name} = %{version}-%{release}
-Requires:	php(zend-abi) = %{php_zend_api}
-Requires:	php(api) = %{php_core_api}
+Requires:	php(zend-abi) = %{?php_zend_api}%{?!php_zend_api:UNDEFINED}
+Requires:	php(api) = %{?php_core_api}%{?!php_core_api:UNDEFINED}
 
 %description php
 PHP extension for graphviz.
