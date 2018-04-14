@@ -50,7 +50,6 @@ Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
 Release:		22%{?dist}
-Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
@@ -98,7 +97,6 @@ A collection of tools for the manipulation and layout of graphs (as in nodes
 and edges, not as in barcharts).
 
 %package devel
-Group:			Development/Libraries
 Summary:		Development package for graphviz
 Requires:		%{name} = %{version}-%{release}, pkgconfig
 Requires:		%{name}-gd = %{version}-%{release}
@@ -110,7 +108,6 @@ graphviz.
 
 %if %{DEVIL}
 %package devil
-Group:			Applications/Multimedia
 Summary:		Graphviz plugin for renderers based on DevIL
 Requires:		%{name} = %{version}-%{release}
 
@@ -121,14 +118,12 @@ supported directly by the cairo+pango based renderer in the base graphviz rpm.)
 %endif
 
 %package doc
-Group:			Documentation
 Summary:		PDF and HTML documents for graphviz
 
 %description doc
 Provides some additional PDF and HTML documentation for graphviz.
 
 %package gd
-Group:			Applications/Multimedia
 Summary:		Graphviz plugin for renderers based on gd
 Requires:		%{name} = %{version}-%{release}
 Requires(post):		%{_bindir}/dot /sbin/ldconfig
@@ -140,14 +135,12 @@ GIF, you are recommended to use the PNG format instead because of the better
 quality anti-aliased lines provided by the cairo+pango based renderer.)
 
 %package graphs
-Group:			Applications/Multimedia
 Summary:		Demo graphs for graphviz
 
 %description graphs
 Some demo graphs for graphviz.
 
 %package guile
-Group:			Applications/Multimedia
 Summary:		Guile extension for graphviz
 Requires:		%{name} = %{version}-%{release}, guile
 
@@ -155,7 +148,6 @@ Requires:		%{name} = %{version}-%{release}, guile
 Guile extension for graphviz.
 
 %package java
-Group:			Applications/Multimedia
 Summary:		Java extension for graphviz
 Requires:		%{name} = %{version}-%{release}
 
@@ -163,7 +155,6 @@ Requires:		%{name} = %{version}-%{release}
 Java extension for graphviz.
 
 %package lua
-Group:			Applications/Multimedia
 Summary:		Lua extension for graphviz
 Requires:		%{name} = %{version}-%{release}, lua
 
@@ -172,7 +163,6 @@ Lua extension for graphviz.
 
 %if %{MING}
 %package ming
-Group:			Applications/Multimedia
 Summary:		Graphviz plugin for flash renderer based on ming
 Requires:		%{name} = %{version}-%{release}
 
@@ -182,7 +172,6 @@ Graphviz plugin for -Tswf (flash) renderer based on ming.
 
 %if %{OCAML}
 %package ocaml
-Group:			Applications/Multimedia
 Summary:		Ocaml extension for graphviz
 Requires:		%{name} = %{version}-%{release}, ocaml
 
@@ -191,7 +180,6 @@ Ocaml extension for graphviz.
 %endif
 
 %package perl
-Group:			Applications/Multimedia
 Summary:		Perl extension for graphviz
 Requires:		%{name} = %{version}-%{release}
 Requires:		perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
@@ -201,7 +189,6 @@ Perl extension for graphviz.
 
 %if %{PHP}
 %package php
-Group:			Applications/Multimedia
 Summary:		PHP extension for graphviz
 Requires:		%{name} = %{version}-%{release}
 Requires:	php(zend-abi) = %{php_zend_api}
@@ -212,7 +199,6 @@ PHP extension for graphviz.
 %endif
 
 %package python2
-Group:			Applications/Multimedia
 Summary:		Python extension for graphviz
 Requires:		%{name} = %{version}-%{release}
 # Manually add provides that would be generated automatically if .egg-info was present
@@ -229,7 +215,6 @@ Python extension for graphviz.
 
 %if %{ARRRR}
 %package R
-Group:			Applications/Multimedia
 Summary:		R extension for graphviz
 Requires:		%{name} = %{version}-%{release}, R-core
 
@@ -238,7 +223,6 @@ R extension for graphviz.
 %endif
 
 %package ruby
-Group:			Applications/Multimedia
 Summary:		Ruby extension for graphviz
 Requires:		%{name} = %{version}-%{release}, ruby
 
@@ -247,7 +231,6 @@ Ruby extension for graphviz.
 
 %if %{SHARP}
 %package sharp
-Group:			Applications/Multimedia
 Summary:		C# extension for graphviz
 Requires:		%{name} = %{version}-%{release}, mono-core
 
@@ -256,7 +239,6 @@ C# extension for graphviz.
 %endif
 
 %package tcl
-Group:			Applications/Multimedia
 Summary:		Tcl extension & tools for graphviz
 Requires:		%{name} = %{version}-%{release}, tcl >= 8.3, tk
 
@@ -418,7 +400,6 @@ php --no-php-ini \
 %endif
 
 %files
-%defattr(-,root,root,-)
 %doc %{_docdir}/%{name}
 %{_bindir}/*
 %dir %{_libdir}/graphviz
@@ -449,7 +430,6 @@ php --no-php-ini \
 %endif
 
 %files devel
-%defattr(-,root,root,-)
 %{_includedir}/graphviz
 %{_libdir}/*.so
 %{_libdir}/graphviz/*.so
@@ -458,64 +438,53 @@ php --no-php-ini \
 
 %if %{DEVIL}
 %files devil
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/libgvplugin_devil.so.*
 %endif
 
 %files doc
-%defattr(-,root,root,-)
 %doc %{_docdir}/%{name}/html
 %doc %{_docdir}/%{name}/pdf
 %doc %{_docdir}/%{name}/demo
 
 %files gd
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/libgvplugin_gd.so.*
 
 %files graphs
-%defattr(-,root,root,-)
 %dir %{_datadir}/graphviz
 %{_datadir}/graphviz/graphs
 
 %files guile
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/guile/
 %{_mandir}/man3/gv.3guile*
 
 %files java
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/java/
 %{_mandir}/man3/gv.3java*
 
 %files lua
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/lua/
 %{_libdir}/lua*/*
 %{_mandir}/man3/gv.3lua*
 
 %if %{MING}
 %files ming
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/libgvplugin_ming.so.*
 %{_libdir}/graphviz/*fdb
 %endif
 
 %if %{OCAML}
 %files ocaml
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/ocaml/
 %{_mandir}/man3/gv.3ocaml*
 %endif
 
 %files perl
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/perl/
 %{_libdir}/perl*/*
 %{_mandir}/man3/gv.3perl*
 
 %if %{PHP}
 %files php
-%defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/php.d/%{ini_name}
 %{_libdir}/graphviz/php/
 %{php_extdir}/gv.so
@@ -524,33 +493,28 @@ php --no-php-ini \
 %endif
 
 %files python2
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/python/
 %{_libdir}/python*/*
 %{_mandir}/man3/gv.3python*
 
 %if %{ARRRR}
 %files R
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/R/
 %{_mandir}/man3/gv.3r.gz
 %endif
 
 %files ruby
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/ruby/
 %{_libdir}/*ruby*/*
 %{_mandir}/man3/gv.3ruby*
 
 %if %{SHARP}
 %files sharp
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/sharp/
 %{_mandir}/man3/gv.3sharp*
 %endif
 
 %files tcl
-%defattr(-,root,root,-)
 %{_libdir}/graphviz/tcl/
 %{_libdir}/tcl*/*
 # hack to include gv.3tcl only if available
