@@ -49,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		22%{?dist}
+Release:		23%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
@@ -522,6 +522,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Apr 26 2018 Richard W.M. Jones <rjones@redhat.com> - 2.40.1-23
+- OCaml 4.07.0-beta2 rebuild.
+
 * Sat Apr 14 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.40.1-22
 - Rename python2 subpackage to graphviz-python2, because
   there is intent to package python-graphviz, which is a separate project
