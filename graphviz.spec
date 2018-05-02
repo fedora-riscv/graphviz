@@ -49,7 +49,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		23%{?dist}
+Release:		24%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
@@ -57,7 +57,7 @@ Patch0:			graphviz-2.40.1-visio.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel, python2-devel
-BuildRequires:		libXaw-devel, libSM-devel, libXext-devel, java-devel
+BuildRequires:		python3-devel, libXaw-devel, libSM-devel, libXext-devel, java-devel
 BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel
 BuildRequires:		gd-devel, perl-devel, swig >= 1.3.33, automake, autoconf, libtool, qpdf
 # Temporary workaound for perl(Carp) not pulled
@@ -213,6 +213,16 @@ Obsoletes: python2-%{name} < %{version}-%{release}
 %description python2
 Python extension for graphviz.
 
+%package python3
+Summary:		Python 3 extension for graphviz
+Requires:		%{name} = %{version}-%{release}
+# Manually add provides that would be generated automatically if .egg-info was present
+Provides: python3dist(gv) = %{version}
+Provides: python%{python3_version}dist(gv) = %{version}
+
+%description python3
+Python 3 extension for graphviz.
+
 %if %{ARRRR}
 %package R
 Summary:		R extension for graphviz
@@ -291,8 +301,19 @@ export CPPFLAGS=-I`ruby -e "puts File.join(RbConfig::CONFIG['includedir'], RbCon
 	--without-qt \
 %endif
 
+# python3
+cp -a tclpkg/gv tclpkg/gv.python3
+
 make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
   CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}"
+
+# python3
+pushd tclpkg/gv.python3
+make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
+  CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
+  PYTHON_INCLUDES=-I/usr/include/python%{python3_version}m PYTHON_LIBS="-lpython%{python3_version}m" \
+  PYTHON_INSTALL_DIR=%{python3_sitearch} libgv_python.la
+popd
 
 %install
 rm -rf %{buildroot}
@@ -342,6 +363,13 @@ do
     mv -f $f.pdf.$$ $f.pdf
   fi
 done
+popd
+
+# python3
+pushd tclpkg/gv.python3
+install -pD .libs/libgv_python.so %{buildroot}%{python3_sitearch}/_gv.so
+install -p gv.py %{buildroot}%{python3_sitearch}/gv.py
+popd
 
 # Ghost plugins config
 touch %{buildroot}%{_libdir}/graphviz/config%{pluginsver}
@@ -494,7 +522,11 @@ php --no-php-ini \
 
 %files python2
 %{_libdir}/graphviz/python/
-%{_libdir}/python*/*
+%{python2_sitearch}/*
+%{_mandir}/man3/gv.3python*
+
+%files python3
+%{python3_sitearch}/*
 %{_mandir}/man3/gv.3python*
 
 %if %{ARRRR}
@@ -522,6 +554,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed May  2 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-24
+- Added support for python3
+
 * Thu Apr 26 2018 Richard W.M. Jones <rjones@redhat.com> - 2.40.1-23
 - OCaml 4.07.0-beta2 rebuild.
 
