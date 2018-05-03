@@ -1,3 +1,9 @@
+%if 0%{?rhel} == 8
+%bcond_with python2
+%else
+%bcond_without python2
+%endif
+
 # Necessary conditionals
 %ifarch %{mono_arches}
 %global SHARP  1
@@ -49,14 +55,18 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		24%{?dist}
+Release:		25%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:			graphviz-2.40.1-visio.patch
+Patch1:			graphviz-2.40.1-python3.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
-BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel, python2-devel
+BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
+%if %{with python2}
+BuildRequires:		python2-devel
+%endif
 BuildRequires:		python3-devel, libXaw-devel, libSM-devel, libXext-devel, java-devel
 BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel
 BuildRequires:		gd-devel, perl-devel, swig >= 1.3.33, automake, autoconf, libtool, qpdf
@@ -86,7 +96,12 @@ BuildRequires:		gts-devel
 %if %{LASI}
 BuildRequires:		lasi-devel
 %endif
-BuildRequires:		urw-base35-fonts, perl-ExtUtils-Embed, perl-generators, libgs-devel, librsvg2-devel
+BuildRequires:		urw-base35-fonts, perl-ExtUtils-Embed, perl-generators, librsvg2-devel
+%if 0%{?rhel} == 8
+BuildRequires:		ghostscript-devel
+%else
+BuildRequires:		libgs-devel
+%endif
 # ISO8859-1 fonts are required by lefty
 Requires:		urw-base35-fonts, xorg-x11-fonts-ISO8859-1-100dpi
 Requires(post):		/sbin/ldconfig
@@ -198,6 +213,7 @@ Requires:	php(api) = %{?php_core_api}%{?!php_core_api:UNDEFINED}
 PHP extension for graphviz.
 %endif
 
+%if %{with python2}
 %package python2
 Summary:		Python extension for graphviz
 Requires:		%{name} = %{version}-%{release}
@@ -212,6 +228,7 @@ Obsoletes: python2-%{name} < %{version}-%{release}
 
 %description python2
 Python extension for graphviz.
+%endif
 
 %package python3
 Summary:		Python 3 extension for graphviz
@@ -258,6 +275,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %prep
 %setup -q
 %patch0 -p1 -b .visio
+%patch1 -p1 -b .python3
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -301,25 +319,31 @@ export CPPFLAGS=-I`ruby -e "puts File.join(RbConfig::CONFIG['includedir'], RbCon
 	--without-qt \
 %endif
 
-# python3
-cp -a tclpkg/gv tclpkg/gv.python3
+%if %{with python2}
+cp -a tclpkg/gv tclpkg/gv.python2
+%endif
 
-make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
-  CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}"
-
-# python3
-pushd tclpkg/gv.python3
 make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
   CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
   PYTHON_INCLUDES=-I/usr/include/python%{python3_version}m PYTHON_LIBS="-lpython%{python3_version}m" \
-  PYTHON_INSTALL_DIR=%{python3_sitearch} libgv_python.la
+  PYTHON_INSTALL_DIR=%{python3_sitearch} PYTHON=%{__python3}
+
+%if %{with python2}
+pushd tclpkg/gv.python2
+make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
+  CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
+  PYTHON_INCLUDES=-I/usr/include/python%{python2_version} PYTHON_LIBS="-lpython%{python2_version}" \
+  PYTHON_INSTALL_DIR=%{python2_sitearch} libgv_python.la
 popd
+%endif
 
 %install
 rm -rf %{buildroot}
 make DESTDIR=%{buildroot} \
 	docdir=%{buildroot}%{_docdir}/%{name} \
 	pkgconfigdir=%{_libdir}/pkgconfig \
+	PYTHON_LIBS="-lpython%{python3_version}m" \
+	PYTHON_INSTALL_DIR=%{python3_sitearch} \
 	install
 find %{buildroot} -type f -name "*.la" -exec rm -f {} ';'
 chmod -x %{buildroot}%{_datadir}/%{name}/lefty/*
@@ -365,11 +389,23 @@ do
 done
 popd
 
-# python3
-pushd tclpkg/gv.python3
+%if %{with python2}
+pushd tclpkg/gv.python2
+install -pD .libs/libgv_python.so %{buildroot}%{python2_sitearch}/_gv.so
+install -p gv.py %{buildroot}%{python2_sitearch}/gv.py
+popd
+%endif
+
+# python 3
+pushd tclpkg/gv
 install -pD .libs/libgv_python.so %{buildroot}%{python3_sitearch}/_gv.so
 install -p gv.py %{buildroot}%{python3_sitearch}/gv.py
 popd
+
+# remove the python module from the %%_libdir/graphviz/python, it's
+# already installed in the python sitearch
+rm -f %{buildroot}%{_libdir}/graphviz/python/*
+rmdir %{buildroot}%{_libdir}/graphviz/python
 
 # Ghost plugins config
 touch %{buildroot}%{_libdir}/graphviz/config%{pluginsver}
@@ -520,10 +556,11 @@ php --no-php-ini \
 %{_mandir}/man3/gv.3php*
 %endif
 
+%if %{with python2}
 %files python2
-%{_libdir}/graphviz/python/
 %{python2_sitearch}/*
 %{_mandir}/man3/gv.3python*
+%endif
 
 %files python3
 %{python3_sitearch}/*
@@ -554,6 +591,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu May  3 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-25
+- Made python2 package optional
+
 * Wed May  2 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-24
 - Added support for python3
 
