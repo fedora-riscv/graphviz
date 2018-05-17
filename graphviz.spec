@@ -55,12 +55,14 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		25%{?dist}
+Release:		26%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:			graphviz-2.40.1-visio.patch
 Patch1:			graphviz-2.40.1-python3.patch
+# https://gitlab.com/graphviz/graphviz/issues/1367
+Patch2:			graphviz-2.40.1-CVE-2018-10196.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
@@ -276,6 +278,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %setup -q
 %patch0 -p1 -b .visio
 %patch1 -p1 -b .python3
+%patch2 -p1 -b .CVE-2018-10196
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -591,6 +594,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu May 17 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-26
+- Fixed CVE-2018-10196
+
 * Thu May  3 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-25
 - Made python2 package optional
 
