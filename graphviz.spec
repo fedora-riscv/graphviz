@@ -49,12 +49,13 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		10%{?dist}
+Release:		11%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:			graphviz-2.40.1-visio.patch
+Patch1:			graphviz-2.40.1-CVE-2018-10196.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -259,6 +260,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %prep
 %setup -q
 %patch0 -p1 -b .visio
+%patch1 -p1 -b .CVE-2018-10196
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -554,6 +556,9 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu May 17 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-11
+- Fixed CVE-2018-10196
+
 * Mon Aug 07 2017 Richard W.M. Jones <rjones@redhat.com> - 2.40.1-10
 - OCaml 4.05.0 rebuild.
 
