@@ -225,8 +225,8 @@ Provides: python%{python2_version}dist(gv) = %{version}
 # Remove before F30
 Provides: %{name}-python = %{version}-%{release}
 Provides: %{name}-python%{?_isa} = %{version}-%{release}
-Obsoletes: %{name}-python < %{version}-%{release}
-Obsoletes: python2-%{name} < %{version}-%{release}
+Obsoletes: %{name}-python < 2.40.1-25
+Obsoletes: python2-%{name} < 2.40.1-25
 
 %description python2
 Python extension for graphviz.
