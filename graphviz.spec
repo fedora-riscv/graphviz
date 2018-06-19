@@ -55,7 +55,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		27%{?dist}
+Release:		28%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
@@ -594,6 +594,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Jun 19 2018 Richard W.M. Jones <rjones@redhat.com> - 2.40.1-28
+- OCaml 4.07.0-rc1 rebuild.
+
 * Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 2.40.1-27
 - Rebuilt for Python 3.7
 
