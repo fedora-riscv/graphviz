@@ -55,7 +55,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		29%{?dist}
+Release:		30%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
@@ -594,6 +594,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Jul 03 2018 Petr Pisar <ppisar@redhat.com> - 2.40.1-30
+- Perl 5.28 rebuild
+
 * Fri Jun 29 2018 Jitka Plesnikova <jplesnik@redhat.com> - 2.40.1-29
 - Perl 5.28 rebuild
 
