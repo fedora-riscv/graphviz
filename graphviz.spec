@@ -55,10 +55,11 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		31%{?dist}
+Release:		32%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
-Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
+# A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
+Source0:		https://gitlab.com/graphviz/graphviz/-/archive/stable_release_%{version}/graphviz-stable_release_%{version}.tar.gz #/graphviz-2.40.1.tar.gz
 Patch0:			graphviz-2.40.1-visio.patch
 Patch1:			graphviz-2.40.1-python3.patch
 # https://gitlab.com/graphviz/graphviz/issues/1367
@@ -275,7 +276,7 @@ Requires:		%{name} = %{version}-%{release}, tcl >= 8.3, tk
 Various tcl packages (extensions) for the graphviz tools.
 
 %prep
-%setup -q
+%setup -q -n graphviz-stable_release_%{version}
 %patch0 -p1 -b .visio
 %patch1 -p1 -b .python3
 %patch2 -p1 -b .CVE-2018-10196
@@ -284,7 +285,7 @@ Various tcl packages (extensions) for the graphviz tools.
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
 
 %build
-autoreconf -if
+./autogen.sh
 # Hack in the java includes we need
 sed -i '/JavaVM.framework/!s/JAVA_INCLUDES=/JAVA_INCLUDES=\"_MY_JAVA_INCLUDES_\"/g' configure
 sed -i 's|_MY_JAVA_INCLUDES_|-I%{java_home}/include/ -I%{java_home}/include/linux/|g' configure
@@ -594,6 +595,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Jul 12 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-32
+- Updated source URL
+
 * Wed Jul 11 2018 Richard W.M. Jones <rjones@redhat.com> - 2.40.1-31
 - OCaml 4.07.0 (final) rebuild.
 
