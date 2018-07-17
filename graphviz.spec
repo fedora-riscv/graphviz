@@ -55,7 +55,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		33%{?dist}
+Release:		34%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -64,6 +64,8 @@ Patch0:			graphviz-2.40.1-visio.patch
 Patch1:			graphviz-2.40.1-python3.patch
 # https://gitlab.com/graphviz/graphviz/issues/1367
 Patch2:			graphviz-2.40.1-CVE-2018-10196.patch
+# rhbz#1505230
+Patch3:			graphviz-2.40.1-dotty-menu-fix.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
@@ -280,6 +282,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch0 -p1 -b .visio
 %patch1 -p1 -b .python3
 %patch2 -p1 -b .CVE-2018-10196
+%patch3 -p1 -b .dotty-menu-fix
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -595,6 +598,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Jul 17 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-34
+- Fixed menu in dotty
+  Resolves: rhbz#1505230
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.40.1-33
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
