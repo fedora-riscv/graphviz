@@ -49,13 +49,14 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		11%{?dist}
+Release:		12%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:			graphviz-2.40.1-visio.patch
 Patch1:			graphviz-2.40.1-CVE-2018-10196.patch
+Patch2:			graphviz-2.40.1-dotty-menu-fix.patch
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
@@ -261,6 +262,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %setup -q
 %patch0 -p1 -b .visio
 %patch1 -p1 -b .CVE-2018-10196
+%patch2 -p1 -b .dotty-menu-fix
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -556,6 +558,10 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Jul 17 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-12
+- Fixed menu in dotty
+  Resolves: rhbz#1505230
+
 * Thu May 17 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-11
 - Fixed CVE-2018-10196
 
