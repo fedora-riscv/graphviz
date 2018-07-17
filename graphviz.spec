@@ -49,13 +49,14 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		22%{?dist}
+Release:		23%{?dist}
 Group:			Applications/Multimedia
 License:		EPL
 URL:			http://www.graphviz.org/
 Source0:		http://www.graphviz.org/pub/graphviz/ARCHIVE/%{name}-%{version}.tar.gz
 Patch0:			graphviz-2.40.1-visio.patch
 Patch1:			graphviz-2.40.1-CVE-2018-10196.patch
+Patch2:			graphviz-2.40.1-dotty-menu-fix.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel, python2-devel
@@ -268,6 +269,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %setup -q
 %patch0 -p1 -b .visio
 %patch1 -p1 -b .CVE-2018-10196
+%patch2 -p1 -b .dotty-menu-fix
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -560,6 +562,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Jul 17 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-23
+- Fixed menu in dotty
+  Resolves: rhbz#1505230
+
 * Fri May 18 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.40.1-22
 - Rename python2 subpackage to graphviz-python2, because
   there is intent to package python-graphviz, which is a separate project
