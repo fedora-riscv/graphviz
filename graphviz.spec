@@ -1,7 +1,9 @@
 %if 0%{?rhel} == 8
 %bcond_with python2
+%bcond_with php
 %else
 %bcond_without python2
+%bcond_without php
 %endif
 
 # Necessary conditionals
@@ -34,7 +36,11 @@
 %global LASI   0
 %endif
 
+%if %{with php}
 %global PHP 1
+%else
+%global PHP 0
+%endif
 
 # Plugins version
 %global pluginsver 6
@@ -55,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		34%{?dist}
+Release:		35%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -598,6 +604,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Jul 18 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-35
+- Conditionalized php support
+
 * Tue Jul 17 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-34
 - Fixed menu in dotty
   Resolves: rhbz#1505230
