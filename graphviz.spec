@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		35%{?dist}
+Release:		36%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -108,11 +108,9 @@ BuildRequires:		gts-devel
 BuildRequires:		lasi-devel
 %endif
 BuildRequires:		urw-base35-fonts, perl-ExtUtils-Embed, perl-generators, librsvg2-devel
-%if 0%{?rhel} == 8
-BuildRequires:		ghostscript-devel
-%else
+# for ps2pdf
+BuildRequires:		ghostscript
 BuildRequires:		libgs-devel
-%endif
 # ISO8859-1 fonts are required by lefty
 Requires:		urw-base35-fonts, xorg-x11-fonts-ISO8859-1-100dpi
 Requires(post):		/sbin/ldconfig
@@ -604,6 +602,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Jul 18 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-36
+- Fixed ghostscript requirements
+
 * Wed Jul 18 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-35
 - Conditionalized php support
 
