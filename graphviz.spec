@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		36%{?dist}
+Release:		37%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -438,7 +438,7 @@ php --no-php-ini \
 
 %post
 /sbin/ldconfig
-%{_bindir}/dot -c
+%{_bindir}/dot -c 2>/dev/null || :
 
 %postun
 /sbin/ldconfig
@@ -602,6 +602,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Sep 26 2018 Kevin Fenzi <kevin@scrye.com> - 2.40.1-37
+- Don't fail on post scriptlet failures.
+
 * Wed Jul 18 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-36
 - Fixed ghostscript requirements
 
