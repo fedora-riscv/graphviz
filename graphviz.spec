@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		37%{?dist}
+Release:		38%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -602,6 +602,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Oct 11 2018 Remi Collet <remi@remirepo.net> - 2.40.1-38
+- Rebuild for https://fedoraproject.org/wiki/Changes/php73
+
 * Wed Sep 26 2018 Kevin Fenzi <kevin@scrye.com> - 2.40.1-37
 - Don't fail on post scriptlet failures.
 
