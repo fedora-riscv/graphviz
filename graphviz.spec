@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		38%{?dist}
+Release:		39%{?dist}
 License:		EPL
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -73,7 +73,7 @@ Patch2:			graphviz-2.40.1-CVE-2018-10196.patch
 # rhbz#1505230
 Patch3:			graphviz-2.40.1-dotty-menu-fix.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
-BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig
+BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
 %if %{with python2}
 BuildRequires:		python2-devel
@@ -327,8 +327,12 @@ export CPPFLAGS=-I`ruby -e "puts File.join(RbConfig::CONFIG['includedir'], RbCon
 	--without-devil \
 %endif
 %if ! %{QTAPPS}
-	--without-qt \
+	--without-qt
 %endif
+
+# drop rpath
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 %if %{with python2}
 cp -a tclpkg/gv tclpkg/gv.python2
@@ -602,6 +606,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Mon Oct 15 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-39
+- Dropped rpath
+
 * Thu Oct 11 2018 Remi Collet <remi@remirepo.net> - 2.40.1-38
 - Rebuild for https://fedoraproject.org/wiki/Changes/php73
 
