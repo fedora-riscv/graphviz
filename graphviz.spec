@@ -61,8 +61,8 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		39%{?dist}
-License:		EPL
+Release:		40%{?dist}
+License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
 Source0:		https://gitlab.com/graphviz/graphviz/-/archive/stable_release_%{version}/graphviz-stable_release_%{version}.tar.gz #/graphviz-2.40.1.tar.gz
@@ -606,6 +606,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Oct 18 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-40
+- Clarified license tag
+
 * Mon Oct 15 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-39
 - Dropped rpath
 
