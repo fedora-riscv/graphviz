@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		42%{?dist}
+Release:		43%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -608,6 +608,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Mon Jan 21 2019 Vít Ondruch <vondruch@redhat.com> - 2.40.1-43
+- Rebuilt for https://fedoraproject.org/wiki/Changes/Ruby_2.6
+
 * Mon Jan 14 2019 Björn Esser <besser82@fedoraproject.org> - 2.40.1-42
 - Rebuilt for libcrypt.so.2 (#1666033)
 
