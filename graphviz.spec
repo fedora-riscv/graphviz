@@ -443,41 +443,40 @@ php --no-php-ini \
 # make rtest
 
 %post
-/sbin/ldconfig
+%{?ldconfig}
 %{_bindir}/dot -c 2>/dev/null || :
 
-%postun
-/sbin/ldconfig
+%ldconfig_postun
 
 %if %{DEVIL}
 # run "dot -c" to generate plugin config in %%{_libdir}/graphviz/config*
 %post devil
 %{_bindir}/dot -c 2>/dev/null || :
-/sbin/ldconfig
+%{?ldconfig}
 
 %postun devil
 %{_bindir}/dot -c 2>/dev/null || :
-/sbin/ldconfig
+%{?ldconfig}
 %endif
 
 # run "dot -c" to generate plugin config in %%{_libdir}/graphviz/config*
 %post gd
 %{_bindir}/dot -c 2>/dev/null || :
-/sbin/ldconfig
+%{?ldconfig}
 
 %postun gd
 %{_bindir}/dot -c 2>/dev/null || :
-/sbin/ldconfig
+%{?ldconfig}
 
 %if %{MING}
 # run "dot -c" to generate plugin config in %%{_libdir}/graphviz/config*
 %post ming
 %{_bindir}/dot -c 2>/dev/null || :
-/sbin/ldconfig
+%{?ldconfig}
 
 %postun ming
 %{_bindir}/dot -c 2>/dev/null || :
-/sbin/ldconfig
+%{?ldconfig}
 %endif
 
 %files
