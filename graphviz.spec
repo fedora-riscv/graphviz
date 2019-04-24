@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		45%{?dist}
+Release:		46%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -609,6 +609,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Apr 24 2019 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-46
+- Updated CVE-2019-11023 patch
+  Related: CVE-2019-11023
+
 * Wed Apr 24 2019 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-45
 - Fixed null pointer dereference in function agroot()
   Resolves: CVE-2019-11023
