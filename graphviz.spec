@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		44%{?dist}
+Release:		45%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -73,6 +73,7 @@ Patch2:			graphviz-2.40.1-CVE-2018-10196.patch
 # rhbz#1505230
 Patch3:			graphviz-2.40.1-dotty-menu-fix.patch
 Patch4:			graphviz-2.40.1-coverity-scan-fixes.patch
+Patch5:			graphviz-2.40.1-CVE-2019-11023.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
@@ -289,6 +290,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch2 -p1 -b .CVE-2018-10196
 %patch3 -p1 -b .dotty-menu-fix
 %patch4 -p1 -b .coverity-scan-fixes
+%patch5 -p1 -b .CVE-2019-11023
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -607,6 +609,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Apr 24 2019 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-45
+- Fixed null pointer dereference in function agroot()
+  Resolves: CVE-2019-11023
+
 * Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 2.40.1-44
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
