@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		47%{?dist}
+Release:		48%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -74,6 +74,7 @@ Patch2:			graphviz-2.40.1-CVE-2018-10196.patch
 Patch3:			graphviz-2.40.1-dotty-menu-fix.patch
 Patch4:			graphviz-2.40.1-coverity-scan-fixes.patch
 Patch5:			graphviz-2.40.1-CVE-2019-11023.patch
+Patch6:			graphviz-2.40.1-swig4-updated-language-options.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
@@ -291,6 +292,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch3 -p1 -b .dotty-menu-fix
 %patch4 -p1 -b .coverity-scan-fixes
 %patch5 -p1 -b .CVE-2019-11023
+%patch6 -p1 -b .swig4-updated-language-options
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -609,6 +611,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue May  7 2019 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-48
+- Fixed FTBFS caused by swig-4.0.0
+  Resolves: rhbz#1707435
+
 * Mon Apr 29 2019 Richard W.M. Jones <rjones@redhat.com> - 2.40.1-47
 - OCaml 4.08.0 (beta 3) rebuild.
 
