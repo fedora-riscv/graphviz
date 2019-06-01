@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		48%{?dist}
+Release:		49%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -611,6 +611,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Sat Jun 01 2019 Jitka Plesnikova <jplesnik@redhat.com> - 2.40.1-49
+- Perl 5.30 rebuild
+
 * Tue May  7 2019 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-48
 - Fixed FTBFS caused by swig-4.0.0
   Resolves: rhbz#1707435
