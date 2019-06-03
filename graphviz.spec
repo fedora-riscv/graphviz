@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		49%{?dist}
+Release:		50%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -346,7 +346,7 @@ cp -a tclpkg/gv tclpkg/gv.python2
 
 make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
   CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
-  PYTHON_INCLUDES=-I/usr/include/python%{python3_version}m PYTHON_LIBS="-lpython%{python3_version}m" \
+  PYTHON_INCLUDES=`python3-config --includes` PYTHON_LIBS=`python3-config --libs` \
   PYTHON_INSTALL_DIR=%{python3_sitearch} PYTHON=%{__python3}
 
 %if %{with python2}
@@ -363,7 +363,7 @@ rm -rf %{buildroot}
 make DESTDIR=%{buildroot} \
 	docdir=%{buildroot}%{_docdir}/%{name} \
 	pkgconfigdir=%{_libdir}/pkgconfig \
-	PYTHON_LIBS="-lpython%{python3_version}m" \
+	PYTHON_LIBS=`python3-config --libs` \
 	PYTHON_INSTALL_DIR=%{python3_sitearch} \
 	install
 find %{buildroot} -type f -name "*.la" -exec rm -f {} ';'
@@ -611,6 +611,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Mon Jun  3 2019 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-50
+- Fixed FTBFS with python-3.8
+
 * Sat Jun 01 2019 Jitka Plesnikova <jplesnik@redhat.com> - 2.40.1-49
 - Perl 5.30 rebuild
 

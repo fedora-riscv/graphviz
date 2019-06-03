@@ -22,7 +22,7 @@ index b747045..2b1ac8d 100644
 -
 +    print(sysconfig.get_python_lib(0,0))
 diff --git a/configure.ac b/configure.ac
-index 51166c3..4d8c9a0 100644
+index 51166c3..0f18965 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -1142,7 +1142,7 @@ else
@@ -34,20 +34,18 @@ index 51166c3..4d8c9a0 100644
        if test "x$PYTHON" = "x"; then
          use_python="No (python not available)"
        else
-@@ -1167,8 +1167,11 @@ else
+@@ -1167,8 +1167,8 @@ else
        if test "x$PYTHON" = "x"; then
  	use_python="No (python is too old)"
        else
 -        PYTHON_PREFIX=`$PYTHON -c "import sys; print sys.prefix"`
+-        PYTHON_INCLUDES=-I$PYTHON_PREFIX/include/python$PYTHON_VERSION_SHORT
 +        PYTHON_PREFIX=`$PYTHON -c "import sys; print(sys.prefix)"`
-         PYTHON_INCLUDES=-I$PYTHON_PREFIX/include/python$PYTHON_VERSION_SHORT
-+        if test $PYTHON_VERSION_MAJOR -gt 2; then
-+          PYTHON_INCLUDES="${PYTHON_INCLUDES}m"
-+        fi
++        PYTHON_INCLUDES=`$PYTHON-config --includes`
  #        PYTHON_LIBS="-lpython$PYTHON_VERSION_SHORT"
  	PYTHON_LIBS="-undefined dynamic_lookup"
          PYTHON_INSTALL_DIR="`$PYTHON $srcdir/config/config_python.py archsitelib`"
-@@ -1548,7 +1551,7 @@ else
+@@ -1548,7 +1548,7 @@ else
        if test "x$PYTHON34" = "x"; then
  	    use_python34="No (python34 is too old)"
        else
