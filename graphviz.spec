@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.40.1
-Release:		50%{?dist}
+Release:		51%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -611,6 +611,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Jun 04 2019 Jitka Plesnikova <jplesnik@redhat.com> - 2.40.1-51
+- Perl 5.30 re-rebuild updated packages
+
 * Mon Jun  3 2019 Jaroslav Škarvada <jskarvad@redhat.com> - 2.40.1-50
 - Fixed FTBFS with python-3.8
 
