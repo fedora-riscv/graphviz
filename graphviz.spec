@@ -431,6 +431,12 @@ rmdir %{buildroot}%{_libdir}/graphviz/python
 # Ghost plugins config
 touch %{buildroot}%{_libdir}/graphviz/config%{pluginsver}
 
+# Fix lua file placement for flatpak
+if [ "%{_prefix}" != "/usr" ]; then
+  cp -ru %{buildroot}/usr/* %{buildroot}%{_prefix}/
+  rm -rf %{buildroot}/usr/*
+fi
+
 %check
 %if %{PHP}
 # Minimal load test of php extension
