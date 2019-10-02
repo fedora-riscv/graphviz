@@ -60,21 +60,15 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.40.1
-Release:		58%{?dist}
+Version:		2.42.2
+Release:		1%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
-Source0:		https://gitlab.com/graphviz/graphviz/-/archive/stable_release_%{version}/graphviz-stable_release_%{version}.tar.gz #/graphviz-2.40.1.tar.gz
-Patch0:			graphviz-2.40.1-visio.patch
-Patch1:			graphviz-2.40.1-python3.patch
-# https://gitlab.com/graphviz/graphviz/issues/1367
-Patch2:			graphviz-2.40.1-CVE-2018-10196.patch
+Source0:		https://gitlab.com/%{name}/%{name}/-/archive/stable_release_%{version}/%{name}-stable_release_%{version}.tar.gz #/%{name}-%{version}.tar.gz
 # rhbz#1505230
-Patch3:			graphviz-2.40.1-dotty-menu-fix.patch
-Patch4:			graphviz-2.40.1-coverity-scan-fixes.patch
-Patch5:			graphviz-2.40.1-CVE-2019-11023.patch
-Patch6:			graphviz-2.40.1-swig4-updated-language-options.patch
+Patch0:			graphviz-2.42.2-dotty-menu-fix.patch
+Patch1:			graphviz-2.42.2-coverity-scan-fixes.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
@@ -286,13 +280,8 @@ Various tcl packages (extensions) for the graphviz tools.
 
 %prep
 %setup -q -n graphviz-stable_release_%{version}
-%patch0 -p1 -b .visio
-%patch1 -p1 -b .python3
-%patch2 -p1 -b .CVE-2018-10196
-%patch3 -p1 -b .dotty-menu-fix
-%patch4 -p1 -b .coverity-scan-fixes
-%patch5 -p1 -b .CVE-2019-11023
-%patch6 -p1 -b .swig4-updated-language-options
+%patch0 -p1 -b .dotty-menu-fix
+%patch1 -p1 -b .coverity-scan-fixes
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -340,31 +329,13 @@ export CPPFLAGS=-I`ruby -e "puts File.join(RbConfig::CONFIG['includedir'], RbCon
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
-%if %{with python2}
-cp -a tclpkg/gv tclpkg/gv.python2
-%endif
-
 make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
-  CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
-  PYTHON_INCLUDES=`python3-config --includes` PYTHON_LIBS=`python3-config --libs` \
-  PYTHON_INSTALL_DIR=%{python3_sitearch} PYTHON=%{__python3}
-
-%if %{with python2}
-pushd tclpkg/gv.python2
-make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
-  CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
-  PYTHON_INCLUDES=-I/usr/include/python%{python2_version} PYTHON_LIBS="-lpython%{python2_version}" \
-  PYTHON_INSTALL_DIR=%{python2_sitearch} libgv_python.la
-popd
-%endif
+  CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}"
 
 %install
-rm -rf %{buildroot}
 make DESTDIR=%{buildroot} \
 	docdir=%{buildroot}%{_docdir}/%{name} \
 	pkgconfigdir=%{_libdir}/pkgconfig \
-	PYTHON_LIBS=`python3-config --libs` \
-	PYTHON_INSTALL_DIR=%{python3_sitearch} \
 	install
 find %{buildroot} -type f -name "*.la" -exec rm -f {} ';'
 chmod -x %{buildroot}%{_datadir}/%{name}/lefty/*
@@ -411,22 +382,13 @@ done
 popd
 
 %if %{with python2}
-pushd tclpkg/gv.python2
-install -pD .libs/libgv_python.so %{buildroot}%{python2_sitearch}/_gv.so
-install -p gv.py %{buildroot}%{python2_sitearch}/gv.py
-popd
+install -pD tclpkg/gv/.libs/libgv_python2.so %{buildroot}%{python2_sitearch}/_gv.so
+install -p tclpkg/gv/gv.py %{buildroot}%{python2_sitearch}/gv.py
 %endif
 
 # python 3
-pushd tclpkg/gv
-install -pD .libs/libgv_python.so %{buildroot}%{python3_sitearch}/_gv.so
-install -p gv.py %{buildroot}%{python3_sitearch}/gv.py
-popd
-
-# remove the python module from the %%_libdir/graphviz/python, it's
-# already installed in the python sitearch
-rm -f %{buildroot}%{_libdir}/graphviz/python/*
-rmdir %{buildroot}%{_libdir}/graphviz/python
+install -pD tclpkg/gv/.libs/libgv_python3.so %{buildroot}%{python3_sitearch}/_gv.so
+install -p tclpkg/gv/gv.py %{buildroot}%{python3_sitearch}/gv.py
 
 # Ghost plugins config
 touch %{buildroot}%{_libdir}/graphviz/config%{pluginsver}
@@ -617,6 +579,13 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Oct  2 2019 Jaroslav Škarvada <jskarvad@redhat.com> - 2.42.2-1
+- New version
+  Resolves: rhbz#1753061
+- Dropped visio, python3, CVE-2018-10196, CVE-2019-11023, and
+  swig4-updated-language-options patches (all upstreamed)
+- Simplified python bindings build process
+
 * Wed Oct 02 2019 Orion Poplawski <orion@nwra.com> - 2.40.1-58
 - Rebuild for lasi 1.1.3 soname bump
 
