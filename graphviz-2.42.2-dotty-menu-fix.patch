@@ -1,8 +1,8 @@
 diff --git a/cmd/dotty/dotty_ui.lefty b/cmd/dotty/dotty_ui.lefty
-index a8c9116..a708c61 100644
+index 6fdec8f..270c0c8 100644
 --- a/cmd/dotty/dotty_ui.lefty
 +++ b/cmd/dotty/dotty_ui.lefty
-@@ -342,7 +342,7 @@ dotty.protovt.normal.uifuncs = [
+@@ -351,7 +351,7 @@ dotty.protovt.normal.uifuncs = [
          else
              gt.insertedge (gt, data.pobj, null, data.obj, null, null, 1);
      };
@@ -11,7 +11,7 @@ index a8c9116..a708c61 100644
          local vt, gt, menu, i;
  
          vt = dotty.views[data.widget];
-@@ -447,7 +447,7 @@ dotty.protovt.birdseye.uifuncs = [
+@@ -456,7 +456,7 @@ dotty.protovt.birdseye.uifuncs = [
      'middledown' = dotty.protovt.normal.uifuncs.middledown;
      'middlemove' = dotty.protovt.normal.uifuncs.middlemove;
      'middleup' = dotty.protovt.normal.uifuncs.middleup;

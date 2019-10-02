@@ -12,10 +12,10 @@ index cf738c0..65e17e2 100644
      while (isalnum (*p) || (*p == '_') || (!isascii (*p)))
          *q++ = *p++;
 diff --git a/cmd/tools/gvgen.c b/cmd/tools/gvgen.c
-index 662343e..2925d19 100644
+index c2b166d..c9a51e9 100644
 --- a/cmd/tools/gvgen.c
 +++ b/cmd/tools/gvgen.c
-@@ -458,6 +458,8 @@ closeOpen (void)
+@@ -453,6 +453,8 @@ closeOpen (void)
  	fprintf(opts.outfile, "}\ngraph {\n");
  }
  
