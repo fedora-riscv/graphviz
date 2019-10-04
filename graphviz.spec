@@ -61,7 +61,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.42.2
-Release:		1%{?dist}
+Release:		2%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -579,7 +579,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
-* Tue Oct  2 2019 Jaroslav Škarvada <jskarvad@redhat.com> - 2.42.2-1
+* Fri Oct 04 2019 Remi Collet <remi@remirepo.net> - 2.42.2-2
+- rebuild for https://fedoraproject.org/wiki/Changes/php74
+
+* Wed Oct  2 2019 Jaroslav Škarvada <jskarvad@redhat.com> - 2.42.2-1
 - New version
   Resolves: rhbz#1753061
 - Dropped visio, python3, CVE-2018-10196, CVE-2019-11023, and
