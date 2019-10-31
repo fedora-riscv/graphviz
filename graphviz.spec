@@ -2,7 +2,11 @@
 %bcond_with python2
 %bcond_with php
 %else
+%if 0%{?fedora} > 31
+%bcond_with python2
+%else
 %bcond_without python2
+%endif
 %bcond_without php
 %endif
 
@@ -61,7 +65,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.42.2
-Release:		2%{?dist}
+Release:		3%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -579,6 +583,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Oct 31 2019 Miro Hrončok <mhroncok@redhat.com> - 2.42.2-3
+- Remove Python 2 package on Fedora 32+
+
 * Fri Oct 04 2019 Remi Collet <remi@remirepo.net> - 2.42.2-2
 - rebuild for https://fedoraproject.org/wiki/Changes/php74
 
