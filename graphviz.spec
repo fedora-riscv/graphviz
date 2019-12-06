@@ -65,7 +65,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.42.2
-Release:		3%{?dist}
+Release:		4%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -583,6 +583,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Fri Dec 06 2019 Richard W.M. Jones <rjones@redhat.com> - 2.42.2-4
+- OCaml 4.09.0 (final) rebuild.
+
 * Thu Oct 31 2019 Miro Hrončok <mhroncok@redhat.com> - 2.42.2-3
 - Remove Python 2 package on Fedora 32+
 
