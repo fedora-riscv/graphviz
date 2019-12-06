@@ -73,6 +73,9 @@ Source0:		https://gitlab.com/%{name}/%{name}/-/archive/stable_release_%{version}
 # rhbz#1505230
 Patch0:			graphviz-2.42.2-dotty-menu-fix.patch
 Patch1:			graphviz-2.42.2-coverity-scan-fixes.patch
+# Workaround for some const casting badness in the OCaml bindings.
+# Real fix will need a fix to SWIG.
+Patch2:                 graphviz-2.42.2-ocaml-allow-const-cast.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
@@ -286,6 +289,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %setup -q -n graphviz-stable_release_%{version}
 %patch0 -p1 -b .dotty-menu-fix
 %patch1 -p1 -b .coverity-scan-fixes
+%patch2 -p1
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
