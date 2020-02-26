@@ -65,7 +65,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.42.2
-Release:		8%{?dist}
+Release:		9%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 # A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
@@ -587,6 +587,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Feb 26 2020 Richard W.M. Jones <rjones@redhat.com> - 2.42.2-9
+- OCaml 4.10.0 final.
+
 * Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.42.2-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
