@@ -64,18 +64,14 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.42.2
-Release:		10%{?dist}
+Version:		2.42.4
+Release:		1%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
-# A bit hacking needed due to: https://gitlab.com/graphviz/graphviz/issues/1371
-Source0:		https://gitlab.com/%{name}/%{name}/-/archive/stable_release_%{version}/%{name}-stable_release_%{version}.tar.gz #/%{name}-%{version}.tar.gz
+Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 # rhbz#1505230
 Patch0:			graphviz-2.42.2-dotty-menu-fix.patch
 Patch1:			graphviz-2.42.2-coverity-scan-fixes.patch
-# Workaround for some const casting badness in the OCaml bindings.
-# Real fix will need a fix to SWIG.
-Patch2:                 graphviz-2.42.2-ocaml-allow-const-cast.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
@@ -286,10 +282,9 @@ Requires:		%{name} = %{version}-%{release}, tcl >= 8.3, tk
 Various tcl packages (extensions) for the graphviz tools.
 
 %prep
-%setup -q -n graphviz-stable_release_%{version}
+%setup -q
 %patch0 -p1 -b .dotty-menu-fix
 %patch1 -p1 -b .coverity-scan-fixes
-%patch2 -p1
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -587,6 +582,12 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Mon Apr  6 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.42.4-1
+- New version
+  Resolves: rhbz#1821045
+- Switched to bz2 archives
+- Dropped ocaml-allow-const-cast patch (upstreamed)
+
 * Thu Apr 02 2020 Richard W.M. Jones <rjones@redhat.com> - 2.42.2-10
 - Update all OCaml dependencies for RPM 4.16.
 
