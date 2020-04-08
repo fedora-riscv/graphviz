@@ -65,7 +65,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.44.0
-Release:		1%{?dist}
+Release:		2%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -489,7 +489,7 @@ php --no-php-ini \
 %{_libdir}/*.so
 %{_libdir}/graphviz/*.so
 %{_libdir}/pkgconfig/*.pc
-%{_mandir}/man3/*.3*
+%{_mandir}/man3/*.3.*
 
 %if %{DEVIL}
 %files devil
@@ -560,7 +560,7 @@ php --no-php-ini \
 %if %{ARRRR}
 %files R
 %{_libdir}/graphviz/R/
-%{_mandir}/man3/gv.3r*
+%{_mandir}/man3/gv.3r.*
 %endif
 
 %files ruby
@@ -582,6 +582,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Apr  8 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.44.0-2
+- Fixed multiple packaging of manual pages
+
 * Wed Apr  8 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.44.0-1
 - New version
   Resolves: rhbz#1822101
