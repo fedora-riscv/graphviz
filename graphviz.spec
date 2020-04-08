@@ -64,7 +64,7 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.42.4
+Version:		2.44.0
 Release:		1%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
@@ -582,6 +582,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Apr  8 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.44.0-1
+- New version
+  Resolves: rhbz#1822101
+
 * Mon Apr  6 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.42.4-1
 - New version
   Resolves: rhbz#1821045
