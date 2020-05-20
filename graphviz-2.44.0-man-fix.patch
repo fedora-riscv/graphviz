@@ -2,6 +2,15 @@ diff --git a/cmd/dot/dot.1 b/cmd/dot/dot.1
 index 986b262..e9c56f2 100644
 --- a/cmd/dot/dot.1
 +++ b/cmd/dot/dot.1
+@@ -352,7 +352,7 @@ in the layout.
+ layout the graph.
+ .PP
+ \fBstart=\fIval\fR. Adjusts the random initial placement of nodes
+-with no specified position.  If \fIval\fP is is an integer,
++with no specified position.  If \fIval\fP is an integer,
+ it is used as the seed for the random number generator.
+ If \fIval\fP is not an integer, a random system\(hygenerated integer,
+ such as the process ID or current time, is used as the seed.
 @@ -635,6 +635,22 @@ As usual, edge layout is guided by the \fBsplines\fR attribute.
  .PP
  \fB\-y\fR invert y coordinate in output.
