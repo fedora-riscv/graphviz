@@ -65,7 +65,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.44.0
-Release:		7%{?dist}
+Release:		8%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -585,6 +585,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue May 26 2020 Miro Hrončok <mhroncok@redhat.com> - 2.44.0-8
+- Rebuilt for Python 3.9
+
 * Wed May 20 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.44.0-7
 - Also fixed man page typo
 
