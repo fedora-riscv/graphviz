@@ -1,14 +1,9 @@
 %if 0%{?rhel} == 8
-%bcond_with python2
 %bcond_with php
 %else
-%if 0%{?fedora} > 31
-%bcond_with python2
-%else
-%bcond_without python2
-%endif
 %bcond_without php
 %endif
+%bcond_with python2
 
 # Necessary conditionals
 %ifarch %{mono_arches}
@@ -65,7 +60,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.44.0
-Release:		14%{?dist}
+Release:		15%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -585,6 +580,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Nov 25 2020 Miro Hrončok <mhroncok@redhat.com> - 2.44.0-15
+- Disable Python 2 in ELN
+
 * Tue Sep 01 2020 Richard W.M. Jones <rjones@redhat.com> - 2.44.0-14
 - OCaml 4.11.1 rebuild
 
