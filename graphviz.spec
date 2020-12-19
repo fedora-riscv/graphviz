@@ -108,6 +108,7 @@ BuildRequires:		urw-base35-fonts, perl-ExtUtils-Embed, perl-generators, librsvg2
 # for ps2pdf
 BuildRequires:		ghostscript
 BuildRequires:		libgs-devel
+BuildRequires: make
 # ISO8859-1 fonts are required by lefty
 Requires:		urw-base35-fonts, xorg-x11-fonts-ISO8859-1-100dpi
 Requires(post):		/sbin/ldconfig
