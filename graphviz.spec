@@ -60,7 +60,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.44.0
-Release:		15%{?dist}
+Release:		16%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -581,6 +581,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Jan 07 2021 Mamoru TASAKA <mtasaka@fedoraproject.org> - 2.44.0-16
+- F-34: rebuild against ruby 3.0
+
 * Wed Nov 25 2020 Miro Hrončok <mhroncok@redhat.com> - 2.44.0-15
 - Disable Python 2 in ELN
 
