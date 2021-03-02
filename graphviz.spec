@@ -59,16 +59,11 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.44.0
-Release:		18%{?dist}
+Version:		2.46.0
+Release:		1%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
-# rhbz#1505230
-Patch0:			graphviz-2.42.2-dotty-menu-fix.patch
-Patch1:			graphviz-2.42.2-coverity-scan-fixes.patch
-# rhbz#1612692, https://gitlab.com/graphviz/graphviz/-/merge_requests/1367
-Patch2:			graphviz-2.44.0-man-fix.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
@@ -280,10 +275,7 @@ Requires:		%{name} = %{version}-%{release}, tcl >= 8.3, tk
 Various tcl packages (extensions) for the graphviz tools.
 
 %prep
-%setup -q
-%patch0 -p1 -b .dotty-menu-fix
-%patch1 -p1 -b .coverity-scan-fixes
-%patch2 -p1 -b .man-fix
+%autosetup -p1
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -581,6 +573,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Mar  2 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.46.0-1
+- New version
+  Resolves: rhbz#1933722
+
 * Mon Mar  1 13:11:59 GMT 2021 Richard W.M. Jones <rjones@redhat.com> - 2.44.0-18
 - OCaml 4.12.0 build
 
