@@ -59,7 +59,7 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.46.0
+Version:		2.46.1
 Release:		1%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
@@ -573,6 +573,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Mar  3 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.46.1-1
+- New version
+  Related: rhbz#1933722
+
 * Tue Mar  2 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.46.0-1
 - New version
   Resolves: rhbz#1933722
