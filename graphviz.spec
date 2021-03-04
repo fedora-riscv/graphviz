@@ -60,13 +60,13 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.46.1
-Release:		1%{?dist}
+Release:		2%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
-BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
+BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile22-devel
 %if %{with python2}
 BuildRequires:		python2-devel
 %endif
@@ -573,6 +573,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Mar  4 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.46.1-2
+- Built against guile22
+
 * Wed Mar  3 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.46.1-1
 - New version
   Related: rhbz#1933722
