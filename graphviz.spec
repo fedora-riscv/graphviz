@@ -1,7 +1,9 @@
 %if 0%{?rhel} == 8
 %bcond_with php
 %else
-%bcond_without php
+# Temporaly disable, no PHP-8 support in swig yet:
+# https://github.com/swig/swig/issues/1929
+%bcond_with php
 %endif
 %bcond_with python2
 
@@ -574,7 +576,7 @@ php --no-php-ini \
 
 %changelog
 * Mon Mar  8 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.46.1-3
-- Rebuilt to fix graphviz-php FTI
+- Temporary disabled PHP support
   Resolves: rhbz#1935859
 
 * Thu Mar  4 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.46.1-2
