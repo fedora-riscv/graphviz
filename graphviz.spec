@@ -1,9 +1,7 @@
 %if 0%{?rhel} == 8
 %bcond_with php
 %else
-# Temporaly disable, no PHP-8 support in swig yet:
-# https://github.com/swig/swig/issues/1929
-%bcond_with php
+%bcond_without php
 %endif
 %bcond_with python2
 
@@ -62,7 +60,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.47.0
-Release:		1%{?dist}
+Release:		2%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -575,6 +573,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Mar 23 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.0-2
+- Re-enabled PHP support
+  Resolves: rhbz#1934996
+
 * Tue Mar 16 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.0-1
 - New version
   Resolves: rhbz#1939299
