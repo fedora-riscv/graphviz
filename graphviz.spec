@@ -59,8 +59,8 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.47.0
-Release:		2%{?dist}
+Version:		2.47.1
+Release:		1%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -573,6 +573,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Mon Apr 19 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.1-1
+- New version
+  Resolves: rhbz#1950691
+
 * Tue Mar 23 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.0-2
 - Re-enabled PHP support
   Resolves: rhbz#1934996
