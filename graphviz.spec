@@ -68,10 +68,11 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.47.1
-Release:		2%{?dist}
+Release:		3%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
+BuildRequires:		gcc-g++
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby
@@ -593,6 +594,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Fri May  7 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.1-3
+- Added build requirement for gcc-g++
+
 * Fri May  7 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.1-2
 - Conditionalized guile support
 - Updated RHEL macros
