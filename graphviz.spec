@@ -1,7 +1,9 @@
-%if 0%{?rhel} == 8
+%if 0%{?rhel} >= 8
 %bcond_with php
+%bcond_with guile
 %else
 %bcond_without php
+%bcond_without guile
 %endif
 %bcond_with python2
 
@@ -41,6 +43,12 @@
 %global PHP 0
 %endif
 
+%if %{with guile}
+%global GUILE 1
+%else
+%global GUILE 0
+%endif
+
 # Plugins version
 %global pluginsver 6
 
@@ -60,13 +68,16 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.47.1
-Release:		1%{?dist}
+Release:		2%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
-BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile22-devel
+BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby
+%if %{GUILE}
+BuildRequires:		guile22-devel
+%endif
 %if %{with python2}
 BuildRequires:		python2-devel
 %endif
@@ -157,12 +168,14 @@ Summary:		Demo graphs for graphviz
 %description graphs
 Some demo graphs for graphviz.
 
+%if %{GUILE}
 %package guile
 Summary:		Guile extension for graphviz
 Requires:		%{name} = %{version}-%{release}, guile
 
 %description guile
 Guile extension for graphviz.
+%endif
 
 %package java
 Summary:		Java extension for graphviz
@@ -316,7 +329,12 @@ export CPPFLAGS=-I`ruby -e "puts File.join(RbConfig::CONFIG['includedir'], RbCon
 	--without-devil \
 %endif
 %if ! %{QTAPPS}
-	--without-qt
+	--without-qt \
+%endif
+%if %{GUILE}
+	--enable-guile=yes
+%else
+	--enable-guile=no
 %endif
 
 # drop rpath
@@ -499,9 +517,11 @@ php --no-php-ini \
 %dir %{_datadir}/graphviz
 %{_datadir}/graphviz/graphs
 
+%if %{GUILE}
 %files guile
 %{_libdir}/graphviz/guile/
 %{_mandir}/man3/gv.3guile*
+%endif
 
 %files java
 %{_libdir}/graphviz/java/
@@ -573,6 +593,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Fri May  7 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.1-2
+- Conditionalized guile support
+- Updated RHEL macros
+
 * Mon Apr 19 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.1-1
 - New version
   Resolves: rhbz#1950691
