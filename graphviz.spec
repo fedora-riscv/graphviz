@@ -68,7 +68,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.47.1
-Release:		3%{?dist}
+Release:		4%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -120,6 +120,8 @@ BuildRequires: make
 Requires:		urw-base35-fonts, xorg-x11-fonts-ISO8859-1-100dpi
 Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
+# https://gitlab.com/graphviz/graphviz/-/issues/2061
+Patch0:			graphviz-2.47.1-drop-tmsize10-clo.patch
 
 %description
 A collection of tools for the manipulation and layout of graphs (as in nodes
@@ -594,6 +596,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed May 12 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.1-4
+- Dropped unneeded tmsize10.clo file
+
 * Fri May  7 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.1-3
 - Added build requirement for gcc-g++
 
