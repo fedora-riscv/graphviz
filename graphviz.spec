@@ -68,7 +68,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.47.1
-Release:		4%{?dist}
+Release:		5%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -596,6 +596,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Sun May 23 2021 Jitka Plesnikova <jplesnik@redhat.com> - 2.47.1-5
+- Perl 5.34 rebuild
+
 * Wed May 12 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.1-4
 - Dropped unneeded tmsize10.clo file
 
