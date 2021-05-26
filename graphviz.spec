@@ -65,7 +65,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.44.0
-Release:		14%{?dist}.1
+Release:		14%{?dist}.2
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -74,6 +74,7 @@ Patch0:			graphviz-2.42.2-dotty-menu-fix.patch
 Patch1:			graphviz-2.42.2-coverity-scan-fixes.patch
 # rhbz#1612692, https://gitlab.com/graphviz/graphviz/-/merge_requests/1367
 Patch2:			graphviz-2.44.0-man-fix.patch
+Patch3:			graphviz-2.44.0-CVE-2020-18032.patch
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
 BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby, guile-devel
@@ -288,6 +289,7 @@ Various tcl packages (extensions) for the graphviz tools.
 %patch0 -p1 -b .dotty-menu-fix
 %patch1 -p1 -b .coverity-scan-fixes
 %patch2 -p1 -b .man-fix
+%patch3 -p1 -b .CVE-2020-18032
 
 # Attempt to fix rpmlint warnings about executable sources
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
@@ -585,6 +587,11 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed May 26 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.44.0-14.2
+- Fixed buffer overflow in lib/common/shapes.c
+  Resolves: CVE-2020-18032
+  Resolves: rhbz#1963395
+
 * Wed Sep 02 2020 Richard W.M. Jones <rjones@redhat.com> - 2.44.0-14.1
 - Bump release and rebuild.
 
