@@ -68,10 +68,12 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.47.2
-Release:		2%{?dist}
+Release:		3%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
+# https://gitlab.com/graphviz/graphviz/-/merge_requests/1994
+Patch0:			graphviz-2.47.2-makefile-docs-fix.patch
 BuildRequires:		gcc-g++
 BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
 BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
@@ -594,6 +596,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Jun  8 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.47.2-3
+- Fixed possible races during docs build which could lead to empty pdf files
+
 * Fri Jun 04 2021 Python Maint <python-maint@redhat.com> - 2.47.2-2
 - Rebuilt for Python 3.10
 
