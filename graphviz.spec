@@ -68,7 +68,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.48.0
-Release:		2%{?dist}
+Release:		3%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -172,7 +172,7 @@ Some demo graphs for graphviz.
 %if %{GUILE}
 %package guile
 Summary:		Guile extension for graphviz
-Requires:		%{name} = %{version}-%{release}, guile
+Requires:		%{name} = %{version}-%{release}
 
 %description guile
 Guile extension for graphviz.
@@ -594,6 +594,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Fri Jul 23 2021 Aleksei Bavshin <alebastr@fedoraproject.org> - 2.48.0-3
+- Dropped unused runtime dependency from guile 2.0
+
 * Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.48.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
