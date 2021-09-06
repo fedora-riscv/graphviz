@@ -67,8 +67,8 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.48.0
-Release:		3%{?dist}
+Version:		2.49.0
+Release:		1%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -594,6 +594,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Mon Sep  6 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.49.0-1
+- New version
+  Resolves: rhbz#1998765
+
 * Fri Jul 23 2021 Aleksei Bavshin <alebastr@fedoraproject.org> - 2.48.0-3
 - Dropped unused runtime dependency from guile 2.0
 
