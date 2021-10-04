@@ -68,7 +68,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.49.0
-Release:		2%{?dist}
+Release:		3%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -594,6 +594,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Mon Oct 04 2021 Richard W.M. Jones <rjones@redhat.com> - 2.49.0-3
+- OCaml 4.13.1 build
+
 * Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 2.49.0-2
 - Rebuilt with OpenSSL 3.0.0
 
