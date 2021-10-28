@@ -68,7 +68,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.49.3
-Release:		1%{?dist}
+Release:		2%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -594,6 +594,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Thu Oct 28 2021 Remi Collet <remi@remirepo.net> - 2.49.3-2
+- rebuild for https://fedoraproject.org/wiki/Changes/php81
+
 * Mon Oct 25 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.49.3-1
 - New version
   Resolves: rhbz#2016728
