@@ -120,6 +120,7 @@ BuildRequires:		make
 Requires:		urw-base35-fonts, xorg-x11-fonts-ISO8859-1-100dpi
 Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
+# rhbz#1838679
 Patch0:			graphviz-2.49.3-gvpack-neato-static.patch
 
 %description
