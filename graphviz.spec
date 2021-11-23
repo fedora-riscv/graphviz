@@ -68,7 +68,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.48.0
-Release:		3%{?dist}
+Release:		4%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -115,11 +115,13 @@ BuildRequires:		urw-base35-fonts, perl-ExtUtils-Embed, perl-generators, librsvg2
 # for ps2pdf
 BuildRequires:		ghostscript
 BuildRequires:		libgs-devel
-BuildRequires: make
+BuildRequires:		make
 # ISO8859-1 fonts are required by lefty
 Requires:		urw-base35-fonts, xorg-x11-fonts-ISO8859-1-100dpi
 Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
+# rhbz#1838679
+Patch0:			graphviz-2.48.0-gvpack-neato-static.patch
 
 %description
 A collection of tools for the manipulation and layout of graphs (as in nodes
@@ -594,6 +596,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Tue Nov 23 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.48.0-4
+- Fixed gvpack to run
+  Resolves: rhbz#1838679
+
 * Fri Jul 23 2021 Aleksei Bavshin <alebastr@fedoraproject.org> - 2.48.0-3
 - Dropped unused runtime dependency from guile 2.0
 
