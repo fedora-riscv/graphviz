@@ -67,24 +67,54 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.49.3
-Release:		3%{?dist}
+Version:		2.50.0
+Release:		1%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 BuildRequires:		gcc-g++
-BuildRequires:		zlib-devel, libpng-devel, libjpeg-devel, expat-devel, freetype-devel >= 2
-BuildRequires:		ksh, bison, m4, flex, tk-devel, tcl-devel >= 8.3, swig, sed
-BuildRequires:		fontconfig-devel, libtool-ltdl-devel, ruby-devel, ruby
+BuildRequires:		zlib-devel
+BuildRequires:		libpng-devel
+BuildRequires:		libjpeg-devel
+BuildRequires:		expat-devel
+BuildRequires:		freetype-devel >= 2
+BuildRequires:		ksh
+BuildRequires:		bison
+BuildRequires:		m4
+BuildRequires:		flex
+BuildRequires:		tk-devel
+BuildRequires:		tcl-devel >= 8.3
+BuildRequires:		swig
+BuildRequires:		sed
+BuildRequires:		fontconfig-devel
+BuildRequires:		libtool-ltdl-devel
+BuildRequires:		ruby-devel
+BuildRequires:		ruby
+BuildRequires:		libXt-devel
+BuildRequires:		libXmu-devel
 %if %{GUILE}
 BuildRequires:		guile22-devel
 %endif
 %if %{with python2}
 BuildRequires:		python2-devel
 %endif
-BuildRequires:		python3-devel, libXaw-devel, libSM-devel, libXext-devel, java-devel
-BuildRequires:		cairo-devel >= 1.1.10, pango-devel, gmp-devel, lua-devel, gtk2-devel
-BuildRequires:		gd-devel, perl-devel, swig >= 1.3.33, automake, autoconf, libtool, qpdf
+BuildRequires:		python3-devel
+BuildRequires:		libXaw-devel
+BuildRequires:		libSM-devel
+BuildRequires:		libXext-devel
+BuildRequires:		java-devel
+BuildRequires:		cairo-devel >= 1.1.10
+BuildRequires:		pango-devel
+BuildRequires:		gmp-devel
+BuildRequires:		lua-devel
+BuildRequires:		gtk2-devel
+BuildRequires:		gd-devel
+BuildRequires:		perl-devel
+BuildRequires:		swig >= 1.3.33
+BuildRequires:		automake
+BuildRequires:		autoconf
+BuildRequires:		libtool
+BuildRequires:		qpdf
 # Temporary workaound for perl(Carp) not pulled
 BuildRequires:		perl-Carp
 %if %{PHP}
@@ -111,13 +141,17 @@ BuildRequires:		gts-devel
 %if %{LASI}
 BuildRequires:		lasi-devel
 %endif
-BuildRequires:		urw-base35-fonts, perl-ExtUtils-Embed, perl-generators, librsvg2-devel
+BuildRequires:		urw-base35-fonts
+BuildRequires:		perl-ExtUtils-Embed
+BuildRequires:		perl-generators
+BuildRequires:		librsvg2-devel
 # for ps2pdf
 BuildRequires:		ghostscript
 BuildRequires:		libgs-devel
 BuildRequires:		make
 # ISO8859-1 fonts are required by lefty
-Requires:		urw-base35-fonts, xorg-x11-fonts-ISO8859-1-100dpi
+Requires:		urw-base35-fonts
+Requires:		xorg-x11-fonts-ISO8859-1-100dpi
 Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
 # rhbz#1838679
@@ -309,7 +343,7 @@ sed -i 's|sitearchdir|vendorarchdir|' config/config_ruby.rb
 export CPPFLAGS=-I`ruby -e "puts File.join(RbConfig::CONFIG['includedir'], RbConfig::CONFIG['sitearch'])" || echo /dev/null`
 %configure --with-x --disable-static --disable-dependency-tracking \
 	--without-mylibgd --with-ipsepcola --with-pangocairo \
-	--with-gdk-pixbuf --with-visio --disable-silent-rules \
+	--with-gdk-pixbuf --with-visio --disable-silent-rules --enable-lefty \
 %if ! %{LASI}
 	--without-lasi \
 %endif
@@ -353,7 +387,6 @@ make DESTDIR=%{buildroot} \
 	pkgconfigdir=%{_libdir}/pkgconfig \
 	install
 find %{buildroot} -type f -name "*.la" -exec rm -f {} ';'
-chmod -x %{buildroot}%{_datadir}/%{name}/lefty/*
 
 # Move docs to the right place
 mkdir -p %{buildroot}%{_docdir}/%{name}
@@ -596,6 +629,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Mon Dec  6 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.50.0-1
+- New version
+  Resolves: rhbz#2029089
+
 * Tue Nov 23 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.49.3-3
 - Fixed gvpack to run
   Resolves: rhbz#1838679
