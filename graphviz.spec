@@ -68,7 +68,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.50.0
-Release:		1%{?dist}
+Release:		2%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -198,6 +198,15 @@ Requires(postun):	%{_bindir}/dot /sbin/ldconfig
 Graphviz plugin for renderers based on gd.  (Unless you absolutely have to use
 GIF, you are recommended to use the PNG format instead because of the better
 quality anti-aliased lines provided by the cairo+pango based renderer.)
+
+%package gtk2
+Summary:		Graphviz plugin for renderers based on gtk2
+Requires:		%{name} = %{version}-%{release}
+Requires(post):		%{_bindir}/dot /sbin/ldconfig
+Requires(postun):	%{_bindir}/dot /sbin/ldconfig
+
+%description gtk2
+Graphviz plugin for renderers based on gtk2.
 
 %package graphs
 Summary:		Demo graphs for graphviz
@@ -488,6 +497,14 @@ php --no-php-ini \
 %{_bindir}/dot -c 2>/dev/null || :
 %{?ldconfig}
 
+%post gtk2
+%{_bindir}/dot -c 2>/dev/null || :
+%{?ldconfig}
+
+%postun gtk2
+%{_bindir}/dot -c 2>/dev/null || :
+%{?ldconfig}
+
 %if %{MING}
 # run "dot -c" to generate plugin config in %%{_libdir}/graphviz/config*
 %post ming
@@ -521,6 +538,8 @@ php --no-php-ini \
 
 %exclude %{_libdir}/graphviz/*/*
 %exclude %{_libdir}/graphviz/libgvplugin_gd.*
+%exclude %{_libdir}/graphviz/libgvplugin_gtk.*
+%exclude %{_libdir}/graphviz/libgvplugin_gdk.*
 %if %{DEVIL}
 %exclude %{_libdir}/graphviz/libgvplugin_devil.*
 %endif
@@ -548,6 +567,10 @@ php --no-php-ini \
 
 %files gd
 %{_libdir}/graphviz/libgvplugin_gd.so.*
+
+%files gtk2
+%{_libdir}/graphviz/libgvplugin_gtk.so.*
+%{_libdir}/graphviz/libgvplugin_gdk.so.*
 
 %files graphs
 %dir %{_datadir}/graphviz
@@ -629,6 +652,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Dec 15 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.50.0-2
+- GTK2 stuff Split to the gtk2 subpackage
+  Resolves: rhbz#2032671
+
 * Mon Dec  6 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.50.0-1
 - New version
   Resolves: rhbz#2029089
