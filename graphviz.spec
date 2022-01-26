@@ -68,7 +68,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.50.0
-Release:		3%{?dist}
+Release:		4%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -652,6 +652,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Jan 26 2022 Vít Ondruch <vondruch@redhat.com> - 2.50.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Changes/Ruby_3.1
+
 * Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.50.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
