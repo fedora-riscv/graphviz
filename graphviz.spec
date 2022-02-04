@@ -1,3 +1,4 @@
+%undefine _package_note_flags
 %if 0%{?rhel} >= 8
 %bcond_with php
 %bcond_with guile
@@ -68,7 +69,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		2.50.0
-Release:		4%{?dist}
+Release:		5%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -652,6 +653,9 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Fri Feb 04 2022 Richard W.M. Jones <rjones@redhat.com> - 2.50.0-5
+- OCaml 4.13.1 rebuild to remove package notes
+
 * Wed Jan 26 2022 Vít Ondruch <vondruch@redhat.com> - 2.50.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Changes/Ruby_3.1
 
