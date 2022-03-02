@@ -68,8 +68,8 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		2.50.0
-Release:		6%{?dist}
+Version:		3.0.0
+Release:		1%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -653,6 +653,10 @@ php --no-php-ini \
 %{_mandir}/man3/*.3tcl*
 
 %changelog
+* Wed Mar  2 2022 Jaroslav Škarvada <jskarvad@redhat.com> - 3.0.0-1
+- New version
+  Resolves: rhbz#2058892
+
 * Sat Feb 05 2022 Jiri Vanek <jvanek@redhat.com> - 2.50.0-6
 - Rebuilt for java-17-openjdk as system jdk
 
