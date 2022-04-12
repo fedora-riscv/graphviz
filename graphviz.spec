@@ -30,6 +30,12 @@
 # Not in Fedora yet.
 %global MING   0
 
+%ifarch %{java_arches}
+%global JAVA 1
+%else
+%global JAVA 0
+%endif
+
 %if 0%{?rhel}
 %global SHARP  0
 %global ARRRR  0
@@ -103,7 +109,9 @@ BuildRequires:		python3-devel
 BuildRequires:		libXaw-devel
 BuildRequires:		libSM-devel
 BuildRequires:		libXext-devel
+%if %{JAVA}
 BuildRequires:		java-devel
+%endif
 BuildRequires:		cairo-devel >= 1.1.10
 BuildRequires:		pango-devel
 BuildRequires:		gmp-devel
@@ -157,6 +165,10 @@ Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
 # rhbz#1838679
 Patch0:			graphviz-2.49.3-gvpack-neato-static.patch
+
+%if ! %{JAVA}
+Obsoletes:              graphviz-java < %{version}-%{release}
+%endif
 
 %description
 A collection of tools for the manipulation and layout of graphs (as in nodes
@@ -224,12 +236,14 @@ Requires:		%{name} = %{version}-%{release}
 Guile extension for graphviz.
 %endif
 
+%if %{JAVA}
 %package java
 Summary:		Java extension for graphviz
 Requires:		%{name} = %{version}-%{release}
 
 %description java
 Java extension for graphviz.
+%endif
 
 %package lua
 Summary:		Lua extension for graphviz
@@ -342,9 +356,11 @@ find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
 
 %build
 ./autogen.sh
+%if %{JAVA}
 # Hack in the java includes we need
 sed -i '/JavaVM.framework/!s/JAVA_INCLUDES=/JAVA_INCLUDES=\"_MY_JAVA_INCLUDES_\"/g' configure
 sed -i 's|_MY_JAVA_INCLUDES_|-I%{java_home}/include/ -I%{java_home}/include/linux/|g' configure
+%endif
 # Rewrite config_ruby.rb to work with Ruby 2.2
 sed -i 's|expand(|expand(RbConfig::|' config/config_ruby.rb
 sed -i 's|sitearchdir|vendorarchdir|' config/config_ruby.rb
@@ -456,6 +472,8 @@ if [ "%{_prefix}" != "/usr" ]; then
   cp -ru %{buildroot}/usr/* %{buildroot}%{_prefix}/
   rm -rf %{buildroot}/usr/*
 fi
+
+rm -v %{buildroot}%{_mandir}/man3/gv.3java*
 
 %check
 %if %{PHP}
@@ -583,9 +601,11 @@ php --no-php-ini \
 %{_mandir}/man3/gv.3guile*
 %endif
 
+%if %{JAVA}
 %files java
 %{_libdir}/graphviz/java/
 %{_mandir}/man3/gv.3java*
+%endif
 
 %files lua
 %{_libdir}/graphviz/lua/
