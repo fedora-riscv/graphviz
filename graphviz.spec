@@ -50,6 +50,8 @@
 %global GUILE 0
 %endif
 
+%global GOLANG 1
+
 # Plugins version
 %global pluginsver 6
 
@@ -68,8 +70,8 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		3.0.0
-Release:		2%{?dist}
+Version:		4.0.0
+Release:		1%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -150,13 +152,23 @@ BuildRequires:		librsvg2-devel
 BuildRequires:		ghostscript
 BuildRequires:		libgs-devel
 BuildRequires:		make
+BuildRequires:		poppler-glib-devel
+BuildRequires:		freeglut-devel
+BuildRequires:		libglade2-devel
+BuildRequires:		gtkglext-devel
+BuildRequires:		doxygen
+%if %{GOLANG}
+BuildRequires:		golang
+%endif
 # ISO8859-1 fonts are required by lefty
 Requires:		urw-base35-fonts
 Requires:		xorg-x11-fonts-ISO8859-1-100dpi
 Requires(post):		/sbin/ldconfig
 Requires(postun):	/sbin/ldconfig
 # rhbz#1838679
-Patch0:			graphviz-2.49.3-gvpack-neato-static.patch
+Patch0:			graphviz-4.0.0-gvpack-neato-static.patch
+# https://gitlab.com/graphviz/graphviz/-/issues/2246
+Patch1:			graphviz-4.0.0-gvcolor-lm-fix.patch
 
 %description
 A collection of tools for the manipulation and layout of graphs (as in nodes
@@ -188,6 +200,12 @@ Summary:		PDF and HTML documents for graphviz
 
 %description doc
 Provides some additional PDF and HTML documentation for graphviz.
+
+%package smyrna
+Summary:		Graphviz interactive graph viewer
+
+%description smyrna
+Smyrna is a viewer for graphs in the DOT format.
 
 %package gd
 Summary:		Graphviz plugin for renderers based on gd
@@ -334,6 +352,15 @@ Requires:		%{name} = %{version}-%{release}, tcl >= 8.3, tk
 %description tcl
 Various tcl packages (extensions) for the graphviz tools.
 
+%if %{GOLANG}
+%package go
+Summary:		Go extension for graphviz
+Requires:		%{name} = %{version}-%{release}, golang
+
+%description go
+Go extension for graphviz.
+%endif
+
 %prep
 %autosetup -p1
 
@@ -379,28 +406,28 @@ export CPPFLAGS=-I`ruby -e "puts File.join(RbConfig::CONFIG['includedir'], RbCon
 	--without-qt \
 %endif
 %if %{GUILE}
-	--enable-guile=yes
+	--enable-guile=yes \
 %else
-	--enable-guile=no
+	--enable-guile=no \
+%endif
+%if %{GOLANG}
+	--enable-go=yes
+%else
+	--enable-go=no
 %endif
 
 # drop rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
-make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
+%make_build CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}" \
   CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow %{?FFSTORE}"
+make doxygen
 
 %install
-make DESTDIR=%{buildroot} \
-	docdir=%{buildroot}%{_docdir}/%{name} \
-	pkgconfigdir=%{_libdir}/pkgconfig \
-	install
+%make_install docdir=%{_docdir}/%{name} \
+	pkgconfigdir=%{_libdir}/pkgconfig
 find %{buildroot} -type f -name "*.la" -exec rm -f {} ';'
-
-# Move docs to the right place
-mkdir -p %{buildroot}%{_docdir}/%{name}
-mv %{buildroot}%{_datadir}/%{name}/doc/* %{buildroot}%{_docdir}/%{name}
 
 # Install README
 install -m0644 README %{buildroot}%{_docdir}/%{name}
@@ -427,8 +454,8 @@ find %{buildroot}%{_docdir}/%{name}/demo -type f -name "*.py" -exec mv {} {}.dem
 rm -f %{buildroot}%{_bindir}/dot_builtins
 
 # Remove metadata from generated PDFs
-pushd %{buildroot}%{_docdir}/%{name}/pdf
-for f in prune lneato.1 lefty.1 gvgen.1 gc.1 dotty.1 dot.1 cluster.1
+pushd %{buildroot}%{_docdir}/%{name}
+for f in prune gvgen.1 gc.1 dot.1 cluster.1
 do
   if [ -f $f.pdf ]
   then
@@ -519,22 +546,24 @@ php --no-php-ini \
 
 %files
 %doc %{_docdir}/%{name}
+%exclude %{_bindir}/smyrna
 %{_bindir}/*
 %dir %{_libdir}/graphviz
 %{_libdir}/*.so.*
 %{_libdir}/graphviz/*.so.*
+%exclude %{_mandir}/man1/smyrna.1*
 %{_mandir}/man1/*.1*
 %{_mandir}/man7/*.7*
-%dir %{_datadir}/graphviz
-%exclude %{_docdir}/%{name}/html
-%exclude %{_docdir}/%{name}/pdf
+%dir %{_datadir}/%{name}
+%exclude %{_docdir}/%{name}/*.html
+%exclude %{_docdir}/%{name}/*.pdf
 %exclude %{_docdir}/%{name}/demo
-%{_datadir}/graphviz/lefty
-%{_datadir}/graphviz/gvpr
-%ghost %{_libdir}/graphviz/config%{pluginsver}
+%{_datadir}/%{name}/gvpr
+%{_datadir}/%{name}/examples
+%ghost %{_libdir}/%{name}/config%{pluginsver}
 
 %if %{QTAPPS}
-%{_datadir}/graphviz/gvedit
+%{_datadir}/%{name}/gvedit
 %endif
 
 %exclude %{_libdir}/graphviz/*/*
@@ -562,9 +591,14 @@ php --no-php-ini \
 %endif
 
 %files doc
-%doc %{_docdir}/%{name}/html
-%doc %{_docdir}/%{name}/pdf
+%doc %{_docdir}/%{name}/*.html
+%doc %{_docdir}/%{name}/*.pdf
 %doc %{_docdir}/%{name}/demo
+
+%files smyrna
+%{_bindir}/smyrna
+%{_datadir}/%{name}/smyrna
+%{_mandir}/man1/smyrna.1*
 
 %files gd
 %{_libdir}/graphviz/libgvplugin_gd.so.*
@@ -652,7 +686,17 @@ php --no-php-ini \
 #  always includes tcldot.3tcl, gdtclft.3tcl
 %{_mandir}/man3/*.3tcl*
 
+%if %{GOLANG}
+%files go
+%{_libdir}/graphviz/go/
+%{_mandir}/man3/gv.3go.*
+%endif
+
 %changelog
+* Mon Jun  6 2022 Jaroslav Škarvada <jskarvad@redhat.com> - 4.0.0-1
+- New version
+  Resolves: rhbz#2091383
+
 * Wed Jun 01 2022 Jitka Plesnikova <jplesnik@redhat.com> - 3.0.0-2
 - Perl 5.36 rebuild
 

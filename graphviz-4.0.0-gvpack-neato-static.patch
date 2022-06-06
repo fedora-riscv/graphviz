@@ -11,5 +11,5 @@ index 4978fea..9fbe2e2 100644
 +	$(top_builddir)/lib/pathplan/libpathplan_C.la \
 +		$(EXPAT_LIBS) $(Z_LIBS) $(GTS_LIBS) $(SOCKET_LIBS) $(IPSEPCOLA_LIBS) $(MATH_LIBS)
  
- # add a non-existent C++ source to force the C++ compiler to be used for
- # linking, so the C++ standard library is included for our C++ dependencies
+ if ENABLE_STATIC
+ gvpack_static_SOURCES = gvpack.cpp
