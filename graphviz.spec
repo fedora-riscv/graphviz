@@ -71,7 +71,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		4.0.0
-Release:		1%{?dist}
+Release:		2%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -168,7 +168,7 @@ Requires(postun):	/sbin/ldconfig
 # rhbz#1838679
 Patch0:			graphviz-4.0.0-gvpack-neato-static.patch
 # https://gitlab.com/graphviz/graphviz/-/issues/2246
-Patch1:			graphviz-4.0.0-gvcolor-lm-fix.patch
+Patch1:			graphviz-4.0.0-lm-fix.patch
 
 %description
 A collection of tools for the manipulation and layout of graphs (as in nodes
@@ -693,6 +693,9 @@ php --no-php-ini \
 %endif
 
 %changelog
+* Thu Jun  9 2022 Jaroslav Škarvada <jskarvad@redhat.com> - 4.0.0-2
+- Used lm fix patch from upstream
+
 * Mon Jun  6 2022 Jaroslav Škarvada <jskarvad@redhat.com> - 4.0.0-1
 - New version
   Resolves: rhbz#2091383
