@@ -71,7 +71,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		4.0.0
-Release:		8%{?dist}
+Release:		9%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -693,6 +693,10 @@ php --no-php-ini \
 %endif
 
 %changelog
+* Sun Jul 10 2022 Elliott Sales de Andrade <quantum.analyst@gmail.com> - 4.0.0-9
+- Rebuilt for CVE-2022-1996, CVE-2022-24675, CVE-2022-28327, CVE-2022-27191,
+  CVE-2022-29526, CVE-2022-30629
+
 * Mon Jun 20 2022 Jaroslav Škarvada <jskarvad@redhat.com> - 4.0.0-8
 - Rebuilt for ocaml
   Resolves: rhbz#2098719
