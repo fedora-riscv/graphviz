@@ -77,7 +77,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		5.0.0
-Release:		1%{?dist}
+Release:		2%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -711,6 +711,14 @@ php --no-php-ini \
 %endif
 
 %changelog
+* Fri Jul 15 2022 Jiri Vanek <jvanek@redhat.com> - 5.0.0-2
+- adapted to removal of java on i686
+- finsihing merged https://src.fedoraproject.org/rpms/graphviz/pull-request/9#request_diff
+- NOT ifed out on i686 recomanded rm -v...
+-- it breaks build, most likely deeper involved issue
+- added changelog entry, bumped release
+- https://bugzilla.redhat.com/show_bug.cgi?id=2104225
+
 * Tue Jul 12 2022 Jaroslav Škarvada <jskarvad@redhat.com> - 5.0.0-1
 - New version
   Resolves: rhbz#2105006
