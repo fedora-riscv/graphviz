@@ -393,6 +393,9 @@ sed -i 's|sitearchdir|vendorarchdir|' config/config_ruby.rb
 # get the path to search for ruby/config.h to CPPFLAGS, so that configure can find it
 export CPPFLAGS=-I`ruby -e "puts File.join(RbConfig::CONFIG['includedir'], RbConfig::CONFIG['sitearch'])" || echo /dev/null`
 %configure --with-x --disable-static --disable-dependency-tracking \
+%if ! %{JAVA}
+--enable-java=no \
+%endif
 	--without-mylibgd --with-ipsepcola --with-pangocairo \
 	--with-gdk-pixbuf --with-visio --disable-silent-rules --enable-lefty \
 %if ! %{LASI}
@@ -497,8 +500,6 @@ if [ "%{_prefix}" != "/usr" ]; then
   cp -ru %{buildroot}/usr/* %{buildroot}%{_prefix}/
   rm -rf %{buildroot}/usr/*
 fi
-
-rm -v %{buildroot}%{_mandir}/man3/gv.3java*
 
 %check
 %if %{PHP}
@@ -714,8 +715,8 @@ php --no-php-ini \
 * Fri Jul 15 2022 Jiri Vanek <jvanek@redhat.com> - 5.0.0-2
 - adapted to removal of java on i686
 - finsihing merged https://src.fedoraproject.org/rpms/graphviz/pull-request/9#request_diff
-- NOT ifed out on i686 recomanded rm -v...
--- it breaks build, most likely deeper involved issue
+- ifed out on i686 recomanded rm -v...
+- set --enable-java=no for non java arches
 - added changelog entry, bumped release
 - https://bugzilla.redhat.com/show_bug.cgi?id=2104225
 
