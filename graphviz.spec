@@ -81,7 +81,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		5.0.0
-Release:		3%{?dist}
+Release:		4%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -716,6 +716,9 @@ php --no-php-ini \
 %endif
 
 %changelog
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Tue Jul 19 2022 Maxwell G <gotmax@e.email> - 5.0.0-3
 - Only build go subpackage on %%golang_arches (i.e. the architectures where
   golang is available).
