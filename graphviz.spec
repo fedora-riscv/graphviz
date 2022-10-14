@@ -81,7 +81,7 @@
 Name:			graphviz
 Summary:		Graph Visualization Tools
 Version:		6.0.2
-Release:		1%{?dist}
+Release:		2%{?dist}
 License:		EPL-1.0
 URL:			http://www.graphviz.org/
 Source0:		https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
@@ -215,11 +215,13 @@ Summary:		PDF and HTML documents for graphviz
 %description doc
 Provides some additional PDF and HTML documentation for graphviz.
 
+%if %{GTS}
 %package smyrna
 Summary:		Graphviz interactive graph viewer
 
 %description smyrna
 Smyrna is a viewer for graphs in the DOT format.
+%endif
 
 %package gd
 Summary:		Graphviz plugin for renderers based on gd
@@ -616,10 +618,12 @@ php --no-php-ini \
 %doc %{_docdir}/%{name}/*.pdf
 %doc %{_docdir}/%{name}/demo
 
+%if %{GTS}
 %files smyrna
 %{_bindir}/smyrna
 %{_datadir}/%{name}/smyrna
 %{_mandir}/man1/smyrna.1*
+%endif
 
 %files gd
 %{_libdir}/graphviz/libgvplugin_gd.so.*
@@ -716,6 +720,9 @@ php --no-php-ini \
 %endif
 
 %changelog
+* Fri Oct 14 2022 Jaroslav Škarvada <jskarvad@redhat.com> - 6.0.2-2
+- Made smyrna dependant on GTS
+
 * Thu Oct 13 2022 Jaroslav Škarvada <jskarvad@redhat.com> - 6.0.2-1
 - New version
   Resolves: rhbz#2133932
