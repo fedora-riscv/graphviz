@@ -415,6 +415,7 @@ find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
 %build
 # https://gitlab.com/graphviz/graphviz/-/issues/2367
 #./autogen.sh
+autoreconf -fi
 
 %if %{JAVA}
 # Hack in the java includes we need
