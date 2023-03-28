@@ -413,7 +413,9 @@ Go extension for graphviz.
 find -type f -regex '.*\.\(c\|h\)$' -exec chmod a-x {} ';'
 
 %build
-./autogen.sh
+# https://gitlab.com/graphviz/graphviz/-/issues/2367
+#./autogen.sh
+
 %if %{JAVA}
 # Hack in the java includes we need
 sed -i '/JavaVM.framework/!s/JAVA_INCLUDES=/JAVA_INCLUDES=\"_MY_JAVA_INCLUDES_\"/g' configure
