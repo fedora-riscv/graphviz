@@ -13,7 +13,7 @@
 # which cause problems during rebuilds. Currently it is circular dependency of graphviz and
 # doxygen - in case a dependency of graphviz/doxygen bumps SONAME and graphviz/doxygen
 # has to be rebuilt, we can break the circular dependency by building with --with bootstrap.
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 %if 0%{?rhel} >= 10
 %bcond_with gtk2
@@ -754,6 +754,9 @@ php --no-php-ini \
 %endif
 
 %changelog
+* Mon Apr 17 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 7.1.0-2~bootstrap
+- Bootstrap for Fedora 38 riscv64.
+
 * Tue Jan 24 2023 Jaroslav Škarvada <jskarvad@redhat.com> - 7.1.0-2
 - Release bump to handle gs update
 
